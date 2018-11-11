@@ -6,23 +6,19 @@ var format = function(d) {
 // Creates a choropleth map, loads the geofile, select the column properly
 // Do not change unitId
 var map = d3.geomap.choropleth()
-<<<<<<< HEAD
-    .geofile('world/countries.json', static_url_path='/static')
-=======
-    .geofile('../static/d3-geomap-2.0.0/topojson/world/countries.json')
->>>>>>> 2623d6b6e7d13480d4b9cd8f4aa7382357c9a480
+    .geofile('countries.json')
     .colors(colorbrewer.YlGnBu[9])
     .column('X1_en')
-    .format(format)
     .legend(true)
-    .unitId('name');
+    .format(format)
+    .unitId('name')
 
 // Loads the csv file needed
-<<<<<<< HEAD
-d3.csv('dataset/data_1850.csv', function(error, data) {
-=======
-d3.csv('../static/d3-geomap-2.0.0/topojson/dataset/data_1850.csv', function(error, data) {
->>>>>>> 2623d6b6e7d13480d4b9cd8f4aa7382357c9a480
+d3.csv('data_1850.csv', function(error, data) {
     var selection = d3.select('#map').datum(data);
     map.draw(selection);
+});
+
+map.addEventListener("click", () => {
+  console.log("Hello");
 });
