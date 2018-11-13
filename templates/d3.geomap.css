@@ -17,6 +17,10 @@ text {
   stroke-width: 1.1px;
 }
 
+#point {
+  shape-outside: circle();
+}
+
 .legend-bg {
   fill: #fff;
   fill-opacity: 0.5; }
