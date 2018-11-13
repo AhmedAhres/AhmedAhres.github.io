@@ -5,6 +5,10 @@ function addAccessor(obj, name, value) {
         return obj;
     };
 }
+
+function stringToPath(string) {
+
+}
 // This product includes color specifications and designs developed by Cynthia Brewer (http://colorbrewer.org/).
 let colorbrewer = { YlGn: {
     3: ["#f7fcb9", "#addd8e", "#31a354"],
@@ -389,21 +393,28 @@ class Geomap {
         y0 = this.properties.height / 2,
         x = x0,
         y = y0;
+        let active;
         if (d && d.hasOwnProperty('geometry') && this._.centered !== d) {
             let countryName = d.properties.name;
             let countryISO = d.properties.iso3;
-            let output = countryName + "'s data is " + this.find(countryISO, this.dataCountry)
-            document.getElementById("header").innerHTML = output;
             let centroid = this.path.centroid(d);
             x = centroid[0];
             y = centroid[1];
             k = this.properties.zoomFactor;
+            // We check if we are zoomed
+            if (k != 1) {
+              let output = countryName.bold() + "'s data is " + this.find(countryISO, this.dataCountry)
+              document.getElementById("header").innerHTML = output;
+            }
             this._.centered = d;
         } else {
             this._.centered = null;
         }
-        this.svg.selectAll('path.unit').classed('active', this._.centered && (_ => _ === this._.centered));
+        if (k == 1) document.getElementById("header").innerHTML = "Hello";
 
+        this.svg.selectAll('path.unit').classed('active', this._.centered && (_ => _ === this._.centered));
+        // Put the border of the country on top to show its border as thicker
+        this.svg.selectAll('path.unit').filter(this._.centered && (_ => _ === this._.centered)).raise();
         this.svg.selectAll('g.zoom').transition().duration(750).attr('transform', `translate(${x0}, ${y0})scale(${k})translate(-${x}, -${y})`);
     }
 
@@ -513,7 +524,7 @@ class Choropleth extends Geomap {
               hRect = hLegend / steps,
               offsetYFactor = hFactor / hRect;
 
-        let legend = self.svg.append('g').attr('class', 'legend').attr('width', wBox).attr('height', hBox).attr('transform', 'translate(0,' + offsetY + ')');
+        let legend = self.svg.append('g').attr('class', 'legend').attr('width', wBox).attr('height', hBox).attr('transform', 'translate(0,' + offsetY + ')').attr('transform', 'translate(0 180)');
 
         legend.append('rect').style('fill', '#fff').attr('class', 'legend-bg').attr('width', wBox).attr('height', hBox);
 
