@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    body {
+      margin: 0;
+    }
+    #rotation {
+      position: absolute;
+      font-family: monospace;
+      padding: 10px;
+      background: rgba(255, 255, 255, .5);
+    }
+    #rotation input {
+      width: 300px;
+    }
+    .graticule {
+      fill: none;
+      stroke: #ccc;
+    }
+    .country {
+      stroke: #fff;
+    }
+    line {
+      stroke: tomato;
+      stroke-width: 3px;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="rotation"></div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.js"></script>
+    <script src="https://unpkg.com/versor@0.0.3/build/versor.min.js"></script>
+    <script src="https://unpkg.com/d3-inertia@0.0.5/build/d3-inertia.min.js"></script>
+    <script>
+    var width = window.innerWidth, height = window.innerHeight;
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var projection = d3.geoOrthographic()
+        .scale(d3.min([width / 2, height / 2]))
+        .translate([width / 2, height / 2])
+        .precision(.1);
+
+    var path = d3.geoPath()
+        .projection(projection);
+
+    // append the graticule
+    svg.append("path")
+        .datum(d3.geoGraticule().step([10, 10]))
+        .attr("class", "graticule")
+        .attr("d", path);
+
+    // inertia versor dragging
+    var inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
+    
+    function render(){
+      update(projection.rotate());
+    }
+
+    function update(eulerAngles){
+      projection.rotate(eulerAngles);
+      svg.selectAll("path").attr("d", path);
+    }
+    </script>
+  </body>
+</html>

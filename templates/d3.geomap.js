@@ -314,12 +314,14 @@ let colorbrewer = { YlGn: {
 class Geomap {
 
     constructor() {
-        // Set default properties optimized for naturalEarth projection.
+
         this.properties = {
             geofile: null,
             height: null,
             postUpdate: null,
-            projection: d3.geoNaturalEarth,
+
+            // Changed the projection from d3.geoNaturalEarth to d3.geoOrthographic
+            projection: d3.geoOrthographic,
             rotate: [0, 0, 0],
             scale: null,
             translate: null,
@@ -507,6 +509,7 @@ class Geomap {
 
         self.path = d3.geoPath().projection(proj);
 
+<<<<<<< Updated upstream
         var gpos0;
         var o0;
 
@@ -527,6 +530,14 @@ class Geomap {
               .on("drag", dragged)
 
         self.svg.call(drag);
+=======
+        // adding the graticule for the rotation
+        // Uncomment graticule out to have black background - its a bug -  we dont need graticule anyway
+        self.svg.append("path")
+            .datum(d3.geoGraticule().step([10, 10]))
+            .attr("class", "graticule")
+            .attr("d", self.path);
+>>>>>>> Stashed changes
 
         // Load and render geo data.
         d3.json(self.properties.geofile, (error, geo) => {
@@ -534,6 +545,19 @@ class Geomap {
             self.svg.append('g').attr('class', 'units zoom').selectAll('path').data(topojson.feature(geo, geo.objects[self.properties.units]).features).enter().append('path').attr('class', d => `unit ${self.properties.unitPrefix}${d.properties[self.properties.unitId]}`).attr('d', self.path).on('click', self.clicked.bind(self)).append('title').text(self.properties.unitTitle);
             self.update();
         });
+
+        // After loading, adding the geoInertia drag from the library
+        var inertia = d3.geoInertiaDrag(self.svg, function() { render(); }, proj);
+    }
+
+    render(){
+        console.log("harsh");
+        updateAngles(projection.rotate());
+    }
+
+    updateAngles(eulerAngles){
+        projection.rotate(eulerAngles);
+        svg.selectAll("path").attr("d", path);
     }
 
     find(country, array) {

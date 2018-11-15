@@ -149,6 +149,10 @@ let map = d3.geomap.choropleth()
     .geofile('world/countries.json')
     .colors(colorbrewer.RdYlGn[11])
     .column('result')
+<<<<<<< Updated upstream
+=======
+    // .projection(d3.geoOrthographic)
+>>>>>>> Stashed changes
     .format(format)
     .scale(410)
     .translate([650,430])
@@ -161,3 +165,4 @@ d3.csv('dataset/data_1850_iso3.csv', function(error, data) {
     var selection = d3.select('#map').datum(data);
     map.draw(selection);
 });
+
