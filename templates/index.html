@@ -169,6 +169,8 @@
       active.classed("active", false);
       active = d3.select(this).classed("active", true);
 
+      let active_info = active.node();
+
       var bounds = path.bounds(d),
           dx = bounds[1][0] - bounds[0][0],
           dy = bounds[1][1] - bounds[0][1],
@@ -183,27 +185,31 @@
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
 
-      // Add coordinates to the country selected
-      showData();
+      // Add coordinates to the country selected, not in any other country
+      if(active_info.__data__.properties.iso3 === 'NGA') {
+        showData();
+      }
     }
 
     function showData() {
         // Add circles to the country which has been selected
-        // Removing part is within reset method
-        svg.selectAll("circle")
+        // Removing part is within reset
+        svg.append('g').selectAll("circle")
             .data(coordinates).enter()
             .append("circle")
             .attr("cx", function (d) {
-                console.log(projection(d)); return projection(d)[0];
+                return projection(d)[0];
             })
             .attr("cy", function (d) {
                 return projection(d)[1];
             })
             .attr("r", "6px")
-            .attr("fill", "red");
+            .attr("fill", "red")
+            .style("position", "fixed");
     }
 
     function zoomed() {
+      // 1.5 here refers to the stroke width of the borders
       g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
       g.attr("transform", d3.event.transform);
     }
