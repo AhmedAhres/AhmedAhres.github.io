@@ -1,23 +1,205 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link href="d3.geomap.css" rel="stylesheet">
-        <script src="d3.min.js"></script>
-        <script src="d3.geomap.js"></script>
-        <script src="d3.geomap.dependencies.min.js"></script>
-<<<<<<< Updated upstream
-        <script src="d3-array.js"></script>
-        <script src="d3-geo.js"></script>
-        <script src="d3-geo-projection.js"></script>
-=======
-        <script src="https://unpkg.com/d3-inertia@0.0.5/build/d3-inertia.min.js"></script>
-        <script src="https://unpkg.com/versor@0.0.3/build/versor.min.js"></script>
->>>>>>> Stashed changes
-    </head>
-    <div id="header"></div>
-    <body>
-        <div id="map"></div>
-        <script src="map.js"></script>
-    </body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    body {
+      margin: 0;
+    }
+
+    .feature.active {
+      fill: orange;
+    }
+
+    .mesh {
+      fill: none;
+      stroke: #fff;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #rotation {
+      position: absolute;
+      font-family: monospace;
+      padding: 10px;
+      background: rgba(255, 255, 255, .5);
+    }
+
+    #rotation input {
+      width: 300px;
+    }
+
+    .country {
+      stroke: #fff;
+    }
+
+    line {
+      stroke: tomato;
+      stroke-width: 3px;
+    }
+
+    .legendThreshold {
+      font-size: 12px;
+      font-family: sans-serif;
+    }
+
+    .caption {
+      fill: #000;
+      font-weight: bold;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="rotation"></div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://unpkg.com/versor@0.0.3/build/versor.min.js"></script>
+    <script src="https://unpkg.com/d3-inertia@0.0.5/build/d3-inertia.min.js"></script>
+
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+
+    <script>
+    var width = window.innerWidth, height = window.innerHeight, active = d3.select(null);
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", stopped, true);;
+
+    // Can change the scale and extent of the zoom
+    var zoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .on("zoom", zoomed);
+
+    // Changing the scale will change the size - height and width of globe
+    var projection = d3.geoOrthographic()
+        .scale(d3.min([width / 5, height / 2]))
+        .translate([width / 2, height / 2])
+        .precision(.1);
+
+    var path = d3.geoPath()
+        .projection(projection);
+
+    //Data and color scale and legend
+    var data = d3.map();
+    var colorScheme = d3.schemeReds[6];
+    colorScheme.unshift("#eee")
+    var colorScale = d3.scaleThreshold()
+        .domain([1, 6, 11, 26, 101, 1001])
+        .range(colorScheme);
+
+    // Getting the Legend and setting the color scale on the legend
+    var g = svg.append("g")
+        .attr("class", "legendThreshold")
+        .attr("transform", "translate(10,20)");
+    g.append("text")
+        .attr("class", "caption")
+        .attr("x", 0)
+        .attr("y", -6)
+        .text("Legend");
+    var labels = ['0', '1-5', '6-10', '11-25', '26-100', '101-1000', '> 1000'];
+    var legend = d3.legendColor()
+        .labels(function (d) { return labels[d.i]; })
+        .shapePadding(4)
+        .scale(colorScale);
+    svg.select(".legendThreshold")
+        .call(legend);
+
+    // Loading the data for the testing file
+    var data_c = {};
+    d3.csv('world/mooc-countries.csv', function(error, data) {
+      data.forEach(function(d) {
+        data_c[d.code] = d.total;
+      });
+    });
+
+    // Calling the ready function to render everything even chloropleth
+    ready();
+
+     // inertia versor dragging after everything has been rendered
+    var inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
+
+    function ready() {
+      d3.json("world/countries.json", function(error, data) {
+        if (error) throw error;
+
+        g.selectAll("path")
+            .data(topojson.feature(data, data.objects.units).features)
+          .enter().append("path")
+
+
+            // Chloropleth code
+            .attr("fill", function (d){
+                  // Pull data for particular iso and set color - Not able to fill it
+                  d.total = data_c[d.properties.iso3] || 0;
+                  return colorScale(d.total);
+              })
+            // End of Chloropleth code
+
+            .attr("d", path)
+            .attr("class", "feature")
+            .on("click", clicked);
+
+        // Creates a mesh around the border
+        g.append("path")
+            .datum(topojson.mesh(data, data.objects.units, function(a, b) { return a !== b; }))
+            .attr("class", "mesh")
+            .attr("d", path);
+      });
+    }
+    
+    function render(){
+      update(projection.rotate());
+    }
+
+    function update(eulerAngles){
+      projection.rotate(eulerAngles);
+      svg.selectAll("path").attr("d", path);
+    }
+
+
+    function clicked(d) {
+      if (active.node() === this) return reset();
+      active.classed("active", false);
+      active = d3.select(this).classed("active", true);
+
+      var bounds = path.bounds(d),
+          dx = bounds[1][0] - bounds[0][0],
+          dy = bounds[1][1] - bounds[0][1],
+          x = (bounds[0][0] + bounds[1][0]) / 2,
+          y = (bounds[0][1] + bounds[1][1]) / 2,
+          scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
+          translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+      svg.transition()
+          .duration(750)
+          .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+    }
+
+    function zoomed() {
+      g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+      g.attr("transform", d3.event.transform);
+    }
+
+    function reset() {
+      active.classed("active", false);
+      active = d3.select(null);
+
+      svg.transition()
+          .duration(750)
+          .call( zoom.transform, d3.zoomIdentity );
+    }
+
+    // If the drag behavior prevents the default click,
+    // also stop propagation so we don’t click-to-zoom.
+    function stopped() {
+      if (d3.event.defaultPrevented) d3.event.stopPropagation();
+    }
+
+    </script>
+  </body>
 </html>
