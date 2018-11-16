@@ -68,11 +68,11 @@
     var svg = d3.select("body").append("svg")
         .attr("width", width)
         .attr("height", height)
-        .on("click", stopped, true);;
+        .on("click", stopped, true);
 
     // Can change the scale and extent of the zoom
     var zoom = d3.zoom()
-    .scaleExtent([1, 8])
+    .scaleExtent([1, 12])
     .on("zoom", zoomed);
 
     // Changing the scale will change the size - height and width of globe
@@ -99,7 +99,7 @@
     g.append("text")
         .attr("class", "caption")
         .attr("x", 0)
-        .attr("y", -6)
+        .attr("y", -4)
         .text("Legend");
     var labels = ['0', '1-5', '6-10', '11-25', '26-100', '101-1000', '> 1000'];
     var legend = d3.legendColor()
@@ -123,6 +123,9 @@
      // inertia versor dragging after everything has been rendered
     var inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
 
+    // Lat - Long Coordinates for Nigeria - Example
+    var coordinates = [[13.5, 4.5], [12.5, 11.5], [4.5, 7.5], [11.5, 11.5], [7.5, 2.5]];
+
     function ready() {
       d3.json("world/countries.json", function(error, data) {
         if (error) throw error;
@@ -130,7 +133,6 @@
         g.selectAll("path")
             .data(topojson.feature(data, data.objects.units).features)
           .enter().append("path")
-
 
             // Chloropleth code
             .attr("fill", function (d){
@@ -172,12 +174,33 @@
           dy = bounds[1][1] - bounds[0][1],
           x = (bounds[0][0] + bounds[1][0]) / 2,
           y = (bounds[0][1] + bounds[1][1]) / 2,
-          scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
+
+          // Change the scale to change the zoom when you select a country
+          scale = Math.max(1, Math.min(12, 0.9 / Math.max(dx / width, dy / height))),
           translate = [width / 2 - scale * x, height / 2 - scale * y];
 
       svg.transition()
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+
+      // Add coordinates to the country selected
+      showData();
+    }
+
+    function showData() {
+        // Add circles to the country which has been selected
+        // Removing part is within reset method
+        svg.selectAll("circle")
+            .data(coordinates).enter()
+            .append("circle")
+            .attr("cx", function (d) {
+                console.log(projection(d)); return projection(d)[0];
+            })
+            .attr("cy", function (d) {
+                return projection(d)[1];
+            })
+            .attr("r", "6px")
+            .attr("fill", "red");
     }
 
     function zoomed() {
@@ -188,6 +211,9 @@
     function reset() {
       active.classed("active", false);
       active = d3.select(null);
+
+      // Remove everything from map which is not selected anymore
+      svg.selectAll('circle').remove();
 
       svg.transition()
           .duration(750)
