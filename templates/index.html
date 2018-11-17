@@ -53,6 +53,8 @@
     <script>
     var width = window.innerWidth, height = window.innerHeight, active = d3.select(null);
 
+    var previousCountryClicked = null;
+
     var svg = d3.select("body").append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -97,7 +99,7 @@
     svg.select(".legendThreshold")
         .call(legend);
 
-    // Loading the data for the testing file
+    // Loading the data for the testing file - Chloropleth
     var data_c = {};
     d3.csv('world/mooc-countries.csv', function(error, data) {
       data.forEach(function(d) {
@@ -112,7 +114,8 @@
     var inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
 
     // Lat - Long Coordinates for Nigeria - Example
-    var coordinates = [[13.5, 4.5]];
+    var coordinates = {};
+    coordinates['NGA'] = [[13.5, 4.5]];
 
     function ready() {
       d3.json("world/countries.json", function(error, data) {
@@ -157,6 +160,7 @@
       active.classed("active", false);
       active = d3.select(this).classed("active", true);
 
+      // Get info of the active country/feature
       let active_info = active.node();
 
       var bounds = path.bounds(d),
@@ -173,14 +177,25 @@
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
 
-      // Add coordinates to the country selected, not in any other country
-      if(active_info.__data__.properties.iso3 === 'NGA') {
+
+      if(active_info.__data__.properties.iso3 in coordinates) {
+        if(previousCountryClicked !== null) {
+            svg.selectAll('circle').remove();
+        }
         // The regions should appear after we zoom in the country
-        setTimeout(showData, 751); // Should be more than 750 -> more than duration
+        setTimeout(function() {
+            showData(coordinates[active_info.__data__.properties.iso3]);
+        }, 751) // Should be more than 750 -> more than duration
+      } else {
+        if(previousCountryClicked !== null) {
+            svg.selectAll('circle').remove();
+        }
       }
+
+      previousCountryClicked = active_info.__data__.properties.iso3
     }
 
-    function showData() {
+    function showData(coordinates) {
         // Add circles to the country which has been selected
         // Removing part is within reset
         svg.append('g').selectAll("circle")
