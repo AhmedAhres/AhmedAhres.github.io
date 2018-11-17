@@ -20,17 +20,6 @@
       stroke-linejoin: round;
     }
 
-    #rotation {
-      position: absolute;
-      font-family: monospace;
-      padding: 10px;
-      background: rgba(255, 255, 255, .5);
-    }
-
-    #rotation input {
-      width: 300px;
-    }
-
     .country {
       stroke: #fff;
     }
@@ -52,7 +41,6 @@
     </style>
   </head>
   <body>
-    <div id="rotation"></div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://unpkg.com/versor@0.0.3/build/versor.min.js"></script>
@@ -124,7 +112,7 @@
     var inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
 
     // Lat - Long Coordinates for Nigeria - Example
-    var coordinates = [[13.5, 4.5], [12.5, 11.5], [4.5, 7.5], [11.5, 11.5], [7.5, 2.5]];
+    var coordinates = [[13.5, 4.5]];
 
     function ready() {
       d3.json("world/countries.json", function(error, data) {
@@ -187,7 +175,8 @@
 
       // Add coordinates to the country selected, not in any other country
       if(active_info.__data__.properties.iso3 === 'NGA') {
-        showData();
+        // The regions should appear after we zoom in the country
+        setTimeout(showData, 751); // Should be more than 750 -> more than duration
       }
     }
 
