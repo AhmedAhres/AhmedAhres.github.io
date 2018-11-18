@@ -75,7 +75,6 @@
         .projection(projection);
 
     //Data and color scale and legend
-    var data = d3.map();
     var colorScheme = d3.schemeReds[6];
     colorScheme.unshift("#eee")
     var colorScale = d3.scaleThreshold()
@@ -132,7 +131,6 @@
                   return colorScale(d.total);
               })
             // End of Chloropleth code
-
             .attr("d", path)
             .attr("class", "feature")
             .on("click", clicked);

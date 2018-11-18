@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html, body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+.box-container {
+	height: 100%;
+    min-height: 100%;
+	display: flex;
+}
+
+.title-container {
+	height: 100%;
+	width: 100%;
+	background-color: yellow;
+}
+
+.title-box {
+	color: black;
+	text-align: center;
+	font-family: sans-serif;
+	font-size: 50px;
+	justify-content: center;
+	padding: 25%;
+}
+	
+.box {
+	text-align: center;
+	color: white;
+	font-family: sans-serif;
+	font-size: 36px;
+	padding: 20px;
+	
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
+}
+
+.box-1 {
+	background-color: green;
+	width: 8%;
+}
+
+.box-2 {
+	background-color: blue;
+	width: 61%;
+}
+
+.box-3 {
+	background-color: red;
+	width: 31%;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- StoryTelling form - 1st page for Title and other content, 2nd Page for the visualization  -->
+<!-- If needed to add another page, just copy the title container and change the name of the classes -->
+<div class="title-container">
+	<div class="title-box">
+		This is title page!
+	</div>
+</div>
+
+<div class="box-container">
+	<div class="box box-1">box 1</div>
+	<div class="box box-2">box 2</div>
+	<div class="box box-3">box 3</div>
+</div>
+
+</body>
+</html>
