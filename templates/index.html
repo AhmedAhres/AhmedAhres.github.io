@@ -17,9 +17,23 @@ html, body {
 }
 
 .title-container {
+  position: relative;
+  text-align: center;
   height: 100%;
   width: 100%;
-  background-color: yellow;
+  background: rgb(247, 246, 241);
+}
+
+.title-container2 {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(247, 246, 241);
+}
+
+.quote-container {
+  height: 36%;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
 }
 
 .title-box {
@@ -108,6 +122,32 @@ line {
   background-color: rgb(247,246,241);
   flex-direction: column;
 }
+
+img {
+  opacity: 1;
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+
+  font-size: 50px;
+  font-weight: bold;
+  font-family: "Open Sans",sans-serif;
+  /* color: rgb(228, 228, 228); */
+  text-shadow: 0px 2px 3px #555;
+  /* text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15); */
+}
+.topleft {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  height: 30%;
+  width: auto;
+  max-height: 30%;
+}
 }
 
 
@@ -130,8 +170,17 @@ line {
 <!-- StoryTelling form - 1st page for Title and other content, 2nd Page for the visualization  -->
 <!-- If needed to add another page, just copy the title container and change the name of the classes -->
 <div class="title-container">
-  <div class="title-box">
-    This is title page!
+  <div class="topleft">
+    <img src="logo_polyscientist.png" alt="logo_polyscientist" style="height : 20%">
+  </div>
+  <img src="Bee_pollinating_a_rose.jpg" alt="Bee_pollinating_a_rose" style = "width:100%; height:84%;" vspace = 60>
+  <div class="centered">Pollination Contribution to Nutrition</div>
+</div>
+
+<div class="title-container2">
+  <div class="quote-container">
+    <p>
+    </p>
   </div>
 </div>
 
