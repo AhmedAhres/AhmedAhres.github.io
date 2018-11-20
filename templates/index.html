@@ -40,7 +40,7 @@ html, body {
   
   display: flex;
   flex-direction: column;
-    justify-content: center;
+  justify-content: center;
 }
 
 .legendThreshold {
@@ -84,9 +84,12 @@ line {
 .box-3 {
   background-color: red;
   width: 31%;
-  }
+  margin-right: 20px;
 }
 
+.planet {
+  fill: rgb(170, 218, 255);
+}
 </style>
 </head>
 <body>
@@ -125,8 +128,15 @@ line {
         .attr("width", width)
         .attr("height", height)
         .on("click", stopped, true);
+    var g = svg.append('g');
 
-    var g = svg.append('g')
+    // Add background to the globe
+    let planet_radius = d3.min([width / 2, height / 2]);
+    g.append('circle')
+      .classed('planet', true)
+      .attr('cx', '50%')
+      .attr('cy', 0.5*height)
+      .attr('r',  planet_radius);
 
     // Can change the scale and extent of the zoom
     var zoom = d3.zoom()
@@ -135,7 +145,7 @@ line {
 
     // Changing the scale will change the size - height and width of globe
     var projection = d3.geoOrthographic()
-        .scale(d3.min([width / 2, height / 2]))
+        .scale(planet_radius)
         .translate([width / 2, height / 2])
         .precision(.1);
 
@@ -183,7 +193,7 @@ line {
 
     // Lat - Long Coordinates for Nigeria - Example
     var coordinates = {};
-    coordinates['NGA'] = [[13.5, 4.5]];
+    coordinates['NGA'] = [[4.5, 13.5]];
 
     function ready() {
       d3.json("world/countries.json", function(error, data) {
@@ -218,9 +228,13 @@ line {
 
     function update(eulerAngles){
       projection.rotate(eulerAngles);
+      console.log(eulerAngles[0], eulerAngles[1], eulerAngles[2]);
+      
       svg.selectAll("path").attr("d", path);
+      svg.selectAll(".plot-point")
+        .attr("cx", d => projection(d)[0])
+        .attr("cy", d => projection(d)[1]);
     }
-
 
     function clicked(d) {
       if (active.node() === this) return reset();
@@ -247,7 +261,7 @@ line {
 
       if(active_info.__data__.properties.iso3 in coordinates) {
         if(previousCountryClicked !== null) {
-            svg.selectAll('circle').remove();
+            svg.selectAll('.plot-point').remove();
         }
         // The regions should appear after we zoom in the country
         setTimeout(function() {
@@ -255,7 +269,7 @@ line {
         }, 751) // Should be more than 750 -> more than duration
       } else {
         if(previousCountryClicked !== null) {
-            svg.selectAll('circle').remove();
+            svg.selectAll('.plot-point').remove();
         }
       }
 
@@ -265,16 +279,17 @@ line {
     function showData(coordinates) {
         // Add circles to the country which has been selected
         // Removing part is within reset
-        svg.append('g').selectAll("circle")
+        g.selectAll(".plot-point")
             .data(coordinates).enter()
             .append("circle")
+            .classed('plot-point', true)
             .attr("cx", function (d) {
                 return projection(d)[0];
             })
             .attr("cy", function (d) {
                 return projection(d)[1];
             })
-            .attr("r", "6px")
+            .attr("r", "0.8px")
             .attr("fill", "red");
     }
 
@@ -289,7 +304,7 @@ line {
       active = d3.select(null);
 
       // Remove everything from map which is not selected anymore
-      svg.selectAll('circle').remove();
+      svg.selectAll('.plot-point').remove();
 
       svg.transition()
           .duration(750)
