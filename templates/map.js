@@ -30,7 +30,7 @@ var formatToData = function(d) {
     if (d == 1950) return 1910;
     if (d == 2000) return 1945;
     if (d == 2050) return 1980;
-    if (d == 2100) return "Curr";
+    if (d == 2100) return "Current";
     if (d == 2150) return "Potential";
     if (d == 2200) return "SSP1";
     if (d == 2250) return "SSP3";
@@ -41,7 +41,7 @@ var slider3 = d3.sliderHorizontal()
   .min(1850)
   .max(2300)
   .step(50)
-  .width(400)
+  .width(500)
   .tickValues(data3)
   .tickFormat(formatToData)
   .displayValue(false)
