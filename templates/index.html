@@ -149,7 +149,7 @@ line {
       World
     </h1>
     <div class = "box box-small">
-      Population:
+      Population: 7.2B
     </div>
     <p id="text-box">
       Folate (vitamin B-9) is important in red blood cell formation and for healthy cell growth and function.
@@ -182,6 +182,7 @@ line {
   var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
   var previousCountryClicked = null;
+
 
     var svg = d3.select(".box.box-2").append("svg")
         .attr("width", width)
@@ -284,6 +285,7 @@ line {
     }
 
     let countryName = document.getElementsByTagName('h1')[1];
+    let popData = document.getElementsByTagName('div')[7];
 
     function clicked(d) {
       if (active.node() === this) return reset();
@@ -306,6 +308,7 @@ line {
       svg.transition()
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+      //popData.innerHTML = "Population: " + active_info.__data__.properties.name;
       countryName.innerHTML = active_info.__data__.properties.name;
 
       if(active_info.__data__.properties.iso3 in coordinates) {
