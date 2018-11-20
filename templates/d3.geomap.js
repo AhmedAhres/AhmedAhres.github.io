@@ -314,12 +314,14 @@ let colorbrewer = { YlGn: {
 class Geomap {
 
     constructor() {
-        // Set default properties optimized for naturalEarth projection.
+
         this.properties = {
             geofile: null,
             height: null,
             postUpdate: null,
-            projection: d3.geoNaturalEarth,
+
+            // Changed the projection from d3.geoNaturalEarth to d3.geoOrthographic
+            projection: d3.geoOrthographic,
             rotate: [0, 0, 0],
             scale: null,
             translate: null,
@@ -364,19 +366,40 @@ class Geomap {
         self.svg.append('rect').attr('class', 'background').attr('width', self.properties.width).attr('height', self.properties.height).on('click', self.clicked.bind(self));
 
         // Set map projection and path.
-        let proj = self.properties.projection().scale(self.properties.scale).translate(self.properties.translate).precision(.1);
+        self.proj = d3.geoOrthographic().scale(self.properties.scale).translate(self.properties.translate).precision(.1);
 
         // Not every projection supports rotation, e. g. albersUsa does not.
-        if (proj.hasOwnProperty('rotate') && self.properties.rotate) proj.rotate(self.properties.rotate);
+        if (self.proj.hasOwnProperty('rotate') && self.properties.rotate) self.proj.rotate(self.properties.rotate);
 
-        self.path = d3.geoPath().projection(proj);
+        self.path = d3.geoPath().projection(self.proj);
+
+        // adding the graticule for the rotation
+        // Uncomment graticule out to have black background - its a bug -  we dont need graticule anyway
+        self.svg.append("path")
+            .datum(d3.geoGraticule().step([10, 10]))
+            .attr("class", "graticule")
+            .attr("d", self.path);
+
+        // After loading, adding the geoInertia drag from the library
+        // var inertia = d3.geoInertiaDrag(self.svg, function() { self.render(proj); }, proj);
 
         // Load and render geo data.
         d3.json(self.properties.geofile, (error, geo) => {
             self.geo = geo;
             self.svg.append('g').attr('class', 'units zoom').selectAll('path').data(topojson.feature(geo, geo.objects[self.properties.units]).features).enter().append('path').attr('class', d => `unit ${self.properties.unitPrefix}${d.properties[self.properties.unitId]}`).attr('d', self.path).on('click', self.clicked.bind(self)).append('title').text(self.properties.unitTitle);
-            self.update();
+            self.update(self.proj);
         });
+    }
+
+    render(proj){
+        console.log("render");
+        this.updateAngles(proj, proj.rotate());
+    }
+
+    updateAngles(proj, eulerAngles){
+        console.log("Inside update angles");
+        proj.rotate(eulerAngles);
+        this.svg.selectAll("path").attr("d", this.path);
     }
 
     find(country, array) {
@@ -419,8 +442,12 @@ class Geomap {
         this.svg.selectAll('g.zoom').transition().duration(750).attr('transform', `translate(${x0}, ${y0})scale(${k})translate(-${x}, -${y})`);
     }
 
-    update() {
-        if (this.properties.postUpdate) this.properties.postUpdate();
+    update(proj) {
+        if (this.properties.postUpdate) {
+            this.properties.postUpdate();
+        } else {
+            var inertia = d3.geoInertiaDrag(this.svg, function() { this.draw(); }, proj);
+        }
     }
 }
 
@@ -483,8 +510,8 @@ class Choropleth extends Geomap {
 
         if (self.properties.legend) self.drawLegend(self.properties.legend);
 
-        // Make sure postUpdate function is run if set.
-        super.update();
+        // Make sure postUpdate function is run if set.;
+        super.update(this.proj);
     }
 
     /**
