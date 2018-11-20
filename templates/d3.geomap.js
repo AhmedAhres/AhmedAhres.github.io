@@ -405,7 +405,6 @@ class Geomap {
     find(country, array) {
       for (let i = 0; i < 162; i++) {
         if (array[i].iso3 == country) {
-          // Replace by the current column (how?)
           return array[i].result;
         }
       }
