@@ -30,14 +30,14 @@ html, body {
   justify-content: center;
   padding: 25%; /* Need to change */
 }
-  
+
 .box {
   text-align: center;
   color: white;
   font-family: sans-serif;
   font-size: 36px;
   padding: 20px;
-  
+
   display: flex;
   flex-direction: column;
     justify-content: center;
@@ -82,8 +82,9 @@ line {
 }
 
 .box-3 {
-  background-color: red;
+  background-color: rgb(232, 186, 89);
   width: 31%;
+  font-size: 23px;
   }
 }
 
@@ -113,7 +114,12 @@ line {
 <div class="box-container">
   <div class="box box-1"></div>
   <div class="box box-2"></div>
-  <div class="box box-3">box 3</div>
+  <div class="box box-3">
+    <h1>
+      Production of Folate
+    </h1>
+
+  </div>
 </div>
 
 <script>
@@ -211,7 +217,7 @@ line {
             .attr("d", path);
       });
     }
-    
+
     function render(){
       update(projection.rotate());
     }
