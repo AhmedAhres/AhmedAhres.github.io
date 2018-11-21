@@ -158,7 +158,7 @@ img {
 </head>
 <body>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="jquery.min.js"></script>
 
 <script src="d3.js"></script>
 <script src="topojson.v1.min.js"></script>
@@ -243,12 +243,12 @@ img {
     var g = svg.append('g');
 
     // Add background to the globe
-    let planet_radius = d3.min([width / 1.7, height / 2]);
+    let planet_radius = d3.min([width / 2, height / 2]);
     g.append('circle')
       .classed('planet', true)
       .attr('cx', '50%')
       .attr('cy', 0.5*height)
-      .attr('r',  planet_radius);
+      .attr('r',  planet_radius*0.88);
 
     // Can change the scale and extent of the zoom
     var zoom = d3.zoom()
@@ -257,7 +257,7 @@ img {
 
     // Changing the scale will change the size - height and width of globe
     var projection = d3.geoOrthographic()
-        .scale(d3.min([width / 2, height / 2]))
+        .scale(planet_radius*0.88)
         .translate([width / 2, height / 2])
         .precision(.1);
 
