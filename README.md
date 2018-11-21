@@ -1,5 +1,12 @@
 # DataVizProject
 
+
+## Running the visualization
+
+The visualization can be seen by visiting the following url: https://ahmedahres.github.io/templates/
+
+Currently, the 2 level visualization only works for the country of Nigeria.
+
 ## Setting up Python Environment
 
 The Python version which are using as part of the backend is Python 3.
