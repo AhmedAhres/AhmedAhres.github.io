@@ -17,9 +17,23 @@ html, body {
 }
 
 .title-container {
+  position: relative;
+  text-align: center;
   height: 100%;
   width: 100%;
-  background-color: yellow;
+  background: rgb(247, 246, 241);
+}
+
+.title-container2 {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(247, 246, 241);
+}
+
+.quote-container {
+  height: 36%;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
 }
 
 .title-box {
@@ -30,14 +44,14 @@ html, body {
   justify-content: center;
   padding: 25%; /* Need to change */
 }
-  
+
 .box {
   text-align: center;
-  color: white;
-  font-family: sans-serif;
+  color: gray;
+  font-family: Open Sans;
   font-size: 36px;
   padding: 20px;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -73,6 +87,21 @@ line {
     stroke-width: 3px;
 }
 
+#box-3-header {
+  text-align: center;
+  font-size: 35px;
+}
+
+#box-3-sub-header {
+  text-align: left;
+  font-size: 20px;
+}
+
+#text-box {
+  text-align: left;
+  font-size: 15px;
+}
+
 .box-1 {
   width: 8%;
 }
@@ -82,13 +111,43 @@ line {
 }
 
 .box-3 {
-  background-color: red;
-  width: 31%;
+  background-color: white;
+  width: 28%;
+  font-size: 23px;
   margin-right: 20px;
+  }
+.box-small {
+  text-align: left;
+  font-size: 20px;
+  background-color: rgb(247,246,241);
+  flex-direction: column;
 }
 
-.planet {
-  fill: rgb(170, 218, 255);
+img {
+  opacity: 1;
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+
+  font-size: 50px;
+  font-weight: bold;
+  font-family: "Open Sans",sans-serif;
+  /* color: rgb(228, 228, 228); */
+  text-shadow: 0px 2px 3px #555;
+  /* text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15); */
+}
+.topleft {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  height: 30%;
+  width: auto;
+  max-height: 30%;
+}
 }
 </style>
 </head>
@@ -96,33 +155,81 @@ line {
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://d3js.org/topojson.v1.min.js"></script>
-<script src="https://unpkg.com/versor@0.0.3/build/versor.min.js"></script>
-<script src="https://unpkg.com/d3-inertia@0.0.5/build/d3-inertia.min.js"></script>
+<script src="d3.js"></script>
+<script src="topojson.v1.min.js"></script>
+<script src="versor.min.js"></script>
+<script src="d3-inertia.min.js"></script>
+<script src="d3-simple-slider.js"></script>
 
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+<script src="d3-scale-chromatic.v1.min.js"></script>
+<script src="d3-geo-projection.v2.min.js"></script>
+<script src="d3-legend.js"></script>
 
 <!-- StoryTelling form - 1st page for Title and other content, 2nd Page for the visualization  -->
 <!-- If needed to add another page, just copy the title container and change the name of the classes -->
 <div class="title-container">
-  <div class="title-box">
-    This is title page!
+  <div class="topleft">
+    <img src="logo_polyscientist.png" alt="logo_polyscientist" style="height : 20%">
+  </div>
+  <img src="Bee_pollinating_a_rose.jpg" alt="Bee_pollinating_a_rose" style = "width:100%; height:84%;" vspace = 60>
+  <div class="centered">Pollination Contribution to Nutrition</div>
+</div>
+
+<div class="title-container2">
+  <div class="quote-container">
+    <p>
+    </p>
   </div>
 </div>
 
 <div class="box-container">
   <div class="box box-1"></div>
-  <div class="box box-2"></div>
-  <div class="box box-3">box 3</div>
+  <div class="box box-2">
+
+  <div id="slider3"></div>
+  </div>
+  <div class="box box-3">
+    <h1 id="box box-3-header">
+      Production of Folate in 1850
+    </h1>
+    <h1 id="box-3-header">
+      World
+    </h1>
+    <div class = "box box-small">
+      Population: 7.2B
+    </div>
+    <p id="text-box">
+      Folate (vitamin B-9) is important in red blood cell formation and for healthy cell growth and function.
+    </p>
+    <div class = "box box-small">
+      Folate Production:
+    </div>
+    <p id="text-box">
+      Food energy is chemical energy that animals (including humans) derive from food through the process of cellular respiration.
+    </p>
+    <div class = "box box-small">
+      Energy Production:
+    </div>
+    <p id="text-box">
+      Vitamin A is involved in immune function, vision, reproduction, and cellular communication.
+    </p>
+    <div class = "box box-small">
+      Vitamin A Production:
+    </div>
+    <p id="text-box">
+      The dietary requirements of vitamin A, folate and energy is the local nutritional requirements (demand).
+    </p>
+    <div class = "box box-small">
+      Dietary Requirements:
+    </div>
+    </div>
 </div>
 
 <script>
   var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
   var previousCountryClicked = null;
+
 
     var svg = d3.select(".box.box-2").append("svg")
         .attr("width", width)
@@ -145,7 +252,7 @@ line {
 
     // Changing the scale will change the size - height and width of globe
     var projection = d3.geoOrthographic()
-        .scale(planet_radius)
+        .scale(d3.min([width / 2 + 7, height / 2]))
         .translate([width / 2, height / 2])
         .precision(.1);
 
@@ -221,7 +328,7 @@ line {
             .attr("d", path);
       });
     }
-    
+
     function render(){
       update(projection.rotate());
     }
@@ -235,6 +342,9 @@ line {
         .attr("cx", d => projection(d)[0])
         .attr("cy", d => projection(d)[1]);
     }
+
+    let countryName = document.getElementsByTagName('h1')[1];
+    let popData = document.getElementsByTagName('div')[7];
 
     function clicked(d) {
       if (active.node() === this) return reset();
@@ -257,7 +367,8 @@ line {
       svg.transition()
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
-
+      //popData.innerHTML = "Population: " + active_info.__data__.properties.name;
+      countryName.innerHTML = active_info.__data__.properties.name;
 
       if(active_info.__data__.properties.iso3 in coordinates) {
         if(previousCountryClicked !== null) {
@@ -309,6 +420,8 @@ line {
       svg.transition()
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity );
+
+      countryName.innerHTML = "World";
     }
 
     // If the drag behavior prevents the default click,
@@ -316,6 +429,72 @@ line {
     function stopped() {
       if (d3.event.defaultPrevented) d3.event.stopPropagation();
     }
+
+let data3 = ["1850", "1900", "1950", "2000", "2050", "2100", "2150", "2200", "2250", "2300"]
+let actualData = ["1850", "1900", "1910", "1945", "1980", "Curr", "Pot", "SSP1", "SSP3", "SSP5"]
+
+var formatToData = function(d) {
+  // TO BE OPTIMIZED
+    if (d == 1850 || d == 1900) return d;
+    if (d == 1950) return 1910;
+    if (d == 2000) return 1945;
+    if (d == 2050) return 1980;
+    if (d == 2100) return "Current";
+    if (d == 2150) return "Potential";
+    if (d == 2200) return "SSP1";
+    if (d == 2250) return "SSP3";
+    if (d == 2300) return "SSP5";
+}
+let h1 = document.getElementsByTagName('h1')[0];
+
+var slider3 = d3.sliderHorizontal()
+  .min(1850)
+  .max(2300)
+  .step(50)
+  .width(480)
+  .tickValues(data3)
+  .tickFormat(formatToData)
+  .on("onchange", val => {
+    // // Here, the value we check for is still the original one, not the formatted one
+    if (val == 1850) {
+      h1.innerHTML = "Production of Folate in 1850";
+    }
+    if (val == 1900) {
+      h1.innerHTML = "Production of Folate in 1900";
+    }
+    if (val == 1950) {
+      h1.innerHTML = "Production of Folate in 1910";
+    }
+    if (val == 2000) {
+      h1.innerHTML = "Production of Folate in 1945";
+    }
+    if (val == 2050) {
+      h1.innerHTML = "Production of Folate in 1980";
+    }
+    if (val == 2100) {
+      h1.innerHTML = "Current Production of Folate";
+    }
+    if (val == 2150) {
+      h1.innerHTML = "Potential Production of Folate";
+    }
+    if (val == 2200) {
+      h1.innerHTML = "Production of Folate in SSP1";
+    }
+    if (val == 2250) {
+      h1.innerHTML = "Production of Folate in SSP3";
+    }
+    if (val == 2300) {
+      h1.innerHTML = "Production of Folate in SSP5";
+    }
+  });
+
+
+var group3 = d3.select(".box.box-2").append("svg")
+  .attr("width", 800)
+  .attr("height", 50)
+  .append("g")
+  .attr("transform", "translate(210, 12)")
+  .call(slider3);
 </script>
 
 
