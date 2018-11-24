@@ -87,9 +87,13 @@ line {
   font-size: 2vh;
 }
 
+#box-3-header {
+  font-size: 5vh;
+}
+
 #box-3-header-2 {
   text-align: center;
-  font-size: 1vh;
+  font-size: 3vh;
 }
 
 #box-3-sub-header {
@@ -102,6 +106,7 @@ line {
   font-size: 15px;
 }
 
+
 .box-1 {
   width: 8%;
 }
@@ -113,7 +118,7 @@ line {
 .box-3 {
   background-color: white;
   width: 28%;
-  /* font-size: 23px; */
+  font-size: 1hv;
   margin-right: 20px;
   }
 .box-small {
@@ -160,35 +165,35 @@ img {
   background-color: rgb(255, 255, 255);
 }
 
-.h1_page { 
-  color: rgb(0, 0, 0); 
-  font-family: 'Open Sans', sans-serif; 
-  font-size: 200%; 
+.h1_page {
+  color: rgb(0, 0, 0);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 200%;
   font-weight: bold;
-  padding-left: 10%; 
-  padding-right:10% ; 
+  padding-left: 10%;
+  padding-right:10% ;
   text-align: center;
    }
-.h2_page { 
-  color: rgb(8, 79, 185); 
-  font-family: 'Open Sans', sans-serif; 
-  font-size: 150%; 
+.h2_page {
+  color: rgb(8, 79, 185);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 150%;
   font-weight: bold;
-  padding-left: 10%; 
-  padding-right:10% ; 
+  padding-left: 10%;
+  padding-right:10% ;
   text-align: center;
    }
 
-.p_page1 { 
+.p_page1 {
   color: #222;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 20px;
   line-height: 200%;
-  padding-left: 10%; 
-  padding-right:10% ; 
+  padding-left: 10%;
+  padding-right:10% ;
   margin-top:-10px;
-  text-align: center; 
+  text-align: center;
   }
 
 .info-container {
@@ -196,14 +201,14 @@ img {
   height: 64px
 }
 
-.p_page2 { 
+.p_page2 {
   color: #222;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 90%;
   line-height: 200%;
-  padding-left: 10%; 
-  padding-right:10% ; 
+  padding-left: 10%;
+  padding-right:10% ;
   }
 
 .column {
@@ -211,7 +216,7 @@ img {
     width: 31.5%;
     height: 64px;
     padding: 10px;
-    
+
 }
 .info-container:after {
     content: "";
@@ -247,7 +252,7 @@ img {
 <div class="title-container2">
   <div class="quote-container">
     <h1 class="h1_page"> There is no Plan Bee for when we run out of pollinators</h1> <br>
-    <p class="p_page1">Pollination is a vital process of nature that isn’t very well known,<br>  but is extremely important in the food growing processes.<br> 
+    <p class="p_page1">Pollination is a vital process of nature that isn’t very well known,<br>  but is extremely important in the food growing processes.<br>
       Pollen has to be transferred between two flowers of the same species,<br>  which then fertilizes the flower and allows the production of healthy seeds on the plant.
     </p>
   </div>
@@ -255,18 +260,18 @@ img {
     <div class="column" style="background-color:gb(207, 206, 201);">
       <h2 class = h2_page>Pollinators:</h2>
         <ul class = "p_page2">
-            <li>Bees: The most recognized pollinators are the various species of bees, 
-              which are plainly adapted to pollination. Bees typically are fuzzy and carry an electrostatic charge. 
+            <li>Bees: The most recognized pollinators are the various species of bees,
+              which are plainly adapted to pollination. Bees typically are fuzzy and carry an electrostatic charge.
               Both features help pollen grains adhere to their bodies.</li>
-            <li>Other insects: Many insects other than bees accomplish pollination by visiting flowers for nectar or pollen, 
+            <li>Other insects: Many insects other than bees accomplish pollination by visiting flowers for nectar or pollen,
               or commonly both. Many do so accidentally.</li>
         </ul>
     </div>
     <div class="column" style="background-color:gb(227, 226, 221);">
       <h2 class = h2_page> SSPs:</h2>
-      <p class = "p_page2">An international team of climate scientists, 
-        economists and energy systems modellers have built a range of new “pathways” that examine how global society, 
-        demographics and economics might change over the next century. They are collectively known as 
+      <p class = "p_page2">An international team of climate scientists,
+        economists and energy systems modellers have built a range of new “pathways” that examine how global society,
+        demographics and economics might change over the next century. They are collectively known as
         the “Shared Socioeconomic Pathways”</p>
       <ul class = "p_page2">
           <li>SSP1: Sustainability – Taking the Green Road.</li>
@@ -292,7 +297,7 @@ img {
   <div id="slider3"></div>
   </div>
   <div class="box box-3">
-    <h1 id="box box-3-header">
+    <h1 id="box-3-header">
       Current Production of Folate
     </h1>
     <h1 id="box-3-header-2">
@@ -444,9 +449,9 @@ img {
         .attr("cy", d => projection(d)[1]);
     }
 
-    let countryName = document.getElementsByTagName('h1')[1];
-    let popData = document.getElementsByTagName('div')[7];
-    let folateProduction = document.getElementsByTagName('p')[1];
+    let countryName = document.getElementsByTagName('h1')[2];
+    //let popData = document.getElementsByTagName('div')[7];
+    let folateProduction = document.getElementsByTagName('p')[3];
 
     let data_folate = {};
     d3.csv('dataset/folate_data.csv', function(error, data) {
@@ -535,8 +540,9 @@ img {
           .call( zoom.transform, d3.zoomIdentity );
 
       countryName.innerHTML = "World";
-      // folateProduction.innerHTML = "Folate Production: 10B mcg";
+      //folateProduction.innerHTML = "Folate Production: 10B mcg";
       previousCountryClicked = 'WRD';
+      display_folate();
     }
 
     // If the drag behavior prevents the default click,
@@ -568,7 +574,7 @@ function display_folate() {
     folateProduction.innerHTML = "Folate Production: Not Measured"
 }
 
-let title = document.getElementsByTagName('h1')[0];
+let title = document.getElementsByTagName('h1')[1];
 
 var slider3 = d3.sliderHorizontal()
   .min(1850)
