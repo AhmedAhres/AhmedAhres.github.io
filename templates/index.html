@@ -12,7 +12,7 @@ html, body {
 }
 .box-container {
   height: 100%;
-    min-height: 100%;
+  min-height: 100%;
   display: flex;
 }
 
@@ -30,11 +30,6 @@ html, body {
   background-color: rgb(247, 246, 241);
 }
 
-.quote-container {
-  height: 36%;
-  width: 100%;
-  background-color: rgb(255, 255, 255);
-}
 
 .title-box {
   color: black;
@@ -87,9 +82,14 @@ line {
     stroke-width: 3px;
 }
 
-#box-3-header {
+.box.box-3-header {
   text-align: center;
-  font-size: 35px;
+  font-size: 2vh;
+}
+
+#box-3-header-2 {
+  text-align: center;
+  font-size: 1vh;
 }
 
 #box-3-sub-header {
@@ -113,7 +113,7 @@ line {
 .box-3 {
   background-color: white;
   width: 28%;
-  font-size: 23px;
+  /* font-size: 23px; */
   margin-right: 20px;
   }
 .box-small {
@@ -153,6 +153,70 @@ img {
   width: auto;
   max-height: 30%;
 }
+
+.quote-container {
+  height: 36%;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+}
+
+.h1_page { 
+  color: rgb(0, 0, 0); 
+  font-family: 'Open Sans', sans-serif; 
+  font-size: 200%; 
+  font-weight: bold;
+  padding-left: 10%; 
+  padding-right:10% ; 
+  text-align: center;
+   }
+.h2_page { 
+  color: rgb(8, 79, 185); 
+  font-family: 'Open Sans', sans-serif; 
+  font-size: 150%; 
+  font-weight: bold;
+  padding-left: 10%; 
+  padding-right:10% ; 
+  text-align: center;
+   }
+
+.p_page1 { 
+  color: #222;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 200%;
+  padding-left: 10%; 
+  padding-right:10% ; 
+  margin-top:-10px;
+  text-align: center; 
+  }
+
+.info-container {
+  width: 100%;
+  height: 64px
+}
+
+.p_page2 { 
+  color: #222;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 90%;
+  line-height: 200%;
+  padding-left: 10%; 
+  padding-right:10% ; 
+  }
+
+.column {
+    float: left;
+    width: 31.5%;
+    height: 64px;
+    padding: 10px;
+    
+}
+.info-container:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 </style>
 </head>
@@ -182,6 +246,42 @@ img {
 
 <div class="title-container2">
   <div class="quote-container">
+    <h1 class="h1_page"> There is no Plan Bee for when we run out of pollinators</h1> <br>
+    <p class="p_page1">Pollination is a vital process of nature that isn’t very well known,<br>  but is extremely important in the food growing processes.<br> 
+      Pollen has to be transferred between two flowers of the same species,<br>  which then fertilizes the flower and allows the production of healthy seeds on the plant.
+    </p>
+  </div>
+  <div>
+    <div class="column" style="background-color:gb(207, 206, 201);">
+      <h2 class = h2_page>Pollinators:</h2>
+        <ul class = "p_page2">
+            <li>Bees: The most recognized pollinators are the various species of bees, 
+              which are plainly adapted to pollination. Bees typically are fuzzy and carry an electrostatic charge. 
+              Both features help pollen grains adhere to their bodies.</li>
+            <li>Other insects: Many insects other than bees accomplish pollination by visiting flowers for nectar or pollen, 
+              or commonly both. Many do so accidentally.</li>
+        </ul>
+    </div>
+    <div class="column" style="background-color:gb(227, 226, 221);">
+      <h2 class = h2_page> SSPs:</h2>
+      <p class = "p_page2">An international team of climate scientists, 
+        economists and energy systems modellers have built a range of new “pathways” that examine how global society, 
+        demographics and economics might change over the next century. They are collectively known as 
+        the “Shared Socioeconomic Pathways”</p>
+      <ul class = "p_page2">
+          <li>SSP1: Sustainability – Taking the Green Road.</li>
+          <li>SSP3: Regional Rivalry – A Rocky Road.</li>
+          <li>SSP5: Fossil-fueled Development – Taking the Highway.</li>
+      </ul>
+    </div>
+    <div class="column" style="background-color:rgb(247, 246, 241);">
+      <h2 class = h2_page>Productions</h2>
+      <ul class = "p_page2">
+          <li>Folate (vitamin B-9): is important in red blood cell formation and for healthy cell growth and function(Unit: mcg DFE).</li>
+          <li>Energy: Food energy is chemical energy that animals (including humans) derive from food through the process of cellular respiration(Unit: kcal).</li>
+          <li>Vitamin A is involved in immune function, vision, reproduction, and cellular communication(Unit: mcg RE).</li>
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -195,7 +295,7 @@ img {
     <h1 id="box box-3-header">
       Current Production of Folate
     </h1>
-    <h1 id="box-3-header">
+    <h1 id="box-3-header-2">
       World
     </h1>
     <div class = "box box-small">
