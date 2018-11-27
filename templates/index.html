@@ -449,6 +449,7 @@ input:checked + .slider:before {
 
   var previousCountryClicked = 'WRD';
   var path, projection, zoom = null;
+  var inertia;
 
   var svg = d3.select(".box.box-2").append("svg")
       .attr("width", width)
@@ -539,9 +540,6 @@ input:checked + .slider:before {
   // Calling the ready function to render everything even chloropleth
   ready();
 
-  // inertia versor dragging after everything has been rendered
-  var inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
-
   // Lat - Long Coordinates for Nigeria - Example
   // Data is in Lat Long, but for coding the sequence is Long Lat
   var coordinates = {};
@@ -568,11 +566,13 @@ input:checked + .slider:before {
           .translate([width / 2, height / 2])
           .precision(.1);
     } else {
-      console.log("In here ortho");
       projection = d3.geoOrthographic()
         .scale(planet_radius*0.844)
         .translate([width / 2, height / 2])
         .precision(.1);
+
+      // inertia versor dragging after everything has been rendered
+      inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
     }
 
     path = d3.geoPath()
