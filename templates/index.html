@@ -447,7 +447,7 @@ img {
       .projection(projection);
 
   //Data and color scale and legend
-  var colorScheme = d3.schemeReds[7];
+  var colorScheme = d3.schemeRdYlGn[7];
   colorScheme.unshift("#eee");
   var colorScale = d3.scaleThreshold()
       .domain([0, 1, 20, 40, 60, 80, 100])
@@ -651,7 +651,7 @@ let years = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"]
 let actualData = ["1850", "1900", "1910", "1945", "1980", "2015", "2050"]
 
 var formatToData = function(d) {
-  // TO BE OPTIMIZED
+  // TO BE OPTIMIZED WITH A DICTIONARY
     if (d == 1850 || d == 1900) return d;
     if (d == 1950) return 1910;
     if (d == 2000) return 1945;
@@ -681,13 +681,20 @@ function select_contribution_energy(period) {
     data.forEach(function(d) {
       data_c[d.iso3] = global_data_c[d.iso3][period];
     });
-    ready();
+    g.selectAll("path").attr("fill", function (d) {
+          // Pull data for particular iso and set color - Not able to fill it
+          if(d.type == 'Feature') {
+              d.total = data_c[d.properties.iso3] || 0;
+          } else {
+          }
+          return colorScale(d.total);
+      })
   });
 }
 
 let current_SSP = "SSP1";
 
-var slider = d3.sliderHorizontal()
+let slider = d3.sliderHorizontal()
   .min(1850)
   .max(2150)
   .step(50)
@@ -715,35 +722,35 @@ var slider = d3.sliderHorizontal()
       title.innerHTML = "Nature's Contribution to Pollination in 1910";
       removeSSPs();
       select_folate("1910");
-      //select_contribution_energy("1910");
+      select_contribution_energy("1910");
     }
 
     if (val == 2000) {
       title.innerHTML = "Nature's Contribution to Pollination in 1945";
       removeSSPs();
       select_folate("1945");
-      //select_contribution_energy("1945");
+      select_contribution_energy("1945");
     }
 
     if (val == 2050) {
       title.innerHTML = "Nature's Contribution to Pollination in 1980";
       removeSSPs();
       select_folate("1980");
-      //select_contribution_energy("1980");
+      select_contribution_energy("1980");
     }
 
     if (val == 2100) {
       title.innerHTML = "Nature's Contribution to Pollination in 2015";
       removeSSPs();
       select_folate("2015");
-      //select_contribution_energy("2015");
+      select_contribution_energy("2015");
     }
 
     if (val == 2150) {
       showSSPs();
       title.innerHTML = "Nature's Contribution to Pollination in 2050 - " + current_SSP;
       select_folate(current_SSP);
-      //select_contribution_energy(current_SSP);
+      select_contribution_energy(current_SSP);
     }
   });
 
@@ -774,7 +781,7 @@ function change_period(period){
       current_SSP = "SSP5";
     }
     select_folate(current_SSP);
-    //select_contribution_energy(current_SSP);
+    select_contribution_energy(current_SSP);
     title.innerHTML = "Nature's Contribution to Pollination 2050 - " + current_SSP;
   }
 
