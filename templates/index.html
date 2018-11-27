@@ -284,7 +284,7 @@ img {
   height: 34px;
 }
 
-.switch input { 
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
@@ -408,7 +408,7 @@ input:checked + .slider:before {
   </div>
   <div class="box box-3">
     <h1 id="box-3-header">
-      Production of Folate in 1945
+      Nature's Contribution to Pollination in 1945
     </h1>
     <h1 id="box-3-header-2">
       World
@@ -505,10 +505,10 @@ input:checked + .slider:before {
   changeProjection(false);
 
   //Data and color scale and legend
-  var colorScheme = d3.schemeReds[6];
+  var colorScheme = d3.schemeRdYlGn[6];
   colorScheme.unshift("#eee");
   var colorScale = d3.scaleThreshold()
-      .domain([1, 6, 11, 26, 101, 1001])
+      .domain([0, 1, 20, 40, 60, 80, 100])
       .range(colorScheme);
 
   // Getting the Legend and setting the color scale on the legend
@@ -516,12 +516,14 @@ input:checked + .slider:before {
   var g_legend = svg_legend.append("g")
       .attr("class", "legendThreshold")
       .attr("transform", "translate(10,20)");
+
   g_legend.append("text")
       .attr("class", "caption")
       .attr("x", 0)
       .attr("y", -4)
-      .text("Legend");
-  var labels = ['0', '1-5', '6-10', '11-25', '26-100', '101-1000', '> 1000'];
+      .text("in %");
+
+  var labels = ['0', '1-20', '21-40', '41-60', '61-80', '81-99', '100'];
   var legend = d3.legendColor()
       .labels(function (d) { return labels[d.i]; })
       .shapePadding(4)
@@ -529,13 +531,32 @@ input:checked + .slider:before {
   svg_legend.select(".legendThreshold")
       .call(legend);
 
-  // Loading the data for the testing file - Chloropleth
-  var data_c = {};
-  d3.csv('world/mooc-countries.csv', function(error, data) {
+function load(dataset) {
+  let result = {};
+  d3.csv(dataset, function(error, data) {
     data.forEach(function(d) {
-      data_c[d.code] = d.total;
+      result[d.iso3] = d;
+      });
     });
+  return result;
+}
+
+let global_folate = load("dataset/folate_data.csv");
+
+let data_folate = {};
+d3.csv('dataset/folate_data.csv', function(error, data) {
+    data.forEach(function(d) {
+      data_folate[d.iso3] = global_folate[d.iso3]["2015"];
+    });
+});
+  // Loading the data for the testing file - Chloropleth
+let global_data_c = load('dataset/country_energy.csv');
+let data_c = {};
+d3.csv('dataset/country_energy.csv', function(error, data) {
+  data.forEach(function(d) {
+    data_c[d.iso3] = global_data_c[d.iso3]["1945"];
   });
+});
 
   // Calling the ready function to render everything even chloropleth
   ready();
@@ -627,25 +648,6 @@ input:checked + .slider:before {
   let title = document.getElementsByTagName('h1')[1];
   let folateProduction = document.getElementsByTagName('p')[3];
 
-  function load(dataset) {
-    let result = {};
-    d3.csv(dataset, function(error, data) {
-      data.forEach(function(d) {
-        result[d.iso3] = d;
-      });
-    });
-    return result;
-  }
-
-  let global_folate = load("dataset/folate_data.csv");
-
-  let data_folate = {};
-  d3.csv('dataset/folate_data.csv', function(error, data) {
-    data.forEach(function(d) {
-      data_folate[d.iso3] = global_folate[d.iso3]["2015"];
-    });
-  });
-
 
     function clicked(d) {
       if (active.node() === this) return reset();
@@ -700,7 +702,7 @@ input:checked + .slider:before {
     previousCountryClicked = active_info.__data__.properties.iso3
   }
 
-  function showData(coordinates) {
+function showData(coordinates) {
       // Add circles to the country which has been selected
       // Removing part is within
 
@@ -750,11 +752,11 @@ input:checked + .slider:before {
     if (d3.event.defaultPrevented) d3.event.stopPropagation();
   }
 
-let data3 = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"]
+let years = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"]
 let actualData = ["1850", "1900", "1910", "1945", "1980", "2015", "2050"]
 
 var formatToData = function(d) {
-  // TO BE OPTIMIZED
+  // TO BE OPTIMIZED WITH A DICTIONARY
     if (d == 1850 || d == 1900) return d;
     if (d == 1950) return 1910;
     if (d == 2000) return 1945;
@@ -762,6 +764,7 @@ var formatToData = function(d) {
     if (d == 2100) return 2015;
     if (d == 2150) return 2050;
 }
+
 function display_folate() {
   if (data_folate[previousCountryClicked] != null)
     folateProduction.innerHTML = "Folate Production: " + data_folate[previousCountryClicked] + " mcg";
@@ -778,58 +781,81 @@ function select_folate(period) {
   });
 }
 
-let last_SSP = "SSP1";
+function select_contribution_energy(period) {
+  d3.csv('dataset/country_energy.csv', function(error, data) {
+    data.forEach(function(d) {
+      data_c[d.iso3] = global_data_c[d.iso3][period];
+    });
+    g.selectAll("path").attr("fill", function (d) {
+          // Pull data for particular iso and set color - Not able to fill it
+          if(d.type == 'Feature') {
+              d.total = data_c[d.properties.iso3] || 0;
+          } else {
+          }
+          return colorScale(d.total);
+      })
+  });
+}
 
-var slider = d3.sliderHorizontal()
+let current_SSP = "SSP1";
+
+let slider = d3.sliderHorizontal()
   .min(1850)
   .max(2150)
   .step(50)
   .default("2000")
   .width(400)
-  .tickValues(data3)
+  .tickValues(years)
   .tickFormat(formatToData)
   .on("onchange", val => {
     // Here, the value we check for is still the original one, not the formatted one
     if (val == 1850) {
-      title.innerHTML = "Production of Folate in 1850";
+      title.innerHTML = "Nature's Contribution to Pollination in 1850";
       removeSSPs();
       select_folate("1850");
+      select_contribution_energy("1850");
     }
 
     if (val == 1900) {
-      title.innerHTML = "Production of Folate in 1900";
+      title.innerHTML = "Nature's Contribution to Pollination in 1900";
       removeSSPs();
       select_folate("1900");
+      select_contribution_energy("1900");
     }
 
     if (val == 1950) {
-      title.innerHTML = "Production of Folate in 1910";
+      title.innerHTML = "Nature's Contribution to Pollination in 1910";
       removeSSPs();
       select_folate("1910");
+      select_contribution_energy("1910");
     }
 
     if (val == 2000) {
-      title.innerHTML = "Production of Folate in 1945";
+      title.innerHTML = "Nature's Contribution to Pollination in 1945";
       removeSSPs();
       select_folate("1945");
+      select_contribution_energy("1945");
     }
 
     if (val == 2050) {
-      title.innerHTML = "Production of Folate in 1980";
+      title.innerHTML = "Nature's Contribution to Pollination in 1980";
       removeSSPs();
       select_folate("1980");
+      select_contribution_energy("1980");
     }
 
     if (val == 2100) {
-      title.innerHTML = "Production of Folate in 2015";
+      title.innerHTML = "Nature's Contribution to Pollination in 2015";
       removeSSPs();
       select_folate("2015");
+      select_contribution_energy("2015");
     }
 
     if (val == 2150) {
       showSSPs();
-      title.innerHTML = "Production of Folate in 2050 - " + last_SSP;
-      select_folate(last_SSP);
+      title.innerHTML = "Nature's Contribution to Pollination in 2050 - " + current_SSP;
+      select_folate(current_SSP);
+      select_contribution_energy(current_SSP);
     }
   });
 
@@ -839,28 +865,29 @@ function change_period(period){
     var ssp5 = document.getElementById("ssp5");
     var selector = document.getElementById("selector");
     if (period === "ssp1") {
-      title.innerHTML = "Production of Folate in 2050 - SSP1";
+      title.innerHTML = "Nature's Contribution to Pollination in 2050 - SSP1";
       selector.style.left = 0;
       selector.style.width = ssp1.clientWidth + "px";
       selector.style.backgroundColor = "#777777";
       selector.innerHTML = "SSP1";
-      last_SSP = "SSP1";
+      current_SSP = "SSP1";
     } else if (period === "ssp3") {
       selector.style.left = ssp1.clientWidth + "px";
       selector.style.width = ssp3.clientWidth + "px";
       selector.innerHTML = "SSP3";
       selector.style.backgroundColor = "#418d92";
-      last_SSP = "SSP3";
+      current_SSP = "SSP3";
     } else {
-      title.innerHTML = "Production of Folate in 2050 - SSP5";
+      title.innerHTML = "Nature's Contribution to Pollination in 2050 - SSP5";
       selector.style.left = ssp1.clientWidth + ssp3.clientWidth + 1 + "px";
       selector.style.width = ssp5.clientWidth + "px";
       selector.innerHTML = "SSP5";
       selector.style.backgroundColor = "#4d7ea9";
-      last_SSP = "SSP5";
+      current_SSP = "SSP5";
     }
-    select_folate(last_SSP);
-    title.innerHTML = "Production of Folate in 2050 - " + last_SSP;
+    select_folate(current_SSP);
+    select_contribution_energy(current_SSP);
+    title.innerHTML = "Nature's Contribution to Pollination 2050 - " + current_SSP;
   }
 
 function showSSPs() {
