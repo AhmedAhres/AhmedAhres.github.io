@@ -151,10 +151,6 @@ img {
   /* text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15); */
 }
 
-/*.planet {
-  fill: rgb(170,218,255);
-}*/
-
 .topleft {
   position: absolute;
   top: 0px;
@@ -228,6 +224,59 @@ img {
     display: table;
     clear: both;
 }
+
+@import url(https://fonts.googleapis.com/css?family=Sintony);
+
+.switch_3_ways{
+  margin: auto;
+  margin-top: 2%;
+  margin-bottom: 5%;
+  font-size:0.5em;
+  font-family:sintony;
+  height:2em;
+  width: 50%;
+  line-height:2em;
+  border-radius:0.3em;
+  background:#ccc;
+  position:relative;
+  display:block;
+  float:left;
+}
+
+.switch.ssp1,
+.switch.ssp3,
+.switch.ssp5{
+  cursor:pointer;
+  position:relative;
+  display:block;
+  float:left;
+  -webkit-transition: 300ms ease-out;
+  -moz-transition: 300ms ease-out;
+  transition: 300ms ease-out;
+  padding: 0 1em;
+}
+
+.selector{
+  text-align:center;
+  position:absolute;
+  width:0;
+  box-sizing:border-box;
+  -webkit-transition: 300ms ease-out;
+  -moz-transition: 300ms ease-out;
+  transition: 300ms ease-out;
+  border-radius:0.3em;
+  color:white;
+  width: 75px;
+
+  -moz-box-shadow: 0px 2px 13px 0px #9b9b9b;
+  -webkit-box-shadow: 0px 2px 13px 0px #9b9b9b;
+  -o-box-shadow: 0px 2px 13px 0px #9b9b9b;
+  box-shadow: 0px 2px 13px 0px #9b9b9b;
+  left: 0;
+  background-color: #777777;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#9b9b9b, Direction=180, Strength=13);
+}
+
 </style>
 </head>
 <body>
@@ -303,11 +352,18 @@ img {
   </div>
   <div class="box box-3">
     <h1 id="box-3-header">
-      Current Production of Folate
+      Production of Folate in 1945
     </h1>
     <h1 id="box-3-header-2">
       World
     </h1>
+  <div class="switch_3_ways" style="display:none;">
+    <div id="ssp1" class="switch ssp1" onclick="change_period('ssp1')">SSP1</div>
+    <div id="ssp3" class="switch ssp3" onclick="change_period('ssp3')">SSP3</div>
+    <div id="ssp5" class="switch ssp5" onclick="change_period('ssp5')">SSP5</div>
+     <div id="selector" class="selector"></div>
+
+  </div>
     <div class = "box box-small">
       Population: 7.2B
     </div>
@@ -315,7 +371,7 @@ img {
       Folate (vitamin B-9) is important in red blood cell formation and for healthy cell growth and function.
     </p>
     <p class = "box box-small">
-      Folate Production: 6.69841e+14
+      Folate Production: 5.93474e+14 mcg
     </p>
     <p id="text-box">
       Food energy is chemical energy that animals (including humans) derive from food through the process of cellular respiration.
@@ -329,12 +385,6 @@ img {
     <div class = "box box-small">
       Vitamin A Production:
     </div>
-    <p id="text-box">
-      The dietary requirements of vitamin A, folate and energy is the local nutritional requirements (demand).
-    </p>
-    <div class = "box box-small">
-      Dietary Requirements:
-    </div>
     </div>
 </div>
 
@@ -342,6 +392,8 @@ img {
   var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
   var previousCountryClicked = 'WRD';
+  let selector = document.getElementById("selector");
+  selector.innerHTML = "SSP1";
 
   var svg = d3.select(".box.box-2").append("svg")
       .attr("width", width)
@@ -479,13 +531,25 @@ img {
   }
 
   let countryName = document.getElementsByTagName('h1')[2];
-  //let popData = document.getElementsByTagName('div')[7];
+  let title = document.getElementsByTagName('h1')[1];
   let folateProduction = document.getElementsByTagName('p')[3];
+
+  function load(dataset) {
+    let result = {};
+    d3.csv(dataset, function(error, data) {
+      data.forEach(function(d) {
+        result[d.iso3] = d;
+      });
+    });
+    return result;
+  }
+
+  let global_folate = load("dataset/folate_data.csv");
 
   let data_folate = {};
   d3.csv('dataset/folate_data.csv', function(error, data) {
     data.forEach(function(d) {
-      data_folate[d.iso3] = d.cur;
+      data_folate[d.iso3] = global_folate[d.iso3]["2015"];
     });
   });
 
@@ -582,8 +646,8 @@ img {
     if (d3.event.defaultPrevented) d3.event.stopPropagation();
   }
 
-let data3 = ["1850", "1900", "1950", "2000", "2050", "2100", "2150", "2200", "2250", "2300"]
-let actualData = ["1850", "1900", "1910", "1945", "1980", "Curr", "Pot", "SSP1", "SSP3", "SSP5"]
+let data3 = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"]
+let actualData = ["1850", "1900", "1910", "1945", "1980", "2015", "2050"]
 
 var formatToData = function(d) {
   // TO BE OPTIMIZED
@@ -591,13 +655,9 @@ var formatToData = function(d) {
     if (d == 1950) return 1910;
     if (d == 2000) return 1945;
     if (d == 2050) return 1980;
-    if (d == 2100) return "Current";
-    if (d == 2150) return "Potential";
-    if (d == 2200) return "SSP1";
-    if (d == 2250) return "SSP3";
-    if (d == 2300) return "SSP5";
+    if (d == 2100) return 2015;
+    if (d == 2150) return 2050;
 }
-
 function display_folate() {
   if (data_folate[previousCountryClicked] != null)
     folateProduction.innerHTML = "Folate Production: " + data_folate[previousCountryClicked] + " mcg";
@@ -605,126 +665,114 @@ function display_folate() {
     folateProduction.innerHTML = "Folate Production: Not Measured"
 }
 
-let title = document.getElementsByTagName('h1')[1];
+function select_folate(period) {
+  d3.csv('dataset/folate_data.csv', function(error, data) {
+    data.forEach(function(d) {
+      data_folate[d.iso3] = global_folate[d.iso3][period];
+    });
+    display_folate();
+  });
+}
 
-var slider3 = d3.sliderHorizontal()
+let last_SSP = "SSP1";
+
+var slider = d3.sliderHorizontal()
   .min(1850)
-  .max(2300)
+  .max(2150)
   .step(50)
-  .default("2100")
-  .width(480)
+  .default("2000")
+  .width(400)
   .tickValues(data3)
   .tickFormat(formatToData)
   .on("onchange", val => {
     // Here, the value we check for is still the original one, not the formatted one
     if (val == 1850) {
       title.innerHTML = "Production of Folate in 1850";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.d1850;
-        });
-        display_folate();
-      });
+      removeSSPs();
+      select_folate("1850");
     }
 
     if (val == 1900) {
       title.innerHTML = "Production of Folate in 1900";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.d1900;
-        });
-        display_folate();
-      });
+      removeSSPs();
+      select_folate("1900");
     }
 
     if (val == 1950) {
       title.innerHTML = "Production of Folate in 1910";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.d1910;
-        });
-        display_folate();
-      });
+      removeSSPs();
+      select_folate("1910");
     }
 
     if (val == 2000) {
       title.innerHTML = "Production of Folate in 1945";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.d1945;
-        });
-        display_folate();
-      });
+      removeSSPs();
+      select_folate("1945");
     }
 
     if (val == 2050) {
       title.innerHTML = "Production of Folate in 1980";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.d1980;
-        });
-        display_folate();
-      });
+      removeSSPs();
+      select_folate("1980");
     }
 
     if (val == 2100) {
-      title.innerHTML = "Current Production of Folate";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.cur;
-        });
-        display_folate();
-      });
+      title.innerHTML = "Production of Folate in 2015";
+      removeSSPs();
+      select_folate("2015");
     }
 
     if (val == 2150) {
-      title.innerHTML = "Potential Production of Folate";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.cur;
-        });
-        display_folate();
-      });
-    }
-
-    if (val == 2200) {
-      title.innerHTML = "Production of Folate in SSP1";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.ssp1;
-        });
-        display_folate();
-      });
-    }
-
-    if (val == 2250) {
-      title.innerHTML = "Production of Folate in SSP3";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.ssp3;
-        });
-        display_folate();
-      });
-    }
-    if (val == 2300) {
-      title.innerHTML = "Production of Folate in SSP5";
-      d3.csv('dataset/folate_data.csv', function(error, data) {
-        data.forEach(function(d) {
-          data_folate[d.iso3] = d.ssp5;
-        });
-        display_folate();
-      });
+      showSSPs();
+      title.innerHTML = "Production of Folate in 2050 - " + last_SSP;
+      select_folate(last_SSP);
     }
   });
 
+function change_period(period){
+    var ssp1 = document.getElementById("ssp1");
+    var ssp3 = document.getElementById("ssp3");
+    var ssp5 = document.getElementById("ssp5");
+    var selector = document.getElementById("selector");
+    if (period === "ssp1") {
+      title.innerHTML = "Production of Folate in 2050 - SSP1";
+      selector.style.left = 0;
+      selector.style.width = ssp1.clientWidth + "px";
+      selector.style.backgroundColor = "#777777";
+      selector.innerHTML = "SSP1";
+      last_SSP = "SSP1";
+    } else if (period === "ssp3") {
+      selector.style.left = ssp1.clientWidth + "px";
+      selector.style.width = ssp3.clientWidth + "px";
+      selector.innerHTML = "SSP3";
+      selector.style.backgroundColor = "#418d92";
+      last_SSP = "SSP3";
+    } else {
+      title.innerHTML = "Production of Folate in 2050 - SSP5";
+      selector.style.left = ssp1.clientWidth + ssp3.clientWidth + 1 + "px";
+      selector.style.width = ssp5.clientWidth + "px";
+      selector.innerHTML = "SSP5";
+      selector.style.backgroundColor = "#4d7ea9";
+      last_SSP = "SSP5";
+    }
+    select_folate(last_SSP);
+    title.innerHTML = "Production of Folate in 2050 - " + last_SSP;
+  }
 
-var group3 = d3.select(".box.box-2").append("svg")
-   // Changing the width
+function showSSPs() {
+  document.getElementsByClassName('switch_3_ways')[0].style.display = "block";
+}
+
+function removeSSPs() {
+  document.getElementsByClassName('switch_3_ways')[0].style.display = "none";
+}
+
+var group = d3.select(".box.box-2").append("svg")
   .attr("width", 900)
   .attr("height", 70)
   .append("g")
-  .attr("transform", "translate(210, 12)")
-  .call(slider3);
+  .attr("transform", "translate(280, 12)")
+  .call(slider);
 </script>
 
 
