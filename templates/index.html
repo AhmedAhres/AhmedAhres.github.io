@@ -398,7 +398,7 @@ input:checked + .slider:before {
 <div class="box-container">
   <div class="box box-1">
     <label class="switch">
-      <input type="checkbox" id="projectionChangeChecked" onclick="projectionChecked()" autocomplete="off" >
+      <input type="checkbox" id="projectionChangeChecked" onclick="projectionChecked()" autocomplete="off">
       <span class="slider"></span>
     </label>
   </div>
@@ -587,6 +587,7 @@ input:checked + .slider:before {
       if (error) throw error;
 
       var features = topojson.feature(data, data.objects.units).features;
+
       g.selectAll("path")
           .data(features)
         .enter().append("path")
@@ -664,9 +665,17 @@ input:checked + .slider:before {
           scale = Math.max(1, Math.min(12, 0.9 / Math.max(dx / width, dy / height))),
           translate = [width / 2 - scale * x, height / 2 - scale * y];
 
+      // For disabling the toggle button when you are zoomed in
+      document.getElementById("projectionChangeChecked").disabled = true;
+
       svg.transition()
           .duration(750)
           .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+
+      // TODO: Centering the country, finding the centroid of the selected country 
+      path_centroid = path.centroid(active_info.__data__);
+      geo_centroid = d3.geoCentroid(active_info.__data__);
+
       //popData.innerHTML = "Population: " + active_info.__data__.properties.name;
       countryName.innerHTML = active_info.__data__.properties.name;
       if (data_folate[active_info.__data__.properties.iso3] != null)
@@ -726,10 +735,13 @@ input:checked + .slider:before {
         .duration(750)
         .call( zoom.transform, d3.zoomIdentity );
 
+    // Change the toggle back to enabled
+    document.getElementById("projectionChangeChecked").disabled = false;
+
     countryName.innerHTML = "World";
-      //folateProduction.innerHTML = "Folate Production: 10B mcg";
-      previousCountryClicked = 'WRD';
-      display_folate();
+    //folateProduction.innerHTML = "Folate Production: 10B mcg";
+    previousCountryClicked = 'WRD';
+    display_folate();
   }
 
   // If the drag behavior prevents the default click,
