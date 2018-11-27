@@ -277,6 +277,57 @@ img {
   filter:progid:DXImageTransform.Microsoft.Shadow(color=#9b9b9b, Direction=180, Strength=13);
 }
 
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
 </style>
 </head>
 <body>
@@ -345,7 +396,12 @@ img {
 </div>
 
 <div class="box-container">
-  <div class="box box-1"></div>
+  <div class="box box-1">
+    <label class="switch">
+      <input type="checkbox" id="projectionChangeChecked" onclick="projectionChecked()" autocomplete="off" >
+      <span class="slider"></span>
+    </label>
+  </div>
   <div class="box box-2">
 
   <div id="slider3"></div>
@@ -392,8 +448,7 @@ img {
   var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
   var previousCountryClicked = 'WRD';
-  let selector = document.getElementById("selector");
-  selector.innerHTML = "SSP1";
+  var path, projection, zoom = null;
 
   var svg = d3.select(".box.box-2").append("svg")
       .attr("width", width)
@@ -424,27 +479,29 @@ img {
       .attr("stop-color", function(d) { return d.color; });
 
   // Add background to the globe
-  let planet_radius = d3.min([width / 2, height / 2]);
-  g.append('circle')
-    // .classed('planet', true)
-    .attr('cx', '50%')
-    .attr('cy', 0.5*height)
-    .attr('r',  planet_radius*1.5)
-    .style("fill", "url(#earth-gradient)");
+  // let planet_radius = d3.min([width / 2, height / 2]);
+  // g.append('circle')
+  //   // .classed('planet', true)
+  //   .attr('cx', '50%')
+  //   .attr('cy', 0.5*height)
+  //   .attr('r',  planet_radius * 0.844)
+  //   .style("fill", "rgb(170, 218, 255)");
 
   // Can change the scale and extent of the zoom
-  var zoom = d3.zoom()
-      .scaleExtent([1, 12])
-      .on("zoom", zoomed);
+  // var zoom = d3.zoom()
+  //     .scaleExtent([1, 12])
+  //     .on("zoom", zoomed);
 
-  // Changing the scale will change the size - height and width of globe
-  var projection = d3.geoOrthographic()
-      .scale(planet_radius*0.844)
-      .translate([width / 2, height / 2])
-      .precision(.1);
+  // // Changing the scale will change the size - height and width of globe
+  // var projection = d3.geoOrthographic()
+  //     .scale(planet_radius*0.844)
+  //     .translate([width / 2, height / 2])
+  //     .precision(.1);
 
-  var path = d3.geoPath()
-      .projection(projection);
+  // var path = d3.geoPath()
+  //     .projection(projection);
+
+  changeProjection(false);
 
   //Data and color scale and legend
   var colorScheme = d3.schemeReds[6];
@@ -489,6 +546,41 @@ img {
   // Data is in Lat Long, but for coding the sequence is Long Lat
   var coordinates = {};
   coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
+
+  function projectionChecked() {
+    var projectionSlider = document.getElementById("projectionChangeChecked");
+    changeProjection(projectionSlider.checked);
+  }
+
+  function changeProjection(sliderChecked) {
+    // Add background to the globe
+    let planet_radius = d3.min([width / 2, height / 2]);
+
+    // Can change the scale and extent of the zoom
+    zoom = d3.zoom()
+        .scaleExtent([1, 12])
+        .on("zoom", zoomed);
+
+    // Changing the scale will change the size - height and width of globe
+    if(sliderChecked) {
+        projection = d3.geoNaturalEarth()
+          .scale(planet_radius*0.45)
+          .translate([width / 2, height / 2])
+          .precision(.1);
+    } else {
+      console.log("In here ortho");
+      projection = d3.geoOrthographic()
+        .scale(planet_radius*0.844)
+        .translate([width / 2, height / 2])
+        .precision(.1);
+    }
+
+    path = d3.geoPath()
+      .projection(projection);
+
+    // Redraw the all projections
+    svg.selectAll('path').attr('d', path);
+  }
 
   function ready() {
     d3.json("world/countries.json", function(error, data) {
