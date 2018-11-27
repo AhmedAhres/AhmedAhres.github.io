@@ -478,20 +478,17 @@ img {
       .attr("cy", d => projection(d)[1]);
   }
 
-  let countryName = document.getElementsByTagName('h1')[1];
-  let popData = document.getElementsByTagName('div')[7];
+  let countryName = document.getElementsByTagName('h1')[2];
+  //let popData = document.getElementsByTagName('div')[7];
+  let folateProduction = document.getElementsByTagName('p')[3];
 
-  function clicked(d) {
-    let countryName = document.getElementsByTagName('h1')[2];
-    //let popData = document.getElementsByTagName('div')[7];
-    let folateProduction = document.getElementsByTagName('p')[3];
-
-    let data_folate = {};
-    d3.csv('dataset/folate_data.csv', function(error, data) {
-      data.forEach(function(d) {
-        data_folate[d.iso3] = d.cur;
-      });
+  let data_folate = {};
+  d3.csv('dataset/folate_data.csv', function(error, data) {
+    data.forEach(function(d) {
+      data_folate[d.iso3] = d.cur;
     });
+  });
+
 
     function clicked(d) {
       if (active.node() === this) return reset();
@@ -540,8 +537,8 @@ img {
 
   function showData(coordinates) {
       // Add circles to the country which has been selected
-      // Removing part is within 
-    
+      // Removing part is within
+
       g.selectAll(".plot-point")
           .data(coordinates).enter()
           .append("circle")
