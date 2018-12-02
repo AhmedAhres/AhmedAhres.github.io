@@ -19,8 +19,10 @@
 <script src="libraries/d3-scale-chromatic.v1.min.js"></script>
 <script src="libraries/d3-geo-projection.v2.min.js"></script>
 <script src="libraries/d3-legend.js"></script>
+<script src="libraries/d3-tip.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 <!-- StoryTelling form - 1st page for Title and other content, 2nd Page for the visualization  -->
 <!-- If needed to add another page, just copy the title container and change the name of the classes -->
@@ -123,8 +125,7 @@
     </label>
   </div>
   <div class="box box-2">
-    <div id="slider3"></div>
-    </div>
+  </div>
   <div class="box box-3">
     <h1 id="box-3-header">
       Nature's Contribution to Pollination in 1945
@@ -223,6 +224,17 @@ function showNow() {
 
   // Add projection to the viz
   changeProjection(false);
+
+  // Adding tip for hover
+  var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    // Here d -> is basically the data which is given to the circle -> right now it is just lat long
+    .html(function(d) {
+      return "<strong> Folate: <span>" + d[0] + "</span></strong>";
+    })
+  // Adding tip to the svg
+  svg.call(tip);
 
   //Data and color scale and legend
   var colorScheme = d3.schemeRdYlGn[6];
@@ -443,7 +455,9 @@ function showData(coordinates) {
             return projection(d)[1];
         })
         .attr("r", "0.8px")
-        .attr("fill", "#F0B0EE");
+        .attr("fill", "#F0B0EE")
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
   }
 
   function zoomed() {
@@ -628,7 +642,7 @@ var group = d3.select(".box.box-2").append("svg")
   .attr("width", 900)
   .attr("height", 70)
   .append("g")
-  .attr("transform", "translate(280, 12)")
+  .attr("transform", "translate(" + 200 + "," + 12 + ")")
   .call(slider);
 </script>
 
