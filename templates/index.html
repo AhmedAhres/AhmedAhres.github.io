@@ -147,7 +147,7 @@
       <p id="text-box">
         Folate (vitamin B-9) is important in red blood cell formation and for healthy cell growth and function.
       </p>
-      <p class = "box box-small">
+      <p class = "box box-small" id = "folate_production">
         Folate Production: 5.93474e+14 mcg
       </p>
       <p id="text-box">
@@ -376,9 +376,9 @@ function showNow() {
       .attr("cy", d => projection(d)[1]);
   }
 
-  let countryName = document.getElementsByTagName('h1')[2];
-  let title = document.getElementsByTagName('h1')[1];
-  let folateProduction = document.getElementsByTagName('p')[3];
+  let countryName = document.getElementById("box-3-header-2");
+  let title = document.getElementById("box-3-header");
+  let folateProduction = document.getElementById("folate_production");
 
   function clicked(d) {
     if (active.node() === this) return reset();
