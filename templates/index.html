@@ -20,6 +20,8 @@
 <script src="libraries/d3-geo-projection.v2.min.js"></script>
 <script src="libraries/d3-legend.js"></script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <!-- StoryTelling form - 1st page for Title and other content, 2nd Page for the visualization  -->
 <!-- If needed to add another page, just copy the title container and change the name of the classes -->
 <div class="title-container">
@@ -71,8 +73,50 @@
   </div>
 </div>
 
+<!-- for the PopUpwindow -->
+<div id="ac-wrapper" style='display:none' onClick="hideNow(event)" >
+<div id="popup" class = "grad1" >
+    <center>
+         <h2 class = "h2_page">How to use ?</h2>
+         <p>
+           <ul class = "p_popup">
+               <li>On the Left:
+                 <ul>
+                   <li>The info button lets you call this popup again</li>
+                   <li>The button lets you choose the whether you want to visualize the globe in 3D or 2D</li>
+                   <li>The legend shows the colors as percentages</li>
+                  </ul>
+              </li>
+              <li>In the center:
+                <ul>
+                  <li>Here we have the globe</li>
+                  <li>You can interact with it by rotating it using the mouse or by clicking on a country to display the information we have about it.</li>
+                 </ul>
+              </li>
+              <li>On the right:
+                <ul>
+                  <li>All the information about the specific country is displayed</li>
+                  <li>You can choose ehat kind of information to display by clicking on the buttons</li>
+                 </ul>
+              </li>
+              <li>On the bottom:
+                <ul>
+                  <li>You can select the year you want to visualize using the slider</li>
+                 </ul>
+              </li>
+
+           </ul>
+        </p>
+        <input type="submit" name="submit" value="Got it !" onClick="PopUp('hide')" />
+    </center>
+</div>
+</div>
+<!-- End of popup window -->
+
 <div class="box-container">
   <div class="box box-1">
+    <input type="button" name="answer" value="info" onclick="showNow()" />
+    <!-- <button style="font-size:24px"><i class="fa fa-info-circle"></i></button> -->
     <label class="switch">
       <input type="checkbox" id="projectionChangeChecked" onclick="projectionChecked()" autocomplete="off">
       <span class="slider"></span>
@@ -121,6 +165,36 @@
 </div>
 
 <script>
+
+// For the popup window
+function PopUp(hideOrshow) {
+
+    if (hideOrshow == 'hide') {
+        document.getElementById('ac-wrapper').style.display = "none";
+    }
+
+    else  if(localStorage.getItem("popupWasShown") == null) {
+        localStorage.setItem("popupWasShown",1);
+        document.getElementById('ac-wrapper').removeAttribute('style');
+    }
+
+}
+window.onload = function () {
+    setTimeout(function () {
+        PopUp('show');
+    }, 0);
+}
+
+
+function hideNow(e) {
+    if (e.target.id == 'ac-wrapper') document.getElementById('ac-wrapper').style.display = 'none';
+}
+function showNow() {
+    document.getElementById('ac-wrapper').style.display = "inline";
+}
+
+// End of popup window
+
   var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
   var previousCountryClicked = 'WRD';
