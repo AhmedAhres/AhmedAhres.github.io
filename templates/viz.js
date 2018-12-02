@@ -1,4 +1,13 @@
 
+
+var waypoint = new Waypoint({
+  element: document.getElementById('3rd_box'),
+  handler: function() {
+    PopUp('show')
+  }
+})
+
+
 // For the popup window
 function PopUp(hideOrshow) {
 
@@ -6,16 +15,11 @@ function PopUp(hideOrshow) {
         document.getElementById('ac-wrapper').style.display = "none";
     }
 
-    else  if(localStorage.getItem("popupWasShown") == null) {
+    else if(localStorage.getItem("popupWasShown") == null) {
         localStorage.setItem("popupWasShown",1);
         document.getElementById('ac-wrapper').removeAttribute('style');
     }
 
-}
-window.onload = function () {
-    setTimeout(function () {
-        PopUp('show');
-    }, 0);
 }
 
 

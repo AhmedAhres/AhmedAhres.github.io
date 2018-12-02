@@ -10,7 +10,7 @@ html, body {
   display: flex;
   background: radial-gradient(
     circle at 40%,
-    rgb(170,218,255) 22%, 
+    rgb(170,218,255) 22%,
     rgb(228, 255, 255) 42%,
     rgb(215, 254, 255) 49%,
     rgb(204, 245, 255) 56%,
