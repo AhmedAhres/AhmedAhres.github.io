@@ -229,6 +229,7 @@ function showNow() {
   var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
+    // Here d -> is basically the data which is given to the circle -> right now it is just lat long
     .html(function(d) {
       return "<strong> Folate: <span>" + d[0] + "</span></strong>";
     })
