@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="styles.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -117,8 +118,7 @@
 
 <div class="box-container">
   <div class="box box-1">
-    <input type="button" name="answer" value="info" onclick="showNow()" />
-    <!-- <button style="font-size:24px"><i class="fa fa-info-circle"></i></button> -->
+    <button class="info-button" name="answer" value="info" onclick="showNow()"><i class="fa fa-info-circle fa-3x"></i></button>
     <label class="switch">
       <input type="checkbox" id="projectionChangeChecked" onclick="projectionChecked()" autocomplete="off">
       <span class="slider"></span>
@@ -253,7 +253,7 @@ function showNow() {
       .attr("class", "caption")
       .attr("x", 0)
       .attr("y", -4)
-      .text("in %");
+      .text("% change");
 
   var labels = ['0', '1-20', '21-40', '41-60', '61-80', '81-99', '100'];
   var legend = d3.legendColor()
