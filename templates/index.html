@@ -123,9 +123,8 @@
     </label>
   </div>
   <div class="box box-2">
-
-  <div id="slider3"></div>
-  </div>
+    <div id="slider3"></div>
+    </div>
   <div class="box box-3">
     <h1 id="box-3-header">
       Nature's Contribution to Pollination in 1945
@@ -133,35 +132,50 @@
     <h1 id="box-3-header-2">
       World
     </h1>
-  <div class="switch_3_ways" style="display:none;">
-    <div id="ssp1" class="switch ssp1" onclick="change_period('ssp1')">SSP1</div>
-    <div id="ssp3" class="switch ssp3" onclick="change_period('ssp3')">SSP3</div>
-    <div id="ssp5" class="switch ssp5" onclick="change_period('ssp5')">SSP5</div>
-     <div id="selector" class="selector"></div>
+    <div class="switch_3_ways" style="display:none;">
+      <div id="ssp1" class="switch ssp1" onclick="change_period('ssp1')">SSP1</div>
+      <div id="ssp3" class="switch ssp3" onclick="change_period('ssp3')">SSP3</div>
+      <div id="ssp5" class="switch ssp5" onclick="change_period('ssp5')">SSP5</div>
 
+       <div id="selector" class="selector"></div>
+
+    </div>
+      <div class = "box box-small">
+        Population: 7.2B
+      </div>
+      <p id="text-box">
+        Folate (vitamin B-9) is important in red blood cell formation and for healthy cell growth and function.
+      </p>
+      <p class = "box box-small">
+        Folate Production: 5.93474e+14 mcg
+      </p>
+      <p id="text-box">
+        Food energy is chemical energy that animals (including humans) derive from food through the process of cellular respiration.
+      </p>
+      <div class = "box box-small">
+        Energy Production:
+      </div>
+      <p id="text-box">
+        Vitamin A is involved in immune function, vision, reproduction, and cellular communication.
+      </p>
+      <div class = "box box-small">
+        Vitamin A Production:
+      </div>
   </div>
-    <div class = "box box-small">
-      Population: 7.2B
+
+  <!-- Add buttons for folate, vitamin, energy  -->
+  <div class="parent-button-div">
+    <div class="folate-button">
+      <h1 class="button-title">Folate</h1>
     </div>
-    <p id="text-box">
-      Folate (vitamin B-9) is important in red blood cell formation and for healthy cell growth and function.
-    </p>
-    <p class = "box box-small">
-      Folate Production: 5.93474e+14 mcg
-    </p>
-    <p id="text-box">
-      Food energy is chemical energy that animals (including humans) derive from food through the process of cellular respiration.
-    </p>
-    <div class = "box box-small">
-      Energy Production:
+    <div class="vitamin-button">
+      <h1 class="button-title">Vitamin</h1>
     </div>
-    <p id="text-box">
-      Vitamin A is involved in immune function, vision, reproduction, and cellular communication.
-    </p>
-    <div class = "box box-small">
-      Vitamin A Production:
+    <div class="energy-button">
+      <h1 class="button-title">Energy</h1>
     </div>
-    </div>
+  </div>
+
 </div>
 
 <script>
@@ -237,16 +251,6 @@ function showNow() {
   svg_legend.select(".legendThreshold")
       .call(legend);
 
-  function load(dataset) {
-    let result = {};
-    d3.csv(dataset, function(error, data) {
-      data.forEach(function(d) {
-        result[d.iso3] = d;
-        });
-      });
-    return result;
-  }
-
   let global_folate = load("dataset/folate_data.csv");
 
   let data_folate = {};
@@ -271,6 +275,16 @@ function showNow() {
   // Data is in Lat Long, but for coding the sequence is Long Lat
   var coordinates = {};
   coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
+
+  function load(dataset) {
+    let result = {};
+    d3.csv(dataset, function(error, data) {
+      data.forEach(function(d) {
+        result[d.iso3] = d;
+        });
+      });
+    return result;
+  }
 
   function projectionChecked() {
     var projectionSlider = document.getElementById("projectionChangeChecked");

@@ -10,7 +10,7 @@ html, body {
   display: flex;
   background: radial-gradient(
     circle at 40%,
-    rgb(170,218,255) 34%,
+    rgb(170,218,255) 22%, 
     rgb(228, 255, 255) 42%,
     rgb(215, 254, 255) 49%,
     rgb(204, 245, 255) 56%,
@@ -118,7 +118,7 @@ line {
 }
 
 .box-2 {
-  width: 62%;
+  width: 61%;
   padding-right: 5px;
   padding-top: 0px;
   padding-left: 0px;
@@ -127,10 +127,10 @@ line {
 
 .box-3 {
   background-color: white;
-  width: 28%;
+  width: 31.7%;
   font-size: 1hv;
-  margin-right: 20px;
-  }
+}
+
 .box-small {
   text-align: left;
   font-size: 2vh;
@@ -179,7 +179,8 @@ img {
   padding-left: 10%;
   padding-right:10% ;
   text-align: center;
-   }
+}
+
 .h2_page {
   color: rgb(8, 79, 185);
   font-family: 'Open Sans', sans-serif;
@@ -379,4 +380,42 @@ input:checked + .slider:before {
    text-align: left;
    }
 
-/* End of popup window */
+.folate-button {
+  width: 100%;
+  height: 33.3%;
+  background: #DDD;
+  border-left: solid 6px rgb(252, 141, 89);
+  font-weight: bold;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+}
+
+.vitamin-button {
+  width: 100%;
+  height: 33.3%;
+  background: #DDD;
+  border-left: solid 6px rgb(145, 207, 96);
+  font-weight: bold;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+}
+
+.energy-button {
+  width: 100%;
+  height: 33.3%;
+  background: #DDD;
+  border-left: solid 6px rgb(215, 48, 39);
+  font-weight: bold;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+}
+
+.parent-button-div {
+  vertical-align: middle;
+  width: 3%;
+}
+
+.button-title {
+  transform: translateY(700%) rotate(-90deg);
+  font-size: 18px;
+  font-family: Open Sans;
+  margin: 0;
+  color: black;
+}
