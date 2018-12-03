@@ -1,17 +1,30 @@
 
 
-var waypoint = new Waypoint({
+let waypoint = new Waypoint({
   element: document.getElementById('3rd_box'),
   handler: function() {
     PopUp('show')
   }
 })
 
-var selector = document.getElementById("selector");
+let selector = document.getElementById("selector");
 selector.style.left = 0;
 selector.style.width = 10.5 + "vh";
 selector.style.backgroundColor = "#777777";
 selector.innerHTML = "SSP1";
+
+function format_number(number) {
+    if (number>1000000000) {
+        return (number/1000000000).toFixed(2) + 'B'
+    }
+    if (number>1000000) {
+        return (number/1000000).toFixed(2) + 'M'
+    }
+     if (number>1000) {
+        return (number/1000).toFixed(2) + 'K'
+    }
+    return number
+}
 
 
 // For the popup window
@@ -65,7 +78,7 @@ function showNow() {
   svg.call(tip);
 
   //Data and color scale and legend
-  var colorScheme = d3.schemeRdYlGn[6];
+  var colorScheme = d3.schemeReds[6];
   colorScheme.unshift("#eee");
   var colorScale = d3.scaleThreshold()
       .domain([0, 1, 20, 40, 60, 80, 100])
@@ -204,8 +217,8 @@ function showNow() {
       .attr("cy", d => projection(d)[1]);
   }
 
-  let countryName = document.getElementById("box-3-header-2");
-  let title = document.getElementById("box-3-header");
+  let countryName = document.getElementById("box-3-header-2").firstElementChild;
+  let title = document.getElementById("box-3-header").firstElementChild;
   let folateProduction = document.getElementById("folate_production");
 
   function clicked(d) {
@@ -378,42 +391,42 @@ let slider = d3.sliderHorizontal()
   .on("onchange", val => {
     // Here, the value we check for is still the original one, not the formatted one
     if (val == 1850) {
-      title.innerHTML = "Nature's Contribution to Pollination in 1850";
+      title.innerHTML = "Energy's Contribution to Pollination in 1850";
       removeSSPs();
       select_folate("1850");
       select_contribution_energy("1850");
     }
 
     if (val == 1900) {
-      title.innerHTML = "Nature's Contribution to Pollination in 1900";
+      title.innerHTML = "Energy's Contribution to Pollination in 1900";
       removeSSPs();
       select_folate("1900");
       select_contribution_energy("1900");
     }
 
     if (val == 1950) {
-      title.innerHTML = "Nature's Contribution to Pollination in 1910";
+      title.innerHTML = "Energy's Contribution to Pollination in 1910";
       removeSSPs();
       select_folate("1910");
       select_contribution_energy("1910");
     }
 
     if (val == 2000) {
-      title.innerHTML = "Nature's Contribution to Pollination in 1945";
+      title.innerHTML = "Energy's Contribution to Pollination in 1945";
       removeSSPs();
       select_folate("1945");
       select_contribution_energy("1945");
     }
 
     if (val == 2050) {
-      title.innerHTML = "Nature's Contribution to Pollination in 1980";
+      title.innerHTML = "Energy's Contribution to Pollination in 1980";
       removeSSPs();
       select_folate("1980");
       select_contribution_energy("1980");
     }
 
     if (val == 2100) {
-      title.innerHTML = "Nature's Contribution to Pollination in 2015";
+      title.innerHTML = "Energy's Contribution to Pollination in 2015";
       removeSSPs();
       select_folate("2015");
       select_contribution_energy("2015");
@@ -421,7 +434,7 @@ let slider = d3.sliderHorizontal()
 
     if (val == 2150) {
       showSSPs();
-      title.innerHTML = "Nature's Contribution to Pollination in 2050 - " + current_SSP;
+      title.innerHTML = "Energy's Contribution to Pollination in 2050 - " + current_SSP;
       select_folate(current_SSP);
       select_contribution_energy(current_SSP);
     }
@@ -433,20 +446,21 @@ function change_period(period){
     var ssp5 = document.getElementById("ssp5");
     var selector = document.getElementById("selector");
     if (period === "ssp1") {
-      title.innerHTML = "Nature's Contribution to Pollination in 2050 - SSP1";
+      title.innerHTML = "Energy's Contribution to Pollination in 2050 - SSP1";
       selector.style.left = 0;
       selector.style.width = ssp1.clientWidth + "px";
       selector.style.backgroundColor = "#777777";
       selector.innerHTML = "SSP1";
       current_SSP = "SSP1";
     } else if (period === "ssp3") {
+      title.innerHTML = "Energy's Contribution to Pollination in 2050 - SSP3";
       selector.style.left = ssp1.clientWidth + "px";
       selector.style.width = ssp3.clientWidth + "px";
       selector.innerHTML = "SSP3";
       selector.style.backgroundColor = "#418d92";
       current_SSP = "SSP3";
     } else {
-      title.innerHTML = "Nature's Contribution to Pollination in 2050 - SSP5";
+      title.innerHTML = "Energy's Contribution to Pollination in 2050 - SSP5";
       selector.style.left = ssp1.clientWidth + ssp3.clientWidth + 1 + "px";
       selector.style.width = ssp5.clientWidth + "px";
       selector.innerHTML = "SSP5";
@@ -455,7 +469,7 @@ function change_period(period){
     }
     select_folate(current_SSP);
     select_contribution_energy(current_SSP);
-    title.innerHTML = "Nature's Contribution to Pollination 2050 - " + current_SSP;
+    title.innerHTML = "Energy's Contribution to Pollination 2050 - " + current_SSP;
   }
 
 function showSSPs() {
