@@ -7,6 +7,12 @@ var waypoint = new Waypoint({
   }
 })
 
+var selector = document.getElementById("selector");
+selector.style.left = 0;
+selector.style.width = 10.5 + "vh";
+selector.style.backgroundColor = "#777777";
+selector.innerHTML = "SSP1";
+
 
 // For the popup window
 function PopUp(hideOrshow) {
