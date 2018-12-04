@@ -482,12 +482,23 @@ input:checked + .slider:before {
     margin-bottom: 0vh;
 }
 
+.nav-bar-hidden {
+    border-bottom: 0.2vh solid rgba(0,0,0,0.25);
+    color: gray;
+    margin-top: 1vh;
+    margin-bottom: 0vh;
+}
+
 .ver-bar {
   border-left: 0.2vh solid rgba(0,0,0,0.25);
   height: 22vh;
   left: 20%;
   margin-left: -6vh;
   top: 0;
+}
+
+#box_population {
+  size: 20vh
 }
 
  .docsChart {

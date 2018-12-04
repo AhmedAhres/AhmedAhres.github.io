@@ -9,6 +9,7 @@ let waypoint = new Waypoint({
 
 // Current dataset depending on what we visualize
 let dataset = 'dataset/country_energy.csv';
+let data_population = 'dataset/population.csv';
 var current_viz = "Energy";
 var colorScheme = d3.schemeReds[6];
 
@@ -26,6 +27,28 @@ function updateDataEnergy() {
 function updateDataVitamin() {
   current_viz = "Vitamin A";
   colorScheme = d3.schemeGreens[6];
+}
+
+// We handle the display of the population part in the story telling
+let current_population_data = {}
+function initialize_population() {
+  d3.csv(data_population, function(error, data) {
+    data.forEach(function(d) {
+      current_population_data[d.iso3] = population_data[d.iso3]["1980"];
+    });
+  });
+}
+
+function update_population(period) {
+  d3.csv(data_population, function(error, data) {
+    data.forEach(function(d) {
+      current_population_data[d.iso3] = population_data[d.iso3][period];
+    });
+    if (format_number(current_population_data[previousCountryClicked] == null))
+      population.innerHTML = "Population: NM";
+    else
+      population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
+  });
 }
 
 let selector = document.getElementById("selector");
@@ -109,7 +132,7 @@ g_legend.append("text")
     .attr("class", "caption")
     .attr("x", 0)
     .attr("y", -4)
-    .text("% change");
+    .text("Contribution %");
 
 var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
 var legend = d3.legendColor()
@@ -128,23 +151,27 @@ d3.csv(dataset, function(error, data) {
   });
 });
 
-  // Calling the ready function to render everything even chloropleth
-  ready();
+// Calling the ready function to render everything even chloropleth
+ready();
 
-  // Lat - Long Coordinates for Nigeria - Example
-  // Data is in Lat Long, but for coding the sequence is Long Lat
-  var coordinates = {};
-  coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
+// Lat - Long Coordinates for Nigeria - Example
+// Data is in Lat Long, but for coding the sequence is Long Lat
+var coordinates = {};
+coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
 
-  function load(dataset) {
-    let result = {};
-    d3.csv(dataset, function(error, data) {
-      data.forEach(function(d) {
-        result[d.iso3] = d;
-        });
+function load(dataset) {
+  let result = {};
+  d3.csv(dataset, function(error, data) {
+    data.forEach(function(d) {
+      result[d.iso3] = d;
       });
-    return result;
-  }
+    });
+  return result;
+}
+
+let population_data = load(data_population);
+initialize_population();
+
 
   function projectionChecked() {
     var projectionSlider = document.getElementById("projectionChangeChecked");
@@ -223,6 +250,7 @@ d3.csv(dataset, function(error, data) {
 
   let countryName = document.getElementById("box-3-header-2").firstElementChild;
   let title = document.getElementById("box-3-header").firstElementChild;
+  let population = document.getElementById("box_population").firstElementChild;
   let current_nature_contribution = 33;
   let current_unmet_need = 45;
 
@@ -280,6 +308,7 @@ d3.csv(dataset, function(error, data) {
     previousCountryClicked = active_info.__data__.properties.iso3
     current_nature_contribution = data_c[active_info.__data__.properties.iso3];
     change_nature_percentage(current_nature_contribution);
+    population.innerHTML = "Population: " + format_number(current_population_data[active_info.__data__.properties.iso3]);
   }
 
 function showData(coordinates) {
@@ -325,6 +354,10 @@ function showData(coordinates) {
     countryName.innerHTML = "World";
     previousCountryClicked = 'WLD';
     change_nature_percentage(data_c[previousCountryClicked]);
+    if (current_population_data[previousCountryClicked] == null)
+      population.innerHTML = "Population: NM" + format_number(current_population_data[previousCountryClicked]);
+    else
+      population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
   }
 
   // If the drag behavior prevents the default click,
@@ -370,9 +403,13 @@ function change_nature_percentage(contribution) {
     return function(t) {
       progress = i(t);
       foreground.attr("d", arc.endAngle(twoPi * progress / 100));
-      percentComplete.text(formatPercent(progress / 100));
+      // In case the data is measured, we put "NM" for "Not Measured"
+      if (contribution == null)
+        percentComplete.text("NM");
+      else
+        percentComplete.text(formatPercent(progress / 100));
     };
-    });
+  });
 }
 
 function change_unmet_percentage(unmet) {
@@ -381,7 +418,11 @@ function change_unmet_percentage(unmet) {
     return function(t) {
       progress_unmet = i2(t);
       foreground2.attr("d", arc.endAngle(twoPi * progress_unmet / 100));
-      percentComplete2.text(formatPercent(progress_unmet / 100));
+      // In case the data is measured, we put "NM" for "Not Measured"
+      if (unmet == null)
+        percentComplete2.text("NM");
+      else
+        percentComplete2.text(formatPercent(progress_unmet / 100));
     };
     });
 }
@@ -391,7 +432,7 @@ let slider = d3.sliderHorizontal()
   .min(1850)
   .max(2150)
   .step(50)
-  .default("2000")
+  .default("2050")
   .width(400)
   .tickValues(years)
   .tickFormat(formatToData)
@@ -401,42 +442,49 @@ let slider = d3.sliderHorizontal()
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1850";
       removeSSPs();
       select_contribution_energy("1850");
+      update_population("1850");
     }
 
     if (val == 1900) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1900";
       removeSSPs();
       select_contribution_energy("1900");
+      update_population("1900");
     }
 
     if (val == 1950) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1910";
       removeSSPs();
       select_contribution_energy("1910");
+      update_population("1910");
     }
 
     if (val == 2000) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1945";
       removeSSPs();
       select_contribution_energy("1945");
+      update_population("1945");
     }
 
     if (val == 2050) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1980";
       removeSSPs();
       select_contribution_energy("1980");
+      update_population("1980");
     }
 
     if (val == 2100) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 2015";
       removeSSPs();
       select_contribution_energy("2015");
+      update_population("2015");
     }
 
     if (val == 2150) {
       showSSPs();
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
       select_contribution_energy(current_SSP);
+      update_population(current_SSP);
     }
  });
 
@@ -472,15 +520,20 @@ function change_period(period){
       current_SSP = "SSP5";
     }
     select_contribution_energy(current_SSP);
-      title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
+    title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
+    update_population(current_SSP);
   }
 
+// Function to show the different SSP scenarios when the slider is on 2050
 function showSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "block";
+  document.getElementsByClassName('nav-bar-hidden')[0].style.display = "block";
 }
 
+// Function to show the hide the different SSP scenarios when the slider is not on 2050
 function removeSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "none";
+  document.getElementsByClassName('nav-bar-hidden')[0].style.display = "none";
 }
 
 // Pollination contribution percentage starts here
