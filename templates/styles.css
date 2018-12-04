@@ -90,7 +90,7 @@ line {
 }
 
 #box-3-header {
-  font-size: 4.2vh;
+  font-size: 3.6vh;
 }
 
 #box-3-header-2 {
@@ -126,20 +126,34 @@ line {
   font-size: 1vh;
 }
 
-.box-small {
-  text-align: left;
+.description_text {
+  font-family: ourFont, sans-serif;
   font-size: 2vh;
+}
+
+
+.box-small {
+  font-size: 1.7vh;
   background-color: white;
   flex-direction: column;
-  margin: 0;
-  padding: 0;
+  margin-top: 2vh;
+  margin-left: -2vh;
+  display: flex;
+  flex-flow: row wrap;
+  /* Then we define how is distributed the remaining space */
+  justify-content: space-around;
 }
+
 .box-small2 {
-  text-align: left;
-  font-size: 2vh;
+  font-size: 1.7vh;
   background-color: white;
   flex-direction: column;
   margin-top: -2vh;
+  margin-left: -2vh;
+  display: flex;
+  flex-flow: row wrap;
+  /* Then we define how is distributed the remaining space */
+  justify-content: space-around;
 }
 
 img {
@@ -468,8 +482,26 @@ input:checked + .slider:before {
     margin-bottom: 0vh;
 }
 
- #docsChart {
+.ver-bar {
+  border-left: 0.2vh solid rgba(0,0,0,0.25);
+  height: 22vh;
+  left: 20%;
+  margin-left: -6vh;
+  top: 0;
+}
+
+ .docsChart {
   font-size: 3vh;
   fill: #5B8BE3;
   font-family: ourFont, sans-serif;
+}
+
+.docsChart2 {
+ font-size: 2.9vh;
+ fill: #5B8BE3;
+ font-family: ourFont, sans-serif;
+}
+
+.small-title {
+  margin-left: -4.3vh
 }

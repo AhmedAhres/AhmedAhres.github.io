@@ -19,7 +19,7 @@ function updateDataFolate() {
 }
 
 function updateDataEnergy() {
-  current_viz = "Energy";
+  current_viz = "Food Energy";
   colorScheme = d3.schemeReds[6];
 }
 
@@ -223,7 +223,8 @@ d3.csv(dataset, function(error, data) {
 
   let countryName = document.getElementById("box-3-header-2").firstElementChild;
   let title = document.getElementById("box-3-header").firstElementChild;
-  var current_nature_contribution = 33;
+  let current_nature_contribution = 33;
+  let current_unmet_need = 45;
 
   function clicked(d) {
     if (active.node() === this) return reset();
@@ -363,8 +364,8 @@ function select_contribution_energy(period) {
   });
 }
 
-function change_nature_percentage(number) {
-  let i = d3.interpolate(progress, number);
+function change_nature_percentage(contribution) {
+  let i = d3.interpolate(progress, contribution);
   d3.transition().duration(1000).tween("progress", function() {
     return function(t) {
       progress = i(t);
@@ -374,8 +375,18 @@ function change_nature_percentage(number) {
     });
 }
 
-let current_SSP = "SSP1";
+function change_unmet_percentage(unmet) {
+  let i2 = d3.interpolate(progress_unmet, unmet);
+  d3.transition().duration(900).tween("progress_unmet", function() {
+    return function(t) {
+      progress_unmet = i2(t);
+      foreground2.attr("d", arc.endAngle(twoPi * progress_unmet / 100));
+      percentComplete2.text(formatPercent(progress_unmet / 100));
+    };
+    });
+}
 
+let current_SSP = "SSP1";
 let slider = d3.sliderHorizontal()
   .min(1850)
   .max(2150)
@@ -387,44 +398,44 @@ let slider = d3.sliderHorizontal()
   .on("onchange", val => {
     // Here, the value we check for is still the original one, not the formatted one
     if (val == 1850) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1850";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1850";
       removeSSPs();
       select_contribution_energy("1850");
     }
 
     if (val == 1900) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1900";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1900";
       removeSSPs();
       select_contribution_energy("1900");
     }
 
     if (val == 1950) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1910";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1910";
       removeSSPs();
       select_contribution_energy("1910");
     }
 
     if (val == 2000) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1945";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1945";
       removeSSPs();
       select_contribution_energy("1945");
     }
 
     if (val == 2050) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1980";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1980";
       removeSSPs();
       select_contribution_energy("1980");
     }
 
     if (val == 2100) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 2015";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 2015";
       removeSSPs();
       select_contribution_energy("2015");
     }
 
     if (val == 2150) {
       showSSPs();
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 2050 - " + current_SSP;
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
       select_contribution_energy(current_SSP);
     }
  });
@@ -461,7 +472,7 @@ function change_period(period){
       current_SSP = "SSP5";
     }
     select_contribution_energy(current_SSP);
-    title.innerHTML = current_viz + "'s Contribution to Pollination in 2050 - " + current_SSP;
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
   }
 
 function showSSPs() {
@@ -472,10 +483,12 @@ function removeSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "none";
 }
 
-let width1 = 135,
-    height1 = 135,
+// Pollination contribution percentage starts here
+let width_circle = 65,
+    height_circle = 65,
     twoPi = 2 * Math.PI,
     progress = 0,
+    progress_unmet = 0,
     formatPercent = d3.format(".0%");
 
 let arc = d3.arc()
@@ -483,9 +496,9 @@ let arc = d3.arc()
     .innerRadius(58)
     .outerRadius(66);
 
-let svg1 = d3.select("#docsChart").append("svg")
+let svg1 = d3.select(".docsChart").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width1 * 1.7 + "," + height1 / 1.7 + ")");
+    .attr("transform", "translate(" + width_circle * 1.1 + "," + height_circle * 1.1 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -496,7 +509,23 @@ let foreground = svg1.append("path")
 
 let percentComplete = svg1.append("text")
     .attr("text-anchor", "middle")
-    .attr("class", "percent-complete")
     .attr("dy", "0.3em");
 
+// Unmet need percentage starts here
+let svg2 = d3.select(".docsChart2").append("svg")
+    .append("g")
+    .attr("transform", "translate(" + width_circle * 1.1 + "," + height_circle * 1.1 + ")");
+
+svg2.append("path")
+      .attr("fill", "#E6E7E8")
+      .attr("d", arc.endAngle(twoPi));
+
+let foreground2 = svg2.append("path")
+      .attr("fill", "#00D2B6");
+
+let percentComplete2 = svg2.append("text")
+      .attr("text-anchor", "middle")
+      .attr("dy", "0.3em");
+
 change_nature_percentage(current_nature_contribution);
+change_unmet_percentage(45);
