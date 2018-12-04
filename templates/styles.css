@@ -449,3 +449,13 @@ input:checked + .slider:before {
     color: gray;
     margin-top: 2vh;
 }
+
+#flag {
+  width: auto;
+  height: 4vh;
+}
+#box-3-header-2{
+  font-family: 'ourFont', sans-serif;
+  font-size: 4vh;
+  font-weight: bold;
+}

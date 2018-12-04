@@ -15,15 +15,15 @@ selector.innerHTML = "SSP1";
 
 function format_number(number) {
     if (number>1000000000) {
-        return (number/1000000000).toFixed(2) + 'B'
+        return (number/1000000000).toFixed(2) + 'B';
     }
     if (number>1000000) {
-        return (number/1000000).toFixed(2) + 'M'
+        return (number/1000000).toFixed(2) + 'M';
     }
      if (number>1000) {
-        return (number/1000).toFixed(2) + 'K'
+        return (number/1000).toFixed(2) + 'K';
     }
-    return number
+    return number;
 }
 
 
@@ -217,9 +217,10 @@ function showNow() {
       .attr("cy", d => projection(d)[1]);
   }
 
-  let countryName = document.getElementById("box-3-header-2").firstElementChild;
+  let countryName = document.getElementById("box-3-header-2");
   let title = document.getElementById("box-3-header").firstElementChild;
-  let folateProduction = document.getElementById("folate_production");
+  // let folateProduction = document.getElementById("folate_production");
+  let flag = d3.select("#flag");
 
   function clicked(d) {
     if (active.node() === this) return reset();
@@ -258,11 +259,12 @@ function showNow() {
         .call(zoom.scaleTo, scale);
 
     //popData.innerHTML = "Population: " + active_info.__data__.properties.name;
-    countryName.innerHTML = active_info.__data__.properties.name;
-    if (data_folate[active_info.__data__.properties.iso3] != null)
-      folateProduction.innerHTML = "Folate Production: " + data_folate[active_info.__data__.properties.iso3] + " mcg";
-    else
-      folateProduction.innerHTML = "Folate Production: Not Measured"
+    countryName.innerHTML = active_info.__data__.properties.name + "&nbsp;&nbsp;&nbsp;";
+    flag.attr("src","flags_iso3/"+active_info.__data__.properties.iso3+".png");
+    // if (data_folate[active_info.__data__.properties.iso3] != null)
+    //   folateProduction.innerHTML = "Folate Production: " + data_folate[active_info.__data__.properties.iso3] + " mcg";
+    // else
+    //   folateProduction.innerHTML = "Folate Production: Not Measured"
 
     if(active_info.__data__.properties.iso3 in coordinates) {
       if(previousCountryClicked !== null) {
@@ -321,7 +323,8 @@ function showData(coordinates) {
     // Change the toggle back to enabled
     document.getElementById("projectionChangeChecked").disabled = false;
 
-    countryName.innerHTML = "World";
+    countryName.innerHTML = "World &nbsp;&nbsp;&nbsp;";
+    flag.attr("src","flags_iso3/WLD.png");
     //folateProduction.innerHTML = "Folate Production: 10B mcg";
     previousCountryClicked = 'WRD';
     display_folate();
@@ -346,12 +349,12 @@ var formatToData = function(d) {
     if (d == 2150) return 2050;
 }
 
-function display_folate() {
-  if (data_folate[previousCountryClicked] != null)
-    folateProduction.innerHTML = "Folate Production: " + data_folate[previousCountryClicked] + " mcg";
-  else
-    folateProduction.innerHTML = "Folate Production: Not Measured"
-}
+// function display_folate() {
+//   if (data_folate[previousCountryClicked] != null)
+//     folateProduction.innerHTML = "Folate Production: " + data_folate[previousCountryClicked] + " mcg";
+//   else
+//     folateProduction.innerHTML = "Folate Production: Not Measured"
+// }
 
 function select_folate(period) {
   d3.csv('dataset/folate_data.csv', function(error, data) {
