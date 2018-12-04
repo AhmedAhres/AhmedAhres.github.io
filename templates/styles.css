@@ -90,7 +90,7 @@ line {
 }
 
 #box-3-header {
-  font-size: 4.5vh;
+  font-size: 4.2vh;
 }
 
 #box-3-header-2 {
@@ -131,6 +131,13 @@ line {
   font-size: 2vh;
   background-color: white;
   flex-direction: column;
+}
+.box-small2 {
+  text-align: left;
+  font-size: 2vh;
+  background-color: white;
+  flex-direction: column;
+  margin-top: -2vh;
 }
 
 img {
@@ -447,5 +454,12 @@ input:checked + .slider:before {
 .nav-bar {
     border-bottom: 0.2vh solid rgba(0,0,0,0.25);
     color: gray;
-    margin-top: 2vh;
+    margin-top: 1vh;
+    margin-bottom: 0vh;
+}
+
+ #docsChart {
+  font-size: 3vh;
+  fill: #5B8BE3;
+  font-family: ourFont, sans-serif;
 }
