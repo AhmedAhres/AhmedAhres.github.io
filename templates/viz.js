@@ -7,18 +7,32 @@ let waypoint = new Waypoint({
   }
 });
 
+// Current dataset depending on what we visualize
 let dataset = 'dataset/country_energy.csv';
-let current_viz = "Energy";
+var current_viz = "Energy";
+var colorScheme = d3.schemeReds[6];
+
+function updateDataFolate() {
+  current_viz = "Folate";
+  colorScheme = d3.schemeBlues[6];
+  ready();
+}
+
+function updateDataEnergy() {
+  current_viz = "Energy";
+  colorScheme = d3.schemeReds[6];
+}
+
+function updateDataVitamin() {
+  current_viz = "Vitamin A";
+  colorScheme = d3.schemeGreens[6];
+}
 
 let selector = document.getElementById("selector");
 selector.style.left = 0;
 selector.style.width = 10.5 + "vh";
 selector.style.backgroundColor = "#777777";
 selector.innerHTML = "SSP1";
-
-function someFunction() {
-  alert("In here");
-}
 
 function format_number(number) {
     if (number > 1000000000) {
@@ -54,66 +68,65 @@ function showNow() {
 
 // End of popup window
 
-  var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
+var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
-  var previousCountryClicked = 'WLD';
-  var path, projection, zoom = null;
-  var inertia;
+var previousCountryClicked = 'WLD';
+var path, projection, zoom = null;
+var inertia;
 
-  var svg = d3.select(".box.box-2").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .on("click", stopped, true);
-  var g = svg.append('g');
+var svg = d3.select(".box.box-2").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", stopped, true);
+var g = svg.append('g');
 
-  // Add projection to the viz
-  changeProjection(false);
+// Add projection to the viz
+changeProjection(false);
 
-  // Adding tip for hover
-  var tip = d3.tip()
-    .attr('class', 'd3-tip')
-    .offset([-10, 0])
-    // Here d -> is basically the data which is given to the circle -> right now it is just lat long
-    .html(function(d) {
-      return "<strong> Folate: <span>" + d[0] + "</span></strong>";
-    })
-  // Adding tip to the svg
-  svg.call(tip);
+// Adding tip for hover
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  // Here d -> is basically the data which is given to the circle -> right now it is just lat long
+  .html(function(d) {
+    return "<strong> Folate: <span>" + d[0] + "</span></strong>";
+  })
+// Adding tip to the svg
+svg.call(tip);
 
-  //Data and color scale and legend
-  var colorScheme = d3.schemeReds[6];
-  var colorScale = d3.scaleThreshold()
-      .domain([20, 40, 60, 80, 99, 100])
-      .range(colorScheme);
+//Data and color scale and legend
+var colorScale = d3.scaleThreshold()
+    .domain([20, 40, 60, 80, 99, 100])
+    .range(colorScheme);
 
-  // Getting the Legend and setting the color scale on the legend
-  var svg_legend = d3.select(".box.box-1").append("svg")
-  var g_legend = svg_legend.append("g")
-      .attr("class", "legendThreshold")
-      .attr("transform", "translate(10,20)");
+// Getting the Legend and setting the color scale on the legend
+var svg_legend = d3.select(".box.box-1").append("svg")
+var g_legend = svg_legend.append("g")
+    .attr("class", "legendThreshold")
+    .attr("transform", "translate(10,20)");
 
-  g_legend.append("text")
-      .attr("class", "caption")
-      .attr("x", 0)
-      .attr("y", -4)
-      .text("% change");
+g_legend.append("text")
+    .attr("class", "caption")
+    .attr("x", 0)
+    .attr("y", -4)
+    .text("% change");
 
-  var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
-  var legend = d3.legendColor()
-      .labels(function (d) { return labels[d.i]; })
-      .shapePadding(4)
-      .scale(colorScale);
-  svg_legend.select(".legendThreshold")
-      .call(legend);
+var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
+var legend = d3.legendColor()
+    .labels(function (d) { return labels[d.i]; })
+    .shapePadding(4)
+    .scale(colorScale);
+svg_legend.select(".legendThreshold")
+    .call(legend);
 
-  // Loading the data for the testing file - Chloropleth
-  let global_data_c = load(dataset);
-  let data_c = {};
-  d3.csv(dataset, function(error, data) {
-    data.forEach(function(d) {
-      data_c[d.iso3] = global_data_c[d.iso3]["1945"];
-    });
+// Loading the data for the testing file - Chloropleth
+let global_data_c = load(dataset);
+let data_c = {};
+d3.csv(dataset, function(error, data) {
+  data.forEach(function(d) {
+    data_c[d.iso3] = global_data_c[d.iso3]["1945"];
   });
+});
 
   // Calling the ready function to render everything even chloropleth
   ready();
@@ -175,22 +188,19 @@ function showNow() {
       if (error) throw error;
 
       var features = topojson.feature(data, data.objects.units).features;
-
       g.selectAll("path")
-          .data(features)
+        .data(features)
         .enter().append("path")
-
           // Chloropleth code
-          .attr("fill", function (d){
-                // Pull data for particular iso and set color - Not able to fill it
-                d.total = data_c[d.properties.iso3] || 0;
-                return colorScale(d.total);
-            })
+        .attr("fill", function (d){
+              // Pull data for particular iso and set color - Not able to fill it
+              d.total = data_c[d.properties.iso3] || 0;
+              return colorScale(d.total);
+          })
           // End of Chloropleth code
           .attr("d", path)
           .attr("class", "feature")
           .on("click", clicked);
-
       // Creates a mesh around the border
       g.append("path")
           .datum(topojson.mesh(data, data.objects.units, function(a, b) { return a !== b; }))
@@ -417,7 +427,14 @@ let slider = d3.sliderHorizontal()
       title.innerHTML = current_viz + "'s Contribution to Pollination in 2050 - " + current_SSP;
       select_contribution_energy(current_SSP);
     }
-  });
+ });
+
+let group = d3.select(".box.box-2").append("svg")
+  .attr("width", 900)
+  .attr("height", 70)
+  .append("g")
+  .attr("transform", "translate(" + 200 + "," + 12 + ")")
+  .call(slider);
 
 function change_period(period){
     var ssp1 = document.getElementById("ssp1");
@@ -455,13 +472,6 @@ function removeSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "none";
 }
 
-let group = d3.select(".box.box-2").append("svg")
-  .attr("width", 900)
-  .attr("height", 70)
-  .append("g")
-  .attr("transform", "translate(" + 200 + "," + 12 + ")")
-  .call(slider);
-
 let width1 = 135,
     height1 = 135,
     twoPi = 2 * Math.PI,
@@ -475,7 +485,7 @@ let arc = d3.arc()
 
 let svg1 = d3.select("#docsChart").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width1 * 1.5 + "," + height1 / 1.7 + ")");
+    .attr("transform", "translate(" + width1 * 1.7 + "," + height1 / 1.7 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")

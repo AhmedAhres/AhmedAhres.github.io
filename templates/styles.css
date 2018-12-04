@@ -131,6 +131,8 @@ line {
   font-size: 2vh;
   background-color: white;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
 }
 .box-small2 {
   text-align: left;
