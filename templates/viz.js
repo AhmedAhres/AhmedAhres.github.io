@@ -253,7 +253,7 @@ function showNow() {
           return function(t) {
             projection.rotate(r(t));
             svg.selectAll("path").attr("d", path);
-          }
+          } 
         })
         // TODO: Need to set it on the basis of the size of the country to fit in the whole svg
         .call(zoom.scaleTo, scale);
