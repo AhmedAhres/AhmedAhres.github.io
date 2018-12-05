@@ -132,18 +132,15 @@
   <div class="box box-3">
     <h1 id="box-3-header">
       <div> Energy's Contribution to Pollination in 1945 </div>
-      <div class="nav-bar">
+      <div class="nav-bar"></div>
     </h1>
-
-      <div>
-        <div class="myGallery">
-          <span id="box-3-header-2">World &nbsp;&nbsp;&nbsp;</span>
-          <img id="flag" src="flags_iso3/WLD.png">
-        </div>
-        <div class="nav-bar">
-        </div>
+    <div>
+      <div class="myGallery">
+        <span id="box-3-header-2">World &nbsp;&nbsp;&nbsp;</span>
+        <img id="flag" src="flags_iso3/WLD.png">
       </div>
-
+      <div class="nav-bar"></div>
+    </div>
 
     <div class="switch_3_ways" style="display:none;">
       <div id="ssp1" class="switch ssp1" onclick="change_period('ssp1')">SSP1</div>
@@ -152,31 +149,32 @@
        <div id="selector" class="selector"></div>
 
     </div>
-      <div class = "box box-small">
+      <div class = "box box-small2">
         <h2> Population </h2>
         <img class="img2" src="images/man.png">
-
       </div>
       <div class = "box box-small">
         <h2> Energy's contribution to pollination
-        <div class="nav-bar"> </h2>
+          <div id="docsChart"></div>
+        <div class="nav-bar"> </div></h2>
       </div>
       <div class = "box box-small">
         <h2> Energy's unmet need
-        <div class="nav-bar"></h2>
+        <div class="nav-bar"></div></h2>
       </div>
   </div>
 
   <!-- Add buttons for folate, vitamin, energy  -->
   <div class="parent-button-div">
     <div class="folate-button">
-      <h1 class="button-title">Folate</h1>
+      <!-- Making the div as a function -->
+      <a class="data-link" href="javascript:updateDataFolate()"><h1 class="button-title">Folate</h1></a>
     </div>
     <div class="vitamin-button">
-      <h1 class="button-title">Vitamin</h1>
+      <a class="data-link" href="javascript:updateDataVitamin()"><h1 class="button-title">Vitamin A</h1></a>
     </div>
     <div class="energy-button">
-      <h1 class="button-title">Energy</h1>
+      <a class="data-link" href="javascript:updateDataEnergy()"><h1 class="button-title">Energy</h1></a>
     </div>
   </div>
 

@@ -5,7 +5,28 @@ let waypoint = new Waypoint({
   handler: function() {
     PopUp('show')
   }
-})
+});
+
+// Current dataset depending on what we visualize
+let dataset = 'dataset/country_energy.csv';
+var current_viz = "Energy";
+var colorScheme = d3.schemeReds[6];
+
+function updateDataFolate() {
+  current_viz = "Folate";
+  colorScheme = d3.schemeBlues[6];
+  ready();
+}
+
+function updateDataEnergy() {
+  current_viz = "Energy";
+  colorScheme = d3.schemeReds[6];
+}
+
+function updateDataVitamin() {
+  current_viz = "Vitamin A";
+  colorScheme = d3.schemeGreens[6];
+}
 
 let selector = document.getElementById("selector");
 selector.style.left = 0;
@@ -26,19 +47,15 @@ function format_number(number) {
     return number;
 }
 
-
 // For the popup window
 function PopUp(hideOrshow) {
-
     if (hideOrshow == 'hide') {
         document.getElementById('ac-wrapper').style.display = "none";
     }
-
     else if(localStorage.getItem("popupWasShown") == null) {
         localStorage.setItem("popupWasShown",1);
         document.getElementById('ac-wrapper').removeAttribute('style');
     }
-
 }
 
 
@@ -51,75 +68,65 @@ function showNow() {
 
 // End of popup window
 
-  var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
+var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
-  var previousCountryClicked = 'WRD';
-  var path, projection, zoom = null;
-  var inertia;
+var previousCountryClicked = 'WLD';
+var path, projection, zoom = null;
+var inertia;
 
-  var svg = d3.select(".box.box-2").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .on("click", stopped, true);
-  var g = svg.append('g');
+var svg = d3.select(".box.box-2").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", stopped, true);
+var g = svg.append('g');
 
-  // Add projection to the viz
-  changeProjection(false);
+// Add projection to the viz
+changeProjection(false);
 
-  // Adding tip for hover
-  var tip = d3.tip()
-    .attr('class', 'd3-tip')
-    .offset([-10, 0])
-    // Here d -> is basically the data which is given to the circle -> right now it is just lat long
-    .html(function(d) {
-      return "<strong> Folate: <span>" + d[0] + "</span></strong>";
-    })
-  // Adding tip to the svg
-  svg.call(tip);
+// Adding tip for hover
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  // Here d -> is basically the data which is given to the circle -> right now it is just lat long
+  .html(function(d) {
+    return "<strong> Folate: <span>" + d[0] + "</span></strong>";
+  })
+// Adding tip to the svg
+svg.call(tip);
 
-  //Data and color scale and legend
-  var colorScheme = d3.schemeReds[6];
-  colorScheme.unshift("#eee");
-  var colorScale = d3.scaleThreshold()
-      .domain([0, 1, 20, 40, 60, 80, 100])
-      .range(colorScheme);
+//Data and color scale and legend
+var colorScale = d3.scaleThreshold()
+    .domain([20, 40, 60, 80, 99, 100])
+    .range(colorScheme);
 
-  // Getting the Legend and setting the color scale on the legend
-  var svg_legend = d3.select(".box.box-1").append("svg")
-  var g_legend = svg_legend.append("g")
-      .attr("class", "legendThreshold")
-      .attr("transform", "translate(10,20)");
+// Getting the Legend and setting the color scale on the legend
+var svg_legend = d3.select(".box.box-1").append("svg")
+var g_legend = svg_legend.append("g")
+    .attr("class", "legendThreshold")
+    .attr("transform", "translate(10,20)");
 
-  g_legend.append("text")
-      .attr("class", "caption")
-      .attr("x", 0)
-      .attr("y", -4)
-      .text("% change");
+g_legend.append("text")
+    .attr("class", "caption")
+    .attr("x", 0)
+    .attr("y", -4)
+    .text("% change");
 
-  var labels = ['0', '1-20', '21-40', '41-60', '61-80', '81-99', '100'];
-  var legend = d3.legendColor()
-      .labels(function (d) { return labels[d.i]; })
-      .shapePadding(4)
-      .scale(colorScale);
-  svg_legend.select(".legendThreshold")
-      .call(legend);
+var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
+var legend = d3.legendColor()
+    .labels(function (d) { return labels[d.i]; })
+    .shapePadding(4)
+    .scale(colorScale);
+svg_legend.select(".legendThreshold")
+    .call(legend);
 
-  let global_folate = load("dataset/folate_data.csv");
-
-  let data_folate = {};
-  d3.csv('dataset/folate_data.csv', function(error, data) {
-      data.forEach(function(d) {
-        data_folate[d.iso3] = global_folate[d.iso3]["2015"];
-      });
+// Loading the data for the testing file - Chloropleth
+let global_data_c = load(dataset);
+let data_c = {};
+d3.csv(dataset, function(error, data) {
+  data.forEach(function(d) {
+    data_c[d.iso3] = global_data_c[d.iso3]["1945"];
   });
-    // Loading the data for the testing file - Chloropleth
-  let global_data_c = load('dataset/country_energy.csv');
-  let data_c = {};
-  d3.csv('dataset/country_energy.csv', function(error, data) {
-    data.forEach(function(d) {
-      data_c[d.iso3] = global_data_c[d.iso3]["1945"];
-    });
-  });
+});
 
   // Calling the ready function to render everything even chloropleth
   ready();
@@ -181,22 +188,19 @@ function showNow() {
       if (error) throw error;
 
       var features = topojson.feature(data, data.objects.units).features;
-
       g.selectAll("path")
-          .data(features)
+        .data(features)
         .enter().append("path")
-
           // Chloropleth code
-          .attr("fill", function (d){
-                // Pull data for particular iso and set color - Not able to fill it
-                d.total = data_c[d.properties.iso3] || 0;
-                return colorScale(d.total);
-            })
+        .attr("fill", function (d){
+              // Pull data for particular iso and set color - Not able to fill it
+              d.total = data_c[d.properties.iso3] || 0;
+              return colorScale(d.total);
+          })
           // End of Chloropleth code
           .attr("d", path)
           .attr("class", "feature")
           .on("click", clicked);
-
       // Creates a mesh around the border
       g.append("path")
           .datum(topojson.mesh(data, data.objects.units, function(a, b) { return a !== b; }))
@@ -219,8 +223,12 @@ function showNow() {
 
   let countryName = document.getElementById("box-3-header-2");
   let title = document.getElementById("box-3-header").firstElementChild;
+
+  var current_nature_contribution = 33;
+
   // let folateProduction = document.getElementById("folate_production");
   let flag = d3.select("#flag");
+
 
   function clicked(d) {
     if (active.node() === this) return reset();
@@ -253,7 +261,7 @@ function showNow() {
           return function(t) {
             projection.rotate(r(t));
             svg.selectAll("path").attr("d", path);
-          } 
+          }
         })
         // TODO: Need to set it on the basis of the size of the country to fit in the whole svg
         .call(zoom.scaleTo, scale);
@@ -279,8 +287,9 @@ function showNow() {
           svg.selectAll('.plot-point').remove();
       }
     }
-
     previousCountryClicked = active_info.__data__.properties.iso3
+    current_nature_contribution = data_c[active_info.__data__.properties.iso3];
+    change_nature_percentage(current_nature_contribution);
   }
 
 function showData(coordinates) {
@@ -366,10 +375,12 @@ function select_folate(period) {
 }
 
 function select_contribution_energy(period) {
-  d3.csv('dataset/country_energy.csv', function(error, data) {
+  d3.csv(dataset, function(error, data) {
     data.forEach(function(d) {
       data_c[d.iso3] = global_data_c[d.iso3][period];
     });
+    current_nature_contribution = data_c[previousCountryClicked];
+    change_nature_percentage(current_nature_contribution);
     g.selectAll("path").attr("fill", function (d) {
           // Pull data for particular iso and set color - Not able to fill it
           if(d.type == 'Feature') {
@@ -379,6 +390,17 @@ function select_contribution_energy(period) {
           return colorScale(d.total);
       })
   });
+}
+
+function change_nature_percentage(number) {
+  let i = d3.interpolate(progress, number);
+  d3.transition().duration(1000).tween("progress", function() {
+    return function(t) {
+      progress = i(t);
+      foreground.attr("d", arc.endAngle(twoPi * progress / 100));
+      percentComplete.text(formatPercent(progress / 100));
+    };
+    });
 }
 
 let current_SSP = "SSP1";
@@ -394,54 +416,54 @@ let slider = d3.sliderHorizontal()
   .on("onchange", val => {
     // Here, the value we check for is still the original one, not the formatted one
     if (val == 1850) {
-      title.innerHTML = "Energy's Contribution to Pollination in 1850";
+      title.innerHTML = current_viz + "'s Contribution to Pollination in 1850";
       removeSSPs();
-      select_folate("1850");
       select_contribution_energy("1850");
     }
 
     if (val == 1900) {
-      title.innerHTML = "Energy's Contribution to Pollination in 1900";
+      title.innerHTML = current_viz + "'s Contribution to Pollination in 1900";
       removeSSPs();
-      select_folate("1900");
       select_contribution_energy("1900");
     }
 
     if (val == 1950) {
-      title.innerHTML = "Energy's Contribution to Pollination in 1910";
+      title.innerHTML = current_viz + "'s Contribution to Pollination in 1910";
       removeSSPs();
-      select_folate("1910");
       select_contribution_energy("1910");
     }
 
     if (val == 2000) {
-      title.innerHTML = "Energy's Contribution to Pollination in 1945";
+      title.innerHTML = current_viz + "'s Contribution to Pollination in 1945";
       removeSSPs();
-      select_folate("1945");
       select_contribution_energy("1945");
     }
 
     if (val == 2050) {
-      title.innerHTML = "Energy's Contribution to Pollination in 1980";
+      title.innerHTML = current_viz + "'s Contribution to Pollination in 1980";
       removeSSPs();
-      select_folate("1980");
       select_contribution_energy("1980");
     }
 
     if (val == 2100) {
-      title.innerHTML = "Energy's Contribution to Pollination in 2015";
+      title.innerHTML = current_viz + "'s Contribution to Pollination in 2015";
       removeSSPs();
-      select_folate("2015");
       select_contribution_energy("2015");
     }
 
     if (val == 2150) {
       showSSPs();
-      title.innerHTML = "Energy's Contribution to Pollination in 2050 - " + current_SSP;
-      select_folate(current_SSP);
+      title.innerHTML = current_viz + "'s Contribution to Pollination in 2050 - " + current_SSP;
       select_contribution_energy(current_SSP);
     }
-  });
+ });
+
+let group = d3.select(".box.box-2").append("svg")
+  .attr("width", 900)
+  .attr("height", 70)
+  .append("g")
+  .attr("transform", "translate(" + 200 + "," + 12 + ")")
+  .call(slider);
 
 function change_period(period){
     var ssp1 = document.getElementById("ssp1");
@@ -449,30 +471,26 @@ function change_period(period){
     var ssp5 = document.getElementById("ssp5");
     var selector = document.getElementById("selector");
     if (period === "ssp1") {
-      title.innerHTML = "Energy's Contribution to Pollination in 2050 - SSP1";
       selector.style.left = 0;
       selector.style.width = ssp1.clientWidth + "px";
       selector.style.backgroundColor = "#777777";
       selector.innerHTML = "SSP1";
       current_SSP = "SSP1";
     } else if (period === "ssp3") {
-      title.innerHTML = "Energy's Contribution to Pollination in 2050 - SSP3";
       selector.style.left = ssp1.clientWidth + "px";
       selector.style.width = ssp3.clientWidth + "px";
       selector.innerHTML = "SSP3";
       selector.style.backgroundColor = "#418d92";
       current_SSP = "SSP3";
     } else {
-      title.innerHTML = "Energy's Contribution to Pollination in 2050 - SSP5";
       selector.style.left = ssp1.clientWidth + ssp3.clientWidth + 1 + "px";
       selector.style.width = ssp5.clientWidth + "px";
       selector.innerHTML = "SSP5";
       selector.style.backgroundColor = "#4d7ea9";
       current_SSP = "SSP5";
     }
-    select_folate(current_SSP);
     select_contribution_energy(current_SSP);
-    title.innerHTML = "Energy's Contribution to Pollination 2050 - " + current_SSP;
+    title.innerHTML = current_viz + "'s Contribution to Pollination in 2050 - " + current_SSP;
   }
 
 function showSSPs() {
@@ -483,9 +501,31 @@ function removeSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "none";
 }
 
-var group = d3.select(".box.box-2").append("svg")
-  .attr("width", 900)
-  .attr("height", 70)
-  .append("g")
-  .attr("transform", "translate(" + 200 + "," + 12 + ")")
-  .call(slider);
+let width1 = 135,
+    height1 = 135,
+    twoPi = 2 * Math.PI,
+    progress = 0,
+    formatPercent = d3.format(".0%");
+
+let arc = d3.arc()
+    .startAngle(0)
+    .innerRadius(58)
+    .outerRadius(66);
+
+let svg1 = d3.select("#docsChart").append("svg")
+    .append("g")
+    .attr("transform", "translate(" + width1 * 1.7 + "," + height1 / 1.7 + ")");
+
+svg1.append("path")
+    .attr("fill", "#E6E7E8")
+    .attr("d", arc.endAngle(twoPi));
+
+let foreground = svg1.append("path")
+    .attr("fill", "#00D2B6");
+
+let percentComplete = svg1.append("text")
+    .attr("text-anchor", "middle")
+    .attr("class", "percent-complete")
+    .attr("dy", "0.3em");
+
+change_nature_percentage(current_nature_contribution);

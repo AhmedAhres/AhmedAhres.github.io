@@ -90,7 +90,7 @@ line {
 }
 
 #box-3-header {
-  font-size: 4.5vh;
+  font-size: 4.2vh;
 }
 
 #box-3-header-2 {
@@ -131,6 +131,15 @@ line {
   font-size: 2vh;
   background-color: white;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+.box-small2 {
+  text-align: left;
+  font-size: 2vh;
+  background-color: white;
+  flex-direction: column;
+  margin-top: -2vh;
 }
 
 img {
@@ -398,11 +407,19 @@ input:checked + .slider:before {
 }
 
 .button-title {
-  transform: translateY(500%) rotate(-90deg);
-  font-size: 18px;
+  width: 100%;
+  transform: translateY(570%) rotate(-90deg);
+  font-size: 1.15vw;
   font-family: ourFont;
   margin: 0;
   color: black;
+  display: -moz-box /* Keeps the heading on a single line */;
+  text-decoration: none;
+}
+
+.data-link {
+  color: white;
+  text-decoration: none;
 }
 
 .plot-point:hover {
@@ -447,15 +464,26 @@ input:checked + .slider:before {
 .nav-bar {
     border-bottom: 0.2vh solid rgba(0,0,0,0.25);
     color: gray;
-    margin-top: 2vh;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+}
+
+ #docsChart {
+  font-size: 3vh;
+  fill: #5B8BE3;
+  font-family: ourFont, sans-serif;
 }
 
 #flag {
   width: auto;
-  height: 4vh;
+  height: 5vh;
+  margin-bottom: 2vh;
 }
 #box-3-header-2{
   font-family: 'ourFont', sans-serif;
   font-size: 4vh;
   font-weight: bold;
 }
+.myGallery img {
+    vertical-align: middle;
+}​
