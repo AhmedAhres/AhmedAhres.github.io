@@ -17,22 +17,6 @@ let energy_text = "Did you know? Food energy is extremely high in Bananas, Coffe
 let folate_text = "Did you know? Folate is extremely high is Vegetables and Broccolis.";
 let vitamin_text = "Did you know? Vitamin A is extremely high in Carrots, Spinaches and Sweet Potatoes.";
 
-function updateDataFolate() {
-  current_viz = "Folate";
-  colorScheme = d3.schemeBlues[6];
-  ready();
-}
-
-function updateDataEnergy() {
-  current_viz = "Food Energy";
-  colorScheme = d3.schemeReds[6];
-}
-
-function updateDataVitamin() {
-  current_viz = "Vitamin A";
-  colorScheme = d3.schemeGreens[6];
-}
-
 // We handle the display of the population part in the story telling
 let current_population_data = {}
 function initialize_population() {
@@ -82,7 +66,6 @@ function update_production(period) {
       production.innerHTML = "Production: " + parseFloat(current_production_data[previousCountryClicked]).toFixed(2);
   });
 }
-
 
 let selector = document.getElementById("selector");
 selector.style.left = 0;
@@ -142,7 +125,8 @@ changeProjection(false);
 // Adding tip for hover
 var tip = d3.tip()
   .attr('class', 'd3-tip')
-  .offset([-10, 0])
+
+.offset([-10, 0])
   // Here d -> is basically the data which is given to the circle -> right now it is just lat long
   .html(function(d) {
     return "<strong> Folate: <span>" + d[0] + "</span></strong>";
@@ -154,35 +138,20 @@ svg.call(tip);
 var colorScale = d3.scaleThreshold()
     .domain([20, 40, 60, 80, 99, 100])
     .range(colorScheme);
-
 // Getting the Legend and setting the color scale on the legend
-var svg_legend = d3.select(".box.box-1").append("svg")
-var g_legend = svg_legend.append("g")
-    .attr("class", "legendThreshold")
-    .attr("transform", "translate(10,20)");
+var svg_legend = d3.select(".box.box-1").append("svg");
+makeLegend(colorScale);
 
-g_legend.append("text")
-    .attr("class", "caption")
-    .attr("x", 0)
-    .attr("y", -4)
-    .text("Contribution %");
+// // Loading the data for the testing file - Chloropleth
+// let global_data_c = load(dataset);
+// let data_c = {};
+// d3.csv(dataset, function(error, data) {
+//   data.forEach(function(d) {
+//     data_c[d.iso3] = global_data_c[d.iso3]["1945"];
+//   });
+// });
 
-var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
-var legend = d3.legendColor()
-    .labels(function (d) { return labels[d.i]; })
-    .shapePadding(4)
-    .scale(colorScale);
-svg_legend.select(".legendThreshold")
-    .call(legend);
-
-// Loading the data for the testing file - Chloropleth
-let global_data_c = load(dataset);
-let data_c = {};
-d3.csv(dataset, function(error, data) {
-  data.forEach(function(d) {
-    data_c[d.iso3] = global_data_c[d.iso3]["1945"];
-  });
-});
+  loadGlobalData(dataset);
 
 // Calling the ready function to render everything even chloropleth
 ready();
@@ -192,20 +161,131 @@ ready();
 var coordinates = {};
 coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
 
-function load(dataset) {
-  let result = {};
-  d3.csv(dataset, function(error, data) {
-    data.forEach(function(d) {
-      result[d.iso3] = d;
+  function loadGlobalData(dataset) {
+    global_data_c = load(dataset);
+    data_c = {};
+    d3.csv(dataset, function(error, data) {
+      data.forEach(function(d) {
+        data_c[d.iso3] = global_data_c[d.iso3]["1945"];
       });
     });
+  }
+
+  function load(dataset) {
+    let result = {};
+    d3.csv(dataset, function(error, data) {
+      data.forEach(function(d) {
+        result[d.iso3] = d;
+        });
+      });
   return result;
 }
 
 
-  function projectionChecked() {
-    var projectionSlider = document.getElementById("projectionChangeChecked");
-    changeProjection(projectionSlider.checked);
+  function updateDataFolate() {
+  d3.json("world/countries.json", function(error, data) {
+    current_viz = "Folate";
+
+    colorScheme = d3.schemeBlues[6];
+    colorScale = d3.scaleThreshold()
+      .domain([20, 40, 60, 80, 99, 100])
+      .range(colorScheme);
+
+    updateLegend(colorScale);
+    // g.selectAll("path").attr("fill", '#fff')// function (d){
+    //   // // Pull data for particular iso and set color - Not able to fill it
+    //   // d.total = data_c[d.properties.iso3] || 0;
+    //   // return colorScale(d.total);
+    // // })
+    // .attr("d", path);
+  });
+}
+
+function updateDataVitamin() {
+  d3.json("world/countries.json", function(error, data) {
+    current_viz = "Vitamin A";
+
+    // loadGlobalData('');
+    colorScheme = d3.schemeGreens[6];
+    colorScale = d3.scaleThreshold()
+      .domain([20, 40, 60, 80, 99, 100])
+      .range(colorScheme);
+
+    updateLegend(colorScale);
+    // g.selectAll("path").attr("fill", '#fff')// function (d){
+    //   // // Pull data for particular iso and set color - Not able to fill it
+    //   // d.total = data_c[d.properties.iso3] || 0;
+    //   // return colorScale(d.total);
+    // // })
+    // .attr("d", path);
+  });
+}
+
+
+function updateDataEnergy() {
+  d3.json("world/countries.json", function(error, data) {
+    current_viz = "Energy";
+
+    // loadGlobalData('');
+    colorScheme = d3.schemeReds[6];
+    colorScale = d3.scaleThreshold()
+      .domain([20, 40, 60, 80, 99, 100])
+      .range(colorScheme);
+
+    updateLegend(colorScale);
+    // g.selectAll("path").attr("fill", '#fff')// function (d){
+    //   // // Pull data for particular iso and set color - Not able to fill it
+    //   // d.total = data_c[d.properties.iso3] || 0;
+    //   // return colorScale(d.total);
+    // // })
+    // .attr("d", path);
+  });
+}
+
+  function updateLegend(colorScale) {
+    svg_legend.selectAll('*').remove();
+    makeLegend(colorScale);
+  }
+
+  function makeLegend(colorScale) {
+    // Getting the Legend and setting the color scale on the legend
+    var g_legend = svg_legend.append("g")
+        .attr("class", "legendThreshold")
+        .attr("transform", "translate(10,20)");
+
+    g_legend.append("text")
+        .attr("class", "caption")
+        .attr("x", 0)
+        .attr("y", -4)
+        .text("% change");
+
+    var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
+    var legend = d3.legendColor()
+        .labels(function (d) { return labels[d.i]; })
+        .shapePadding(4)
+        .scale(colorScale);
+    svg_legend.select(".legendThreshold")
+        .call(legend);
+  }
+
+  function projection3D() {
+    var checked3D = document.getElementById("checked3D").value;
+    var checked2D = document.getElementById("checked2D").value;
+    if(checked3D === 'true') {
+      changeProjection(false);
+      checked3D = "true";
+      check2D = "false";
+    }
+  }
+
+  function projection2D() {
+    var checked2D = document.getElementById("checked2D").value;
+    var checked3D = document.getElementById("checked3D").value;
+    if(checked2D === 'false') {
+      changeProjection(true);
+      checked2D = "true";
+      checked3D = "false";
+    }
   }
 
   function changeProjection(sliderChecked) {
@@ -307,7 +387,8 @@ function load(dataset) {
         // translate = [width / 2 - scale * geo_centroid[0], height / 2 - scale * geo_centroid[1]];
 
     // For disabling the toggle button when you are zoomed in
-    document.getElementById("projectionChangeChecked").disabled = true;
+    document.getElementById("checked3D").disabled = true;
+    document.getElementById("checked2D").disabled = true;
 
     svg.transition()
         .duration(750)
@@ -380,7 +461,8 @@ function showData(coordinates) {
         .call(zoom.transform, d3.zoomIdentity);
 
     // Change the toggle back to enabled
-    document.getElementById("projectionChangeChecked").disabled = false;
+    document.getElementById("checked3D").disabled = false;
+    document.getElementById("checked2D").disabled = false;
 
     countryName.innerHTML = "World";
     previousCountryClicked = 'WLD';

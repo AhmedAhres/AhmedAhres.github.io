@@ -294,6 +294,7 @@ img {
   width: 60px;
   height: 34px;
   margin-bottom: 20px;
+  display: flex;
 }
 
 .switch input {
@@ -440,6 +441,18 @@ input:checked + .slider:before {
   fill: orangered ;
 }
 
+.folate-button:hover {
+  box-shadow: 4px 4px 18px rgba(33,33,33,.7);
+}
+
+.vitamin-button:hover {
+  box-shadow: 4px 4px 18px rgba(33,33,33,.7);
+}
+
+.energy-button:hover {
+  box-shadow: 4px 4px 18px rgba(33,33,33,.7);
+}
+
 .d3-tip {
   line-height: 1;
   font-weight: bold;
@@ -474,6 +487,32 @@ input:checked + .slider:before {
   height:40px;
   margin-bottom: 20px;
 }
+
+.switch-proj {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.map-button {
+  margin-left: 5px;
+}
+
+.info-button:hover {
+  background-color: white;
+}
+
+.globe-button:hover {
+  background-color: white;
+}
+
+.map-button:hover {
+  background-color: white;
+}
+
 
 .nav-bar {
     border-bottom: 0.2vh solid rgba(0,0,0,0.25);
