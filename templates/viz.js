@@ -45,6 +45,8 @@ initialize_population();
 let production_data = load(data_production);
 initialize_production();
 
+let description_text = document.getElementsByClassName("description_text")[0];
+
 // We handle the display of the production
 let current_production_data = {}
 function initialize_production() {
@@ -151,7 +153,7 @@ makeLegend(colorScale);
 //   });
 // });
 
-  loadGlobalData(dataset);
+loadGlobalData(dataset);
 
 // Calling the ready function to render everything even chloropleth
 ready();
@@ -161,17 +163,17 @@ ready();
 var coordinates = {};
 coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
 
-  function loadGlobalData(dataset) {
+function loadGlobalData(dataset) {
     global_data_c = load(dataset);
     data_c = {};
     d3.csv(dataset, function(error, data) {
       data.forEach(function(d) {
-        data_c[d.iso3] = global_data_c[d.iso3]["1945"];
+        data_c[d.iso3] = global_data_c[d.iso3][current_year];
       });
     });
   }
 
-  function load(dataset) {
+function load(dataset) {
     let result = {};
     d3.csv(dataset, function(error, data) {
       data.forEach(function(d) {
@@ -184,7 +186,8 @@ coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,1
 
 function updateDataFolate() {
   current_viz = "Folate";
-
+  description_text.innerHTML = folate_text;
+  title.innerHTML = "Pollination Contribution to Folate in " + current_year;
   colorScheme = d3.schemePurples[6];
   colorScale = d3.scaleThreshold()
     .domain([20, 40, 60, 80, 99, 100])
@@ -205,7 +208,8 @@ function updateDataFolate() {
 
 function updateDataVitamin() {
   current_viz = "Vitamin A";
-
+  description_text.innerHTML = vitamin_text;
+  title.innerHTML = "Pollination Contribution to Vitamin A in " + current_year;
   colorScheme = d3.schemeGreens[6];
   colorScale = d3.scaleThreshold()
     .domain([20, 40, 60, 80, 99, 100])
@@ -246,7 +250,7 @@ function updateDataVitamin() {
   }
 function updateDataEnergy() {
   current_viz = "Energy";
-
+  description_text.innerHTML = energy_text;
   colorScheme = d3.schemeReds[6];
   colorScale = d3.scaleThreshold()
     .domain([20, 40, 60, 80, 99, 100])
@@ -564,6 +568,7 @@ function change_nature_percentage(contribution, unmet) {
 }
 
 let current_SSP = "SSP1";
+let current_year = "1980"
 let slider = d3.sliderHorizontal()
   .min(1850)
   .max(2150)
@@ -576,15 +581,16 @@ let slider = d3.sliderHorizontal()
     // Here, the value we check for is still the original one, not the formatted one
     if (val == 1850) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1850";
+      current_year = "1850";
       removeSSPs();
       select_contribution_energy("1850");
-      change_unmet_percentage(30);
       update_population("1850");
       update_production("1850");
     }
 
     if (val == 1900) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1900";
+      current_year = "1900";
       removeSSPs();
       select_contribution_energy("1900");
       update_population("1900");
@@ -593,6 +599,7 @@ let slider = d3.sliderHorizontal()
 
     if (val == 1950) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1910";
+      current_year = "1910";
       removeSSPs();
       select_contribution_energy("1910");
       update_population("1910");
@@ -601,6 +608,7 @@ let slider = d3.sliderHorizontal()
 
     if (val == 2000) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1945";
+      current_year = "1945";
       removeSSPs();
       select_contribution_energy("1945");
       update_population("1945");
@@ -609,6 +617,7 @@ let slider = d3.sliderHorizontal()
 
     if (val == 2050) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1980";
+      current_year = "1980";
       removeSSPs();
       select_contribution_energy("1980");
       update_population("1980");
@@ -617,6 +626,7 @@ let slider = d3.sliderHorizontal()
 
     if (val == 2100) {
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 2015";
+      current_year = "2015";
       removeSSPs();
       select_contribution_energy("2015");
       update_population("2015");
