@@ -183,61 +183,34 @@ function load(dataset) {
   return result;
 }
 
-
-function updateDataFolate() {
-  current_viz = "Folate";
-  description_text.innerHTML = folate_text;
-  title.innerHTML = "Pollination Contribution to Folate in " + current_year;
-  colorScheme = d3.schemePurples[6];
+function updateData(data_type) {
+  switch(data_type) {
+    case "Vitamin":
+      current_viz = "Vitamin A";
+      description_text.innerHTML = vitamin_text;
+      title.innerHTML = "Pollination Contribution to Vitamin A in " + current_year;
+      colorScheme = d3.schemeGreens[6];
+      dataset = 'dataset/country_va.csv';
+      break;
+    case "Energy":
+      current_viz = "Energy";
+      description_text.innerHTML = energy_text;
+      title.innerHTML = "Pollination Contribution to Energy in " + current_year;
+      colorScheme = d3.schemeReds[6];
+      dataset = 'dataset/country_energy.csv';
+      break;
+    case "Folate":
+      current_viz = "Folate";
+      description_text.innerHTML = folate_text;
+      title.innerHTML = "Pollination Contribution to Folate in " + current_year;
+      colorScheme = d3.schemePurples[6];
+      dataset = 'dataset/country_fo.csv';
+      break;
+  }
   colorScale = d3.scaleThreshold()
     .domain([20, 40, 60, 80, 99, 100])
     .range(colorScheme);
-
   updateLegend(colorScale);
-
-  // Loading the data using a promise - since loading and querying were not in sync
-  dataset = 'dataset/country_fo.csv';
-  let promise = new Promise(function(resolve, reject) {
-    loadGlobalData(dataset);
-    setTimeout(() => resolve(1), 50);
-  });
-  promise.then(function(result) {
-    accessData();
-  });
-}
-
-function updateDataVitamin() {
-  current_viz = "Vitamin A";
-  description_text.innerHTML = vitamin_text;
-  title.innerHTML = "Pollination Contribution to Vitamin A in " + current_year;
-  colorScheme = d3.schemeGreens[6];
-  colorScale = d3.scaleThreshold()
-    .domain([20, 40, 60, 80, 99, 100])
-    .range(colorScheme);
-
-  updateLegend(colorScale);
-
-  dataset = 'dataset/country_va.csv';
-  let promise = new Promise(function(resolve, reject) {
-    loadGlobalData(dataset);
-    setTimeout(() => resolve(1), 50);
-  });
-  promise.then(function(result) {
-    accessData();
-  });
-}
-
-function updateDataEnergy() {
-  current_viz = "Energy";
-  description_text.innerHTML = energy_text;
-  title.innerHTML = "Pollination Contribution to Energy in " + current_year;
-  colorScheme = d3.schemeReds[6];
-  colorScale = d3.scaleThreshold()
-    .domain([20, 40, 60, 80, 99, 100])
-    .range(colorScheme);
-
-  updateLegend(colorScale);
-  dataset = 'dataset/country_energy.csv';
   let promise = new Promise(function(resolve, reject) {
     loadGlobalData(dataset);
     setTimeout(() => resolve(1), 10);
