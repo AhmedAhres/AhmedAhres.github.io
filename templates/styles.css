@@ -492,13 +492,17 @@ input:checked + .slider:before {
 .ver-bar {
   border-left: 0.2vh solid rgba(0,0,0,0.25);
   height: 22vh;
-  left: 20%;
-  margin-left: -6vh;
+  margin-left: -4vh;
   top: 0;
 }
 
 #box_population {
-  size: 20vh
+  flex-basis: 33%;
+  margin-right: 5vh;
+}
+
+#box_production {
+  flex-basis: 33%;
 }
 
  .docsChart {
