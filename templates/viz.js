@@ -227,30 +227,10 @@ function updateDataVitamin() {
   });
 }
 
-
-  function makeLegend(colorScale) {
-    // Getting the Legend and setting the color scale on the legend
-    var g_legend = svg_legend.append("g")
-        .attr("class", "legendThreshold")
-        .attr("transform", "translate(10,20)");
-
-    g_legend.append("text")
-        .attr("class", "caption")
-        .attr("x", 0)
-        .attr("y", -4)
-        .text("% contribution");
-
-    var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
-    var legend = d3.legendColor()
-        .labels(function (d) { return labels[d.i]; })
-        .shapePadding(4)
-        .scale(colorScale);
-    svg_legend.select(".legendThreshold")
-        .call(legend);
-  }
 function updateDataEnergy() {
   current_viz = "Energy";
   description_text.innerHTML = energy_text;
+  title.innerHTML = "Pollination Contribution to Energy in " + current_year;
   colorScheme = d3.schemeReds[6];
   colorScale = d3.scaleThreshold()
     .domain([20, 40, 60, 80, 99, 100])
@@ -276,12 +256,6 @@ function accessData() {
   .attr("d", path);
 }
 
-
-function updateLegend(colorScale) {
-  svg_legend.selectAll('*').remove();
-  makeLegend(colorScale);
-}
-
 function makeLegend(colorScale) {
   // Getting the Legend and setting the color scale on the legend
   var g_legend = svg_legend.append("g")
@@ -292,7 +266,7 @@ function makeLegend(colorScale) {
       .attr("class", "caption")
       .attr("x", 0)
       .attr("y", -4)
-      .text("% change");
+      .text("% contribution");
 
   var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
   var legend = d3.legendColor()
@@ -301,6 +275,11 @@ function makeLegend(colorScale) {
       .scale(colorScale);
   svg_legend.select(".legendThreshold")
       .call(legend);
+}
+
+function updateLegend(colorScale) {
+  svg_legend.selectAll('*').remove();
+  makeLegend(colorScale);
 }
 
 function projection3D() {
