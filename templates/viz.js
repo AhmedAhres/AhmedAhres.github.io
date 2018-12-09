@@ -182,70 +182,47 @@ coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,1
 }
 
 
-  function updateDataFolate() {
-  d3.json("world/countries.json", function(error, data) {
-    current_viz = "Folate";
+function updateDataFolate() {
+  current_viz = "Folate";
 
-    colorScheme = d3.schemeBlues[6];
-    colorScale = d3.scaleThreshold()
-      .domain([20, 40, 60, 80, 99, 100])
-      .range(colorScheme);
+  colorScheme = d3.schemePurples[6];
+  colorScale = d3.scaleThreshold()
+    .domain([20, 40, 60, 80, 99, 100])
+    .range(colorScheme);
 
-    updateLegend(colorScale);
-    // g.selectAll("path").attr("fill", '#fff')// function (d){
-    //   // // Pull data for particular iso and set color - Not able to fill it
-    //   // d.total = data_c[d.properties.iso3] || 0;
-    //   // return colorScale(d.total);
-    // // })
-    // .attr("d", path);
+  updateLegend(colorScale);
+
+  // Loading the data using a promise - since loading and querying were not in sync
+  dataset = 'dataset/country_fo.csv';
+  let promise = new Promise(function(resolve, reject) {
+    loadGlobalData(dataset);
+    setTimeout(() => resolve(1), 50);
+  });
+  promise.then(function(result) {
+    accessData();
   });
 }
 
 function updateDataVitamin() {
-  d3.json("world/countries.json", function(error, data) {
-    current_viz = "Vitamin A";
+  current_viz = "Vitamin A";
 
-    // loadGlobalData('');
-    colorScheme = d3.schemeGreens[6];
-    colorScale = d3.scaleThreshold()
-      .domain([20, 40, 60, 80, 99, 100])
-      .range(colorScheme);
+  colorScheme = d3.schemeGreens[6];
+  colorScale = d3.scaleThreshold()
+    .domain([20, 40, 60, 80, 99, 100])
+    .range(colorScheme);
 
-    updateLegend(colorScale);
-    // g.selectAll("path").attr("fill", '#fff')// function (d){
-    //   // // Pull data for particular iso and set color - Not able to fill it
-    //   // d.total = data_c[d.properties.iso3] || 0;
-    //   // return colorScale(d.total);
-    // // })
-    // .attr("d", path);
+  updateLegend(colorScale);
+
+  dataset = 'dataset/country_va.csv';
+  let promise = new Promise(function(resolve, reject) {
+    loadGlobalData(dataset);
+    setTimeout(() => resolve(1), 50);
+  });
+  promise.then(function(result) {
+    accessData();
   });
 }
 
-
-function updateDataEnergy() {
-  d3.json("world/countries.json", function(error, data) {
-    current_viz = "Energy";
-
-    // loadGlobalData('');
-    colorScheme = d3.schemeReds[6];
-    colorScale = d3.scaleThreshold()
-      .domain([20, 40, 60, 80, 99, 100])
-      .range(colorScheme);
-
-    updateLegend(colorScale);
-    // g.selectAll("path").attr("fill", '#fff')// function (d){
-    //   // // Pull data for particular iso and set color - Not able to fill it
-    //   // d.total = data_c[d.properties.iso3] || 0;
-    //   // return colorScale(d.total);
-    // // })
-    // .attr("d", path);
-  });
-}
-
-  function updateLegend(colorScale) {
-    svg_legend.selectAll('*').remove();
-    makeLegend(colorScale);
-  }
 
   function makeLegend(colorScale) {
     // Getting the Legend and setting the color scale on the legend
@@ -267,161 +244,215 @@ function updateDataEnergy() {
     svg_legend.select(".legendThreshold")
         .call(legend);
   }
+function updateDataEnergy() {
+  current_viz = "Energy";
 
-  function projection3D() {
-    var checked3D = document.getElementById("checked3D").value;
-    var checked2D = document.getElementById("checked2D").value;
-    if(checked3D === 'true') {
-      changeProjection(false);
-      checked3D = "true";
-      check2D = "false";
-    }
+  colorScheme = d3.schemeReds[6];
+  colorScale = d3.scaleThreshold()
+    .domain([20, 40, 60, 80, 99, 100])
+    .range(colorScheme);
+
+  updateLegend(colorScale);
+  dataset = 'dataset/country_energy.csv';
+  let promise = new Promise(function(resolve, reject) {
+    loadGlobalData(dataset);
+    setTimeout(() => resolve(1), 10);
+  });
+  promise.then(function(result) {
+    accessData();
+  });
+}
+
+function accessData() {
+  g.selectAll("path").attr("fill", function (d){
+    // Pull data for particular iso and set color - Not able to fill it
+    d.total = data_c[d.properties.iso3] || 0;
+    return colorScale(d.total);
+  })
+  .attr("d", path);
+}
+
+
+function updateLegend(colorScale) {
+  svg_legend.selectAll('*').remove();
+  makeLegend(colorScale);
+}
+
+function makeLegend(colorScale) {
+  // Getting the Legend and setting the color scale on the legend
+  var g_legend = svg_legend.append("g")
+      .attr("class", "legendThreshold")
+      .attr("transform", "translate(10,20)");
+
+  g_legend.append("text")
+      .attr("class", "caption")
+      .attr("x", 0)
+      .attr("y", -4)
+      .text("% change");
+
+  var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
+  var legend = d3.legendColor()
+      .labels(function (d) { return labels[d.i]; })
+      .shapePadding(4)
+      .scale(colorScale);
+  svg_legend.select(".legendThreshold")
+      .call(legend);
+}
+
+function projection3D() {
+  var checked3D = document.getElementById("checked3D").value;
+  var checked2D = document.getElementById("checked2D").value;
+  if(checked3D === 'true') {
+    changeProjection(false);
+    checked3D = "true";
+    check2D = "false";
   }
+}
 
-  function projection2D() {
-    var checked2D = document.getElementById("checked2D").value;
-    var checked3D = document.getElementById("checked3D").value;
-    if(checked2D === 'false') {
-      changeProjection(true);
-      checked2D = "true";
-      checked3D = "false";
-    }
+function projection2D() {
+  var checked2D = document.getElementById("checked2D").value;
+  var checked3D = document.getElementById("checked3D").value;
+  if(checked2D === 'false') {
+    changeProjection(true);
+    checked2D = "true";
+    checked3D = "false";
   }
+}
 
-  function changeProjection(sliderChecked) {
-    // Add background to the globe
-    let planet_radius = d3.min([width / 2, height / 2]);
+function changeProjection(sliderChecked) {
+  // Add background to the globe
+  let planet_radius = d3.min([width / 2, height / 2]);
 
-    // Can change the scale and extent of the zoom
-    zoom = d3.zoom()
-        .scaleExtent([1, 12])
-        .on("zoom", zoomed);
+  // Can change the scale and extent of the zoom
+  zoom = d3.zoom()
+      .scaleExtent([1, 12])
+      .on("zoom", zoomed);
 
-    // Changing the scale will change the size - height and width of globe
-    if(sliderChecked) {
-        projection = d3.geoNaturalEarth()
-          .scale(planet_radius*0.45)
-          .translate([width / 2, height / 2])
-          .precision(.1);
-    } else {
-      projection = d3.geoOrthographic()
-        .scale(planet_radius*0.844)
+  // Changing the scale will change the size - height and width of globe
+  if(sliderChecked) {
+      projection = d3.geoNaturalEarth()
+        .scale(planet_radius*0.45)
         .translate([width / 2, height / 2])
         .precision(.1);
+  } else {
+    projection = d3.geoOrthographic()
+      .scale(planet_radius*0.844)
+      .translate([width / 2, height / 2])
+      .precision(.1);
 
-      // inertia versor dragging after everything has been rendered
-      inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
-    }
-
-    path = d3.geoPath()
-      .projection(projection);
-
-    // Redraw the all projections
-    svg.selectAll('path').transition().duration(500).attr('d', path);
+    // inertia versor dragging after everything has been rendered
+    inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
   }
 
-  function ready() {
-    d3.json("world/countries.json", function(error, data) {
-      if (error) throw error;
+  path = d3.geoPath()
+    .projection(projection);
 
-      var features = topojson.feature(data, data.objects.units).features;
-      g.selectAll("path")
-        .data(features)
-        .enter().append("path")
-          // Chloropleth code
-        .attr("fill", function (d){
-              // Pull data for particular iso and set color - Not able to fill it
-              d.total = data_c[d.properties.iso3] || 0;
-              return colorScale(d.total);
-          })
-          // End of Chloropleth code
-          .attr("d", path)
-          .attr("class", "feature")
-          .on("click", clicked);
-      // Creates a mesh around the border
-      g.append("path")
-          .datum(topojson.mesh(data, data.objects.units, function(a, b) { return a !== b; }))
-          .attr("class", "mesh")
-          .attr("d", path);
-    });
-  }
+  // Redraw the all projections
+  svg.selectAll('path').transition().duration(500).attr('d', path);
+}
 
-  function render(){
-    update(projection.rotate());
-  }
+function ready() {
+  d3.json("world/countries.json", function(error, data) {
+    if (error) throw error;
 
-  function update(eulerAngles){
-    projection.rotate(eulerAngles);
-    svg.selectAll("path").attr("d", path);
-    svg.selectAll(".plot-point")
-      .attr("cx", d => projection(d)[0])
-      .attr("cy", d => projection(d)[1]);
-  }
-
-  let countryName = document.getElementById("box-3-header-2").firstElementChild;
-  let title = document.getElementById("box-3-header").firstElementChild;
-  let population = document.getElementById("box_population").firstElementChild;
-  let production = document.getElementById('box_production').firstElementChild;
-  let current_nature_contribution = 28;
-  let current_unmet_need = 45;
-
-  function clicked(d) {
-    if (active.node() === this) return reset();
-    active.classed("active", false);
-    active = d3.select(this).classed("active", true);
-
-    // Get info of the active country/feature
-    let active_info = active.node();
-
-    // For centering the globe to that particular country
-    geo_centroid = d3.geoCentroid(active_info.__data__);
-
-    var bounds = path.bounds(d),
-        dx = bounds[1][0] - bounds[0][0],
-        dy = bounds[1][1] - bounds[0][1],
-        x = (bounds[0][0] + bounds[1][0]) / 2,
-        y = (bounds[0][1] + bounds[1][1]) / 2,
-
-        // Change the scale to change the zoom when you select a country
-        scale = Math.max(1, Math.min(12, 0.9 / Math.max(dx / width, dy / height)));
-        // translate = [width / 2 - scale * geo_centroid[0], height / 2 - scale * geo_centroid[1]];
-
-    // For disabling the toggle button when you are zoomed in
-    document.getElementById("checked3D").disabled = true;
-    document.getElementById("checked2D").disabled = true;
-
-    svg.transition()
-        .duration(750)
-        .tween('rotate', function() {
-          var r = d3.interpolate(projection.rotate(), [-geo_centroid[0], -geo_centroid[1]]);
-          return function(t) {
-            projection.rotate(r(t));
-            svg.selectAll("path").attr("d", path);
-          }
+    var features = topojson.feature(data, data.objects.units).features;
+    g.selectAll("path")
+      .data(features)
+      .enter().append("path")
+        // Chloropleth code
+      .attr("fill", function (d){
+            // Pull data for particular iso and set color - Not able to fill it
+            d.total = data_c[d.properties.iso3] || 0;
+            return colorScale(d.total);
         })
-        // TODO: Need to set it on the basis of the size of the country to fit in the whole svg
-        .call(zoom.scaleTo, scale);
+        // End of Chloropleth code
+        .attr("d", path)
+        .attr("class", "feature")
+        .on("click", clicked);
+    // Creates a mesh around the border
+    g.append("path")
+        .datum(topojson.mesh(data, data.objects.units, function(a, b) { return a !== b; }))
+        .attr("class", "mesh")
+        .attr("d", path);
+  });
+}
 
-    countryName.innerHTML = active_info.__data__.properties.name;
+function render(){
+  update(projection.rotate());
+}
 
-    if(active_info.__data__.properties.iso3 in coordinates) {
-      if(previousCountryClicked !== null) {
-          svg.selectAll('.plot-point').remove();
-      }
-      // The regions should appear after we zoom in the country
-      setTimeout(function() {
-          showData(coordinates[active_info.__data__.properties.iso3]);
-      }, 751) // Should be more than 750 -> more than duration
-    } else {
-      if(previousCountryClicked !== null) {
-          svg.selectAll('.plot-point').remove();
-      }
+function update(eulerAngles){
+  projection.rotate(eulerAngles);
+  svg.selectAll("path").attr("d", path);
+  svg.selectAll(".plot-point")
+    .attr("cx", d => projection(d)[0])
+    .attr("cy", d => projection(d)[1]);
+}
+
+let countryName = document.getElementById("box-3-header-2").firstElementChild;
+let title = document.getElementById("box-3-header").firstElementChild;
+let population = document.getElementById("box_population").firstElementChild;
+let production = document.getElementById('box_production').firstElementChild;
+let current_nature_contribution = 28;
+let current_unmet_need = 45;
+
+function clicked(d) {
+  if (active.node() === this) return reset();
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
+
+  // Get info of the active country/feature
+  let active_info = active.node();
+
+  // For centering the globe to that particular country
+  geo_centroid = d3.geoCentroid(active_info.__data__);
+
+  var bounds = path.bounds(d),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]) / 2,
+      y = (bounds[0][1] + bounds[1][1]) / 2,
+
+      // Change the scale to change the zoom when you select a country
+      scale = Math.max(1, Math.min(12, 0.9 / Math.max(dx / width, dy / height)));
+      // translate = [width / 2 - scale * geo_centroid[0], height / 2 - scale * geo_centroid[1]];
+
+  // For disabling the toggle button when you are zoomed in
+  document.getElementById("checked3D").disabled = true;
+  document.getElementById("checked2D").disabled = true;
+
+  svg.transition()
+      .duration(750)
+      .tween('rotate', function() {
+        var r = d3.interpolate(projection.rotate(), [-geo_centroid[0], -geo_centroid[1]]);
+        return function(t) {
+          projection.rotate(r(t));
+          svg.selectAll("path").attr("d", path);
+        }
+      })
+      // TODO: Need to set it on the basis of the size of the country to fit in the whole svg
+      .call(zoom.scaleTo, scale);
+
+  countryName.innerHTML = active_info.__data__.properties.name;
+
+  if(active_info.__data__.properties.iso3 in coordinates) {
+    if(previousCountryClicked !== null) {
+        svg.selectAll('.plot-point').remove();
     }
-    previousCountryClicked = active_info.__data__.properties.iso3
-    current_nature_contribution = data_c[active_info.__data__.properties.iso3];
-    change_nature_percentage(current_nature_contribution);
-    population.innerHTML = "Population: " + format_number(current_population_data[active_info.__data__.properties.iso3]);
+    // The regions should appear after we zoom in the country
+    setTimeout(function() {
+        showData(coordinates[active_info.__data__.properties.iso3]);
+    }, 751) // Should be more than 750 -> more than duration
+  } else {
+    if(previousCountryClicked !== null) {
+        svg.selectAll('.plot-point').remove();
+    }
   }
+  previousCountryClicked = active_info.__data__.properties.iso3
+  current_nature_contribution = data_c[active_info.__data__.properties.iso3];
+  change_nature_percentage(current_nature_contribution);
+  population.innerHTML = "Population: " + format_number(current_population_data[active_info.__data__.properties.iso3]);
+}
 
 function showData(coordinates) {
     // Add circles to the country which has been selected
