@@ -9,8 +9,63 @@ let waypoint = new Waypoint({
 
 // Current dataset depending on what we visualize
 let dataset = 'dataset/country_energy.csv';
-var current_viz = "Energy";
-var colorScheme = d3.schemeReds[6];
+let data_population = 'dataset/population.csv';
+let data_production = 'dataset/country_energy.csv'
+let current_viz = "Food Energy";
+let colorScheme = d3.schemeReds[6];
+let energy_text = "Did you know? Food energy is extremely high in Bananas, Coffee and Apples.";
+let folate_text = "Did you know? Folate is extremely high is Vegetables and Broccolis.";
+let vitamin_text = "Did you know? Vitamin A is extremely high in Carrots, Spinaches and Sweet Potatoes.";
+
+// We handle the display of the population part in the story telling
+let current_population_data = {}
+function initialize_population() {
+  d3.csv(data_population, function(error, data) {
+    data.forEach(function(d) {
+      current_population_data[d.iso3] = population_data[d.iso3]["1980"];
+    });
+  });
+}
+
+function update_population(period) {
+  d3.csv(data_population, function(error, data) {
+    data.forEach(function(d) {
+      current_population_data[d.iso3] = population_data[d.iso3][period];
+    });
+    if (format_number(current_population_data[previousCountryClicked] == null))
+      population.innerHTML = "Population: NM";
+    else
+      population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
+  });
+}
+
+let population_data = load(data_population);
+initialize_population();
+
+let production_data = load(data_production);
+initialize_production();
+
+// We handle the display of the production
+let current_production_data = {}
+function initialize_production() {
+  d3.csv(data_production, function(error, data) {
+    data.forEach(function(d) {
+      current_production_data[d.iso3] = production_data[d.iso3]["1980"];
+    });
+  });
+}
+
+function update_production(period) {
+  d3.csv(data_production, function(error, data) {
+    data.forEach(function(d) {
+      current_production_data[d.iso3] = production_data[d.iso3][period];
+    });
+    if (current_production_data[previousCountryClicked] == null)
+      production.innerHTML = "Production: NM";
+    else
+      production.innerHTML = "Production: " + parseFloat(current_production_data[previousCountryClicked]).toFixed(2);
+  });
+}
 
 let selector = document.getElementById("selector");
 selector.style.left = 0;
@@ -70,7 +125,8 @@ changeProjection(false);
 // Adding tip for hover
 var tip = d3.tip()
   .attr('class', 'd3-tip')
-  .offset([-10, 0])
+
+.offset([-10, 0])
   // Here d -> is basically the data which is given to the circle -> right now it is just lat long
   .html(function(d) {
     return "<strong> Folate: <span>" + d[0] + "</span></strong>";
@@ -97,13 +153,13 @@ makeLegend(colorScale);
 
   loadGlobalData(dataset);
 
-  // Calling the ready function to render everything even chloropleth
-  ready();
+// Calling the ready function to render everything even chloropleth
+ready();
 
-  // Lat - Long Coordinates for Nigeria - Example
-  // Data is in Lat Long, but for coding the sequence is Long Lat
-  var coordinates = {};
-  coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
+// Lat - Long Coordinates for Nigeria - Example
+// Data is in Lat Long, but for coding the sequence is Long Lat
+var coordinates = {};
+coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
 
   function loadGlobalData(dataset) {
     global_data_c = load(dataset);
@@ -122,8 +178,9 @@ makeLegend(colorScale);
         result[d.iso3] = d;
         });
       });
-    return result;
-  }
+  return result;
+}
+
 
   function updateDataFolate() {
   d3.json("world/countries.json", function(error, data) {
@@ -303,7 +360,10 @@ function updateDataEnergy() {
 
   let countryName = document.getElementById("box-3-header-2").firstElementChild;
   let title = document.getElementById("box-3-header").firstElementChild;
-  var current_nature_contribution = 33;
+  let population = document.getElementById("box_population").firstElementChild;
+  let production = document.getElementById('box_production').firstElementChild;
+  let current_nature_contribution = 28;
+  let current_unmet_need = 45;
 
   function clicked(d) {
     if (active.node() === this) return reset();
@@ -360,6 +420,7 @@ function updateDataEnergy() {
     previousCountryClicked = active_info.__data__.properties.iso3
     current_nature_contribution = data_c[active_info.__data__.properties.iso3];
     change_nature_percentage(current_nature_contribution);
+    population.innerHTML = "Population: " + format_number(current_population_data[active_info.__data__.properties.iso3]);
   }
 
 function showData(coordinates) {
@@ -406,6 +467,10 @@ function showData(coordinates) {
     countryName.innerHTML = "World";
     previousCountryClicked = 'WLD';
     change_nature_percentage(data_c[previousCountryClicked]);
+    if (current_population_data[previousCountryClicked] == null)
+      population.innerHTML = "Population: NM" + format_number(current_population_data[previousCountryClicked]);
+    else
+      population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
   }
 
   // If the drag behavior prevents the default click,
@@ -445,69 +510,102 @@ function select_contribution_energy(period) {
   });
 }
 
-function change_nature_percentage(number) {
-  let i = d3.interpolate(progress, number);
-  d3.transition().duration(1000).tween("progress", function() {
+function change_nature_percentage(contribution) {
+  let i = d3.interpolate(progress, contribution);
+  d3.transition().duration(1000).tween("contribution", function() {
     return function(t) {
       progress = i(t);
       foreground.attr("d", arc.endAngle(twoPi * progress / 100));
-      percentComplete.text(formatPercent(progress / 100));
+      // In case the data is measured, we put "NM" for "Not Measured"
+      if (contribution == null)
+        percentComplete.text("NM");
+      else
+        percentComplete.text(formatPercent(progress / 100));
+    };
+  });
+}
+
+function change_unmet_percentage(unmet) {
+  let i2 = d3.interpolate(progress_unmet, unmet);
+  d3.transition().duration(1000).tween("unmet", function() {
+    return function(t2) {
+      progress_unmet = i2(t2);
+      foreground2.attr("d", arc2.endAngle(twoPi2 * progress_unmet / 100));
+      // In case the data is measured, we put "NM" for "Not Measured"
+      if (unmet == null)
+        percentComplete2.text("NM");
+      else
+        percentComplete2.text(formatPercent(progress_unmet / 100));
     };
     });
 }
 
 let current_SSP = "SSP1";
-
 let slider = d3.sliderHorizontal()
   .min(1850)
   .max(2150)
   .step(50)
-  .default("2000")
+  .default("2050")
   .width(400)
   .tickValues(years)
   .tickFormat(formatToData)
   .on("onchange", val => {
     // Here, the value we check for is still the original one, not the formatted one
     if (val == 1850) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1850";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1850";
       removeSSPs();
       select_contribution_energy("1850");
+      change_unmet_percentage(30);
+      update_population("1850");
+      update_production("1850");
     }
 
     if (val == 1900) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1900";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1900";
       removeSSPs();
       select_contribution_energy("1900");
+      update_population("1900");
+      update_production("1900");
     }
 
     if (val == 1950) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1910";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1910";
       removeSSPs();
       select_contribution_energy("1910");
+      update_population("1910");
+      update_production("1910");
     }
 
     if (val == 2000) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1945";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1945";
       removeSSPs();
       select_contribution_energy("1945");
+      update_population("1945");
+      update_production("1945");
     }
 
     if (val == 2050) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 1980";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1980";
       removeSSPs();
       select_contribution_energy("1980");
+      update_population("1980");
+      update_production("1980");
     }
 
     if (val == 2100) {
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 2015";
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 2015";
       removeSSPs();
       select_contribution_energy("2015");
+      update_population("2015");
+      update_production("2015");
     }
 
     if (val == 2150) {
       showSSPs();
-      title.innerHTML = current_viz + "'s Contribution to Pollination in 2050 - " + current_SSP;
+      title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
       select_contribution_energy(current_SSP);
+      update_population(current_SSP);
+      update_production(current_SSP);
     }
  });
 
@@ -543,21 +641,30 @@ function change_period(period){
       current_SSP = "SSP5";
     }
     select_contribution_energy(current_SSP);
-    title.innerHTML = current_viz + "'s Contribution to Pollination in 2050 - " + current_SSP;
+    title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
+    update_population(current_SSP);
+    update_production(current_SSP);
   }
 
+// Function to show the different SSP scenarios when the slider is on 2050
 function showSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "block";
+  document.getElementsByClassName('nav-bar-hidden')[0].style.display = "block";
 }
 
+// Function to show the hide the different SSP scenarios when the slider is not on 2050
 function removeSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "none";
+  document.getElementsByClassName('nav-bar-hidden')[0].style.display = "none";
 }
 
-let width1 = 135,
-    height1 = 135,
+// Pollination contribution percentage starts here
+let width_circle = 65,
+    height_circle = 65,
     twoPi = 2 * Math.PI,
+    twoPi2 = 2 * Math.PI,
     progress = 0,
+    progress_unmet = 0,
     formatPercent = d3.format(".0%");
 
 let arc = d3.arc()
@@ -565,9 +672,14 @@ let arc = d3.arc()
     .innerRadius(58)
     .outerRadius(66);
 
-let svg1 = d3.select("#docsChart").append("svg")
+let arc2 = d3.arc()
+      .startAngle(0)
+      .innerRadius(58)
+      .outerRadius(66);
+
+let svg1 = d3.select(".docsChart").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width1 * 1.7 + "," + height1 / 1.7 + ")");
+    .attr("transform", "translate(" + width_circle * 1.1 + "," + height_circle * 1.1 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -578,7 +690,23 @@ let foreground = svg1.append("path")
 
 let percentComplete = svg1.append("text")
     .attr("text-anchor", "middle")
-    .attr("class", "percent-complete")
     .attr("dy", "0.3em");
 
+// Unmet need percentage starts here
+let svg2 = d3.select(".docsChart2").append("svg")
+    .append("g")
+    .attr("transform", "translate(" + width_circle * 1.1 + "," + height_circle * 1.1 + ")");
+
+svg2.append("path")
+      .attr("fill", "#E6E7E8")
+      .attr("d", arc2.endAngle(twoPi2));
+
+let foreground2 = svg2.append("path")
+      .attr("fill", "#00D2B6");
+
+let percentComplete2 = svg2.append("text")
+      .attr("text-anchor", "middle")
+      .attr("dy", "0.3em");
+
+change_unmet_percentage(40);
 change_nature_percentage(current_nature_contribution);
