@@ -530,9 +530,9 @@ input:checked + .slider:before {
 }
 
 .ver-bar {
-  border-left: 0.2vh solid rgba(0,0,0,0.25);
+  border-left: 0.3vh solid rgba(0,0,0,0.25);
   height: 22vh;
-  margin-left: -4vh;
+  margin-left: -5vh;
   top: 0;
 }
 
@@ -551,8 +551,16 @@ input:checked + .slider:before {
   font-family: ourFont, sans-serif;
 }
 
+.box_unmet {
+  flex-basis: 33%;
+}
+
+.box_contribution {
+  flex-basis: 43%;
+}
+
 .docsChart2 {
- font-size: 2.9vh;
+ font-size: 3vh;
  fill: #5B8BE3;
  font-family: ourFont, sans-serif;
 }

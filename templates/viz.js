@@ -224,6 +224,26 @@ function updateDataVitamin() {
 }
 
 
+  function makeLegend(colorScale) {
+    // Getting the Legend and setting the color scale on the legend
+    var g_legend = svg_legend.append("g")
+        .attr("class", "legendThreshold")
+        .attr("transform", "translate(10,20)");
+
+    g_legend.append("text")
+        .attr("class", "caption")
+        .attr("x", 0)
+        .attr("y", -4)
+        .text("% contribution");
+
+    var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
+    var legend = d3.legendColor()
+        .labels(function (d) { return labels[d.i]; })
+        .shapePadding(4)
+        .scale(colorScale);
+    svg_legend.select(".legendThreshold")
+        .call(legend);
+  }
 function updateDataEnergy() {
   current_viz = "Energy";
 
@@ -509,7 +529,7 @@ function select_contribution_energy(period) {
       data_c[d.iso3] = global_data_c[d.iso3][period];
     });
     current_nature_contribution = data_c[previousCountryClicked];
-    change_nature_percentage(current_nature_contribution);
+    change_nature_percentage(current_nature_contribution, 50);
     g.selectAll("path").attr("fill", function (d) {
           // Pull data for particular iso and set color - Not able to fill it
           if(d.type == 'Feature') {
@@ -521,34 +541,26 @@ function select_contribution_energy(period) {
   });
 }
 
-function change_nature_percentage(contribution) {
-  let i = d3.interpolate(progress, contribution);
+function change_nature_percentage(contribution, unmet) {
+  let contrib_interpolation = d3.interpolate(progress, contribution);
+  let unmet_interpolation = d3.interpolate(progress_unmet, unmet);
   d3.transition().duration(1000).tween("contribution", function() {
     return function(t) {
-      progress = i(t);
+      progress = contrib_interpolation(t);
+      progress_unmet = unmet_interpolation(t);
       foreground.attr("d", arc.endAngle(twoPi * progress / 100));
+      foreground2.attr("d", arc.endAngle(twoPi * progress_unmet / 100));
       // In case the data is measured, we put "NM" for "Not Measured"
       if (contribution == null)
         percentComplete.text("NM");
       else
         percentComplete.text(formatPercent(progress / 100));
-    };
-  });
-}
-
-function change_unmet_percentage(unmet) {
-  let i2 = d3.interpolate(progress_unmet, unmet);
-  d3.transition().duration(1000).tween("unmet", function() {
-    return function(t2) {
-      progress_unmet = i2(t2);
-      foreground2.attr("d", arc2.endAngle(twoPi2 * progress_unmet / 100));
-      // In case the data is measured, we put "NM" for "Not Measured"
       if (unmet == null)
         percentComplete2.text("NM");
       else
         percentComplete2.text(formatPercent(progress_unmet / 100));
     };
-    });
+  });
 }
 
 let current_SSP = "SSP1";
@@ -673,7 +685,6 @@ function removeSSPs() {
 let width_circle = 65,
     height_circle = 65,
     twoPi = 2 * Math.PI,
-    twoPi2 = 2 * Math.PI,
     progress = 0,
     progress_unmet = 0,
     formatPercent = d3.format(".0%");
@@ -682,11 +693,6 @@ let arc = d3.arc()
     .startAngle(0)
     .innerRadius(58)
     .outerRadius(66);
-
-let arc2 = d3.arc()
-      .startAngle(0)
-      .innerRadius(58)
-      .outerRadius(66);
 
 let svg1 = d3.select(".docsChart").append("svg")
     .append("g")
@@ -706,11 +712,11 @@ let percentComplete = svg1.append("text")
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.1 + "," + height_circle * 1.1 + ")");
+    .attr("transform", "translate(" + width_circle * 1.3 + "," + height_circle * 1.1 + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
-      .attr("d", arc2.endAngle(twoPi2));
+      .attr("d", arc.endAngle(twoPi));
 
 let foreground2 = svg2.append("path")
       .attr("fill", "#00D2B6");
@@ -719,5 +725,4 @@ let percentComplete2 = svg2.append("text")
       .attr("text-anchor", "middle")
       .attr("dy", "0.3em");
 
-change_unmet_percentage(40);
-change_nature_percentage(current_nature_contribution);
+change_nature_percentage(current_nature_contribution, current_unmet_need);
