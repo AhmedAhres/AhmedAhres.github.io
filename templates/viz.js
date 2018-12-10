@@ -290,12 +290,15 @@ function changeProjection(sliderChecked) {
         .scale(planet_radius*0.45)
         .translate([width / 2, height / 2])
         .precision(.1);
+      $('.box-container').css({
+        'background': 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
+      });
   } else {
     projection = d3.geoOrthographic()
       .scale(planet_radius*0.844)
       .translate([width / 2, height / 2])
       .precision(.1);
-
+    $('.box-container').css({'background':''});
     // inertia versor dragging after everything has been rendered
     inertia = d3.geoInertiaDrag(svg, function() { render(); }, projection);
   }
@@ -389,6 +392,10 @@ function clicked(d) {
       // TODO: Need to set it on the basis of the size of the country to fit in the whole svg
       .call(zoom.scaleTo, scale);
 
+  $('.box-container').css({
+    'background': 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
+  });
+
   countryName.innerHTML = active_info.__data__.properties.name;
 
   if(active_info.__data__.properties.iso3 in coordinates) {
@@ -450,6 +457,8 @@ function showData(coordinates) {
     // Change the toggle back to enabled
     document.getElementById("checked3D").disabled = false;
     document.getElementById("checked2D").disabled = false;
+
+    $('.box-container').css({'background':''});
 
     countryName.innerHTML = "World";
     previousCountryClicked = 'WLD';
