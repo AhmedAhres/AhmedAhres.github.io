@@ -57,7 +57,7 @@ var tip = d3.tip()
 .offset([-10, 0])
   // Here d -> is basically the data which is given to the circle -> right now it is just lat long
   .html(function(d) {
-    console.log(d);
+    // console.log(d);
     return "<strong> Folate: <span>" + d[0] + "</span></strong>";
   })
 // Adding tip to the svg
@@ -129,6 +129,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1850");
       update_population("1850");
       update_production("1850");
+      update_2D("1850");
     }
 
     if (val == 1900) {
@@ -138,6 +139,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1900");
       update_population("1900");
       update_production("1900");
+      update_2D("1900");
     }
 
     if (val == 1950) {
@@ -147,6 +149,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1910");
       update_population("1910");
       update_production("1910");
+      update_2D("1910");
     }
 
     if (val == 2000) {
@@ -156,6 +159,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1945");
       update_population("1945");
       update_production("1945");
+      update_2D("1945");
     }
 
     if (val == 2050) {
@@ -165,6 +169,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1980");
       update_population("1980");
       update_production("1980");
+      update_2D("1980");
     }
 
     if (val == 2100) {
@@ -182,6 +187,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy(current_SSP);
       update_population(current_SSP);
       update_production(current_SSP);
+      update_2D(current_SSP);
     }
  });
 
@@ -313,12 +319,18 @@ function showNow() {
 function loadGlobalData(dataset) {
     global_data_c = load(dataset);
     data_c = {};
+    data_2D = {};
     d3.csv(dataset, function(error, data) {
       data.forEach(function(d) {
         data_c[d.iso3] = global_data_c[d.iso3][current_year];
+        console.log(current_year);
+        data_2D[d.iso3] = [global_data_c[d.iso3]['lat'],global_data_c[d.iso3]['long'],global_data_c[d.iso3][current_year]];
       });
+
     });
   }
+
+
 
 function load(dataset) {
     let result = {};
@@ -571,6 +583,7 @@ function clicked(d) {
   population.innerHTML = "Population: " + format_number(current_population_data[active_info.__data__.properties.iso3]);
 }
 
+// plot points on the map
 function showData(coordinates) {
     // Add circles to the country which has been selected
     // Removing part is within
@@ -585,8 +598,12 @@ function showData(coordinates) {
         .attr("cy", function (d) {
             return projection(d)[1];
         })
-        .attr("r", "0.8px")
-        .attr("fill", "#F0B0EE")
+        .attr("r", "1px")
+        .attr("fill", function (d) {
+          // console.log(d);
+          color = d[2] || 0 ;
+          return colorScale(color);
+        })
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);
   }
@@ -630,22 +647,56 @@ function showData(coordinates) {
   }
 
 function select_contribution_energy(period) {
-  d3.csv(dataset, function(error, data) {
-    data.forEach(function(d) {
-      data_c[d.iso3] = global_data_c[d.iso3][period];
+  if(checked3D == "true") {
+    d3.csv(dataset, function(error, data) {
+      data.forEach(function(d) {
+        data_c[d.iso3] = global_data_c[d.iso3][period];
+      });
+      current_nature_contribution = data_c[previousCountryClicked];
+      change_nature_percentage(current_nature_contribution, 50);
+        g.selectAll("path").attr("fill", function (d) {
+              // Pull data for particular iso and set color - Not able to fill it
+              if(d.type == 'Feature') {
+                  d.total = data_c[d.properties.iso3] || 0;
+              } else {
+              }
+              return colorScale(d.total);
+          });
     });
-    current_nature_contribution = data_c[previousCountryClicked];
-    change_nature_percentage(current_nature_contribution, 50);
-    if(checked3D == "true") {
-      g.selectAll("path").attr("fill", function (d) {
-            // Pull data for particular iso and set color - Not able to fill it
-            if(d.type == 'Feature') {
-                d.total = data_c[d.properties.iso3] || 0;
-            } else {
-            }
-            return colorScale(d.total);
-        });
-    } else {} 
+  } else {
+    d3.csv('dataset/pixel_energy.csv', function(error, data) {
+      let promise = new Promise(function(resolve, reject) {
+        loadGlobalData('dataset/pixel_energy.csv');
+        setTimeout(() => resolve(1), 10);
+      });
+      promise.then(function(result) {
+        coordstoplot = [];
+        for (var key in data_2D) {
+          coordstoplot.push([data_2D[key][0],data_2D[key][1],data_2D[key][2]]);
+        }
+        showData(coordstoplot);
+        // setTimeout(function() {
+        //     showData(coordstoplot);
+        // }, 800);
+      });
+    });
+
+}
+}
+
+let global_2D = load('dataset/pixel_energy.csv');
+let coordstoplot = [];
+function initialize_2D() {
+  for (var key in data_2D) {
+      coordstoplot.push([global_2D[key][0],global_2D[key][1],global_2D[key][2]]);
+    }
+}
+
+function update_2D(period) {
+  d3.csv(data_production, function(error, data) {
+    data.forEach(function(d) {
+      coordstoplot[d.iso3] = global_2D[d.iso3][period];
+    });
   });
 }
 
@@ -699,6 +750,7 @@ function change_period(period){
     title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
     update_population(current_SSP);
     update_production(current_SSP);
+    update_2D(current_SSP);
   }
 
 // Function to show the different SSP scenarios when the slider is on 2050
