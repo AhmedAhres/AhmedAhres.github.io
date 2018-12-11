@@ -636,14 +636,16 @@ function select_contribution_energy(period) {
     });
     current_nature_contribution = data_c[previousCountryClicked];
     change_nature_percentage(current_nature_contribution, 50);
-    g.selectAll("path").attr("fill", function (d) {
-          // Pull data for particular iso and set color - Not able to fill it
-          if(d.type == 'Feature') {
-              d.total = data_c[d.properties.iso3] || 0;
-          } else {
-          }
-          return colorScale(d.total);
-      })
+    if(checked3D == "true") {
+      g.selectAll("path").attr("fill", function (d) {
+            // Pull data for particular iso and set color - Not able to fill it
+            if(d.type == 'Feature') {
+                d.total = data_c[d.properties.iso3] || 0;
+            } else {
+            }
+            return colorScale(d.total);
+        });
+    } else {} 
   });
 }
 
