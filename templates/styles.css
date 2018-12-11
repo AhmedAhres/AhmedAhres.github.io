@@ -96,6 +96,7 @@ line {
 
 #box-3-header-2 {
   text-align: center;
+  margin-top: -1vh;
   font-size: 3vh;
 }
 
@@ -139,10 +140,6 @@ line {
   flex-direction: column;
   margin-top: 2vh;
   margin-left: -2vh;
-  display: flex;
-  flex-flow: row wrap;
-  /* Then we define how is distributed the remaining space */
-  justify-content: space-around;
 }
 
 .box-small2 {
@@ -567,4 +564,21 @@ input:checked + .slider:before {
 
 .small-title {
   margin-left: -4.3vh
+}
+
+
+.axis path,
+.line2 {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1.7;
+    shape-rendering: crispEdges;
+}
+.legend {
+    font-size: 1.9vh;
+    font-weight: bold;
+    text-anchor: middle;
+}
+.graph {
+  margin-top: 2vh;
 }

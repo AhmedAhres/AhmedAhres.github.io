@@ -1,2 +1,19 @@
-,1850,1900,1910,1945,1980,cur,ssp1,ssp3,ssp5
-0,380628271430728.6,490064729372282.6,515270432228766.75,593473671632386.0,648656300859733.5,669841254427936.0,648544285844711.4,681006137742685.2,702051985616156.6
+name,date,WLD,TUN
+Pollination Contribution,1,36.99,10
+Pollination Contribution,2,38.99,10
+Pollination Contribution,3,37.90,20
+Pollination Contribution,4,33.45,30
+Pollination Contribution,5,28.21,40
+Pollination Contribution,6,26.31,50
+Pollination Contribution,7,29.62,60
+Pollination Contribution,8,42.62,60
+Pollination Contribution,9,60,60
+Unmet Need,1,30,30
+Unmet Need,2,30,60
+Unmet Need,3,25,50
+Unmet Need,4,20,40
+Unmet Need,5,15,30
+Unmet Need,6,10,20
+Unmet Need,7,5,10
+Unmet Need,8,2,10
+Unmet Need,9,1,10

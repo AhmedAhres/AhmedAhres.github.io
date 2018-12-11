@@ -9,65 +9,71 @@ let waypoint = new Waypoint({
 
 // Current dataset depending on what we visualize
 let dataset = 'dataset/country_energy.csv';
-let data_population = 'dataset/population.csv';
-let data_production = 'dataset/country_energy.csv'
 let current_viz = "Food Energy";
 let colorScheme = d3.schemeReds[6];
-let energy_text = "Did you know? Food energy is extremely high in Bananas, Coffee and Apples.";
-let folate_text = "Did you know? Folate is extremely high is Vegetables and Broccolis.";
-let vitamin_text = "Did you know? Vitamin A is extremely high in Carrots, Spinaches and Sweet Potatoes.";
+let unmet_need_dataset = 'dataset/unmet_need_energy.csv'
 
 // We handle the display of the population part in the story telling
-let current_population_data = {}
-function initialize_population() {
-  d3.csv(data_population, function(error, data) {
-    data.forEach(function(d) {
-      current_population_data[d.iso3] = population_data[d.iso3]["1980"];
+// let current_population_data = {}
+// function initialize_population() {
+//   d3.csv(data_population, function(error, data) {
+//     data.forEach(function(d) {
+//       current_population_data[d.iso3] = population_data[d.iso3]["1980"];
+//     });
+//   });
+// }
+let global_unmet = load(unmet_need_dataset);
+let current_unmet_data = {};
+function initialize_unmet() {
+    d3.csv(unmet_need_dataset, function(error, data) {
+      data.forEach(function(d) {
+        current_unmet_data[d.iso3] = global_unmet[d.iso3][current_year];
+      });
     });
-  });
 }
 
-function update_population(period) {
-  d3.csv(data_population, function(error, data) {
-    data.forEach(function(d) {
-      current_population_data[d.iso3] = population_data[d.iso3][period];
-    });
-    if (format_number(current_population_data[previousCountryClicked] == null))
-      population.innerHTML = "Population: NM";
-    else
-      population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
-  });
-}
+initialize_unmet();
+// function update_population(period) {
+//   d3.csv(data_population, function(error, data) {
+//     data.forEach(function(d) {
+//       current_population_data[d.iso3] = population_data[d.iso3][period];
+//     });
+//     if (format_number(current_population_data[previousCountryClicked] == null))
+//       population.innerHTML = "Population: NM";
+//     else
+//       population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
+//   });
+// }
 
-let population_data = load(data_population);
-initialize_population();
+// let population_data = load(data_population);
+// initialize_population();
+//
+// let production_data = load(data_production);
+// initialize_production();
 
-let production_data = load(data_production);
-initialize_production();
-
-let description_text = document.getElementsByClassName("description_text")[0];
+//let description_text = document.getElementsByClassName("description_text")[0];
 
 // We handle the display of the production
-let current_production_data = {}
-function initialize_production() {
-  d3.csv(data_production, function(error, data) {
-    data.forEach(function(d) {
-      current_production_data[d.iso3] = production_data[d.iso3]["1980"];
-    });
-  });
-}
-
-function update_production(period) {
-  d3.csv(data_production, function(error, data) {
-    data.forEach(function(d) {
-      current_production_data[d.iso3] = production_data[d.iso3][period];
-    });
-    if (current_production_data[previousCountryClicked] == null)
-      production.innerHTML = "Production: NM";
-    else
-      production.innerHTML = "Production: " + parseFloat(current_production_data[previousCountryClicked]).toFixed(2);
-  });
-}
+// let current_production_data = {}
+// function initialize_production() {
+//   d3.csv(data_production, function(error, data) {
+//     data.forEach(function(d) {
+//       current_production_data[d.iso3] = production_data[d.iso3]["1980"];
+//     });
+//   });
+// }
+//
+// function update_production(period) {
+//   d3.csv(data_production, function(error, data) {
+//     data.forEach(function(d) {
+//       current_production_data[d.iso3] = production_data[d.iso3][period];
+//     });
+//     if (current_production_data[previousCountryClicked] == null)
+//       production.innerHTML = "Production: NM";
+//     else
+//       production.innerHTML = "Production: " + parseFloat(current_production_data[previousCountryClicked]).toFixed(2);
+//   });
+// }
 
 let selector = document.getElementById("selector");
 selector.style.left = 0;
@@ -187,21 +193,18 @@ function updateData(data_type) {
   switch(data_type) {
     case "Vitamin":
       current_viz = "Vitamin A";
-      description_text.innerHTML = vitamin_text;
       title.innerHTML = "Pollination Contribution to Vitamin A in " + current_year;
       colorScheme = d3.schemeGreens[6];
       dataset = 'dataset/country_va.csv';
       break;
     case "Energy":
       current_viz = "Energy";
-      description_text.innerHTML = energy_text;
       title.innerHTML = "Pollination Contribution to Energy in " + current_year;
       colorScheme = d3.schemeReds[6];
       dataset = 'dataset/country_energy.csv';
       break;
     case "Folate":
       current_viz = "Folate";
-      description_text.innerHTML = folate_text;
       title.innerHTML = "Pollination Contribution to Folate in " + current_year;
       colorScheme = d3.schemePurples[6];
       dataset = 'dataset/country_fo.csv';
@@ -350,10 +353,10 @@ function update(eulerAngles){
 
 let countryName = document.getElementById("box-3-header-2").firstElementChild;
 let title = document.getElementById("box-3-header").firstElementChild;
-let population = document.getElementById("box_population").firstElementChild;
-let production = document.getElementById('box_production').firstElementChild;
+//let population = document.getElementById("box_population").firstElementChild;
+//let production = document.getElementById('box_production').firstElementChild;
 let current_nature_contribution = 28;
-let current_unmet_need = 45;
+let current_unmet_need = 85;
 
 function clicked(d) {
   if (active.node() === this) return reset();
@@ -413,8 +416,10 @@ function clicked(d) {
   }
   previousCountryClicked = active_info.__data__.properties.iso3
   current_nature_contribution = data_c[active_info.__data__.properties.iso3];
-  change_nature_percentage(current_nature_contribution);
-  population.innerHTML = "Population: " + format_number(current_population_data[active_info.__data__.properties.iso3]);
+  current_unmet_need = current_unmet_data[active_info.__data__.properties.iso3];
+  change_nature_percentage(current_nature_contribution, current_unmet_need);
+  updateGraph(previousCountryClicked);
+  //population.innerHTML = "Population: " + format_number(current_population_data[active_info.__data__.properties.iso3]);
 }
 
 function showData(coordinates) {
@@ -462,11 +467,12 @@ function showData(coordinates) {
 
     countryName.innerHTML = "World";
     previousCountryClicked = 'WLD';
-    change_nature_percentage(data_c[previousCountryClicked]);
-    if (current_population_data[previousCountryClicked] == null)
-      population.innerHTML = "Population: NM" + format_number(current_population_data[previousCountryClicked]);
-    else
-      population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
+    change_nature_percentage(data_c[previousCountryClicked], current_unmet_data[previousCountryClicked]);
+    updateGraph(previousCountryClicked);
+    // if (current_population_data[previousCountryClicked] == null)
+    //   population.innerHTML = "Population: NM" + format_number(current_population_data[previousCountryClicked]);
+    // else
+    //   population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
   }
 
   // If the drag behavior prevents the default click,
@@ -493,8 +499,13 @@ function select_contribution_energy(period) {
     data.forEach(function(d) {
       data_c[d.iso3] = global_data_c[d.iso3][period];
     });
+    d3.csv(unmet_need_dataset, function(error, data) {
+      data.forEach(function(d) {
+        current_unmet_data[d.iso3] = global_unmet[d.iso3][period];
+      });
     current_nature_contribution = data_c[previousCountryClicked];
-    change_nature_percentage(current_nature_contribution, 50);
+    current_unmet_need = current_unmet_data[previousCountryClicked];
+    change_nature_percentage(current_nature_contribution, current_unmet_need);
     g.selectAll("path").attr("fill", function (d) {
           // Pull data for particular iso and set color - Not able to fill it
           if(d.type == 'Feature') {
@@ -503,6 +514,7 @@ function select_contribution_energy(period) {
           }
           return colorScale(d.total);
       })
+  });
   });
 }
 
@@ -545,8 +557,8 @@ let slider = d3.sliderHorizontal()
       current_year = "1850";
       removeSSPs();
       select_contribution_energy("1850");
-      update_population("1850");
-      update_production("1850");
+      // update_population("1850");
+      // update_production("1850");
     }
 
     if (val == 1900) {
@@ -554,8 +566,8 @@ let slider = d3.sliderHorizontal()
       current_year = "1900";
       removeSSPs();
       select_contribution_energy("1900");
-      update_population("1900");
-      update_production("1900");
+      // update_population("1900");
+      // update_production("1900");
     }
 
     if (val == 1950) {
@@ -563,8 +575,8 @@ let slider = d3.sliderHorizontal()
       current_year = "1910";
       removeSSPs();
       select_contribution_energy("1910");
-      update_population("1910");
-      update_production("1910");
+      // update_population("1910");
+      // update_production("1910");
     }
 
     if (val == 2000) {
@@ -572,8 +584,8 @@ let slider = d3.sliderHorizontal()
       current_year = "1945";
       removeSSPs();
       select_contribution_energy("1945");
-      update_population("1945");
-      update_production("1945");
+      // update_population("1945");
+      // update_production("1945");
     }
 
     if (val == 2050) {
@@ -581,8 +593,8 @@ let slider = d3.sliderHorizontal()
       current_year = "1980";
       removeSSPs();
       select_contribution_energy("1980");
-      update_population("1980");
-      update_production("1980");
+      // update_population("1980");
+      // update_production("1980");
     }
 
     if (val == 2100) {
@@ -590,16 +602,16 @@ let slider = d3.sliderHorizontal()
       current_year = "2015";
       removeSSPs();
       select_contribution_energy("2015");
-      update_population("2015");
-      update_production("2015");
+      // update_population("2015");
+      // update_production("2015");
     }
 
     if (val == 2150) {
       showSSPs();
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
       select_contribution_energy(current_SSP);
-      update_population(current_SSP);
-      update_production(current_SSP);
+      // update_population(current_SSP);
+      // update_production(current_SSP);
     }
  });
 
@@ -636,8 +648,8 @@ function change_period(period){
     }
     select_contribution_energy(current_SSP);
     title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
-    update_population(current_SSP);
-    update_production(current_SSP);
+    // update_population(current_SSP);
+    // update_production(current_SSP);
   }
 
 // Function to show the different SSP scenarios when the slider is on 2050
@@ -697,3 +709,102 @@ let percentComplete2 = svg2.append("text")
       .attr("dy", "0.3em");
 
 change_nature_percentage(current_nature_contribution, current_unmet_need);
+
+let dataset_graph = "dataset/plot_energy.csv";
+
+// Set the dimensions of the canvas / graph
+let margin = {top: 10, right: 20, bottom: 80, left: 50},
+    width_plot = 500 - margin.left - margin.right,
+    height_plot = 300 - margin.top - margin.bottom;
+
+
+// Set the ranges
+let x = d3.scaleLinear().range([0, width_plot]);
+let y = d3.scaleLinear().range([height_plot, 0]);
+updateGraph('WLD');
+  // Define the line
+function updateGraph(country) {
+  var svg_remove = d3.select(".graph");
+  svg_remove.selectAll("*").remove();
+
+let line_draw = d3.line()
+      .x(function(d) { return x(d.date); })
+      .y(function(d) { return y(d[country]); });
+
+
+  // Adds the svg canvas
+let svg_plot = d3.select(".graph")
+      .append("svg")
+          .attr("width", width_plot + margin.left + margin.right)
+          .attr("height", height_plot + margin.top + margin.bottom)
+      .append("g")
+          .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
+  // Get the data
+  d3.csv(dataset_graph, function(error, data) {
+
+      // Scale the range of the data
+      x.domain(d3.extent(data, function(d) { return d.date; }));
+      y.domain([0, 100]);
+
+      // Nest the entries by symbol
+      let dataNest = d3.nest()
+          .key(function(d) {return d.name;})
+          .entries(data);
+
+      // set the colour scale
+      let color = d3.scaleOrdinal(d3.schemeSet1);
+
+      legendSpace = width_plot / dataNest.length; // spacing for the legend
+
+      // Loop through each symbol / key
+      dataNest.forEach(function(d,i) {
+
+          svg_plot.append("path")
+              .attr("class", "line2")
+              .style("stroke", function() { // Add the colours dynamically
+                  return d.color = color(d.key); })
+              .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign an ID
+              .attr("d", line_draw(d.values));
+
+          // Add the Text
+          svg_plot.append("text")
+              .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
+              .attr("y", height_plot + (margin.bottom/2)+ 5)
+              .attr("class", "legend")    // style the legend
+              .style("fill", function() { // Add the colours dynamically
+                  return d.color = color(d.key); })
+              .text(d.key);
+
+      });
+
+
+
+  let numbers = [1,2,3,4,5,6,7,8,9];
+  let formatToYears = function(d) {
+    // TO BE OPTIMIZED WITH A DICTIONARY
+      if (d == 1) return 1850;
+      if (d == 2) return 1900;
+      if (d == 3) return 1910;
+      if (d == 4) return 1945;
+      if (d == 5) return 1980;
+      if (d == 6) return 2015;
+      if (d == 7) return "SSP1";
+      if (d == 8) return "SSP3";
+      if (d == 9) return "SSP5";
+  }
+
+  // Add the X Axis
+  svg_plot.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + height_plot + ")")
+      .call(d3.axisBottom(x).tickValues(numbers).tickFormat(formatToYears));
+
+  // Add the Y Axis
+  svg_plot.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y));
+
+  });
+}
