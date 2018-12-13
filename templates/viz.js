@@ -33,47 +33,6 @@ function initialize_unmet() {
 }
 
 initialize_unmet();
-// function update_population(period) {
-//   d3.csv(data_population, function(error, data) {
-//     data.forEach(function(d) {
-//       current_population_data[d.iso3] = population_data[d.iso3][period];
-//     });
-//     if (format_number(current_population_data[previousCountryClicked] == null))
-//       population.innerHTML = "Population: NM";
-//     else
-//       population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
-//   });
-// }
-
-// let population_data = load(data_population);
-// initialize_population();
-//
-// let production_data = load(data_production);
-// initialize_production();
-
-//let description_text = document.getElementsByClassName("description_text")[0];
-
-// We handle the display of the production
-// let current_production_data = {}
-// function initialize_production() {
-//   d3.csv(data_production, function(error, data) {
-//     data.forEach(function(d) {
-//       current_production_data[d.iso3] = production_data[d.iso3]["1980"];
-//     });
-//   });
-// }
-//
-// function update_production(period) {
-//   d3.csv(data_production, function(error, data) {
-//     data.forEach(function(d) {
-//       current_production_data[d.iso3] = production_data[d.iso3][period];
-//     });
-//     if (current_production_data[previousCountryClicked] == null)
-//       production.innerHTML = "Production: NM";
-//     else
-//       production.innerHTML = "Production: " + parseFloat(current_production_data[previousCountryClicked]).toFixed(2);
-//   });
-// }
 
 let selector = document.getElementById("selector");
 selector.style.left = 0;
@@ -196,18 +155,27 @@ function updateData(data_type) {
       title.innerHTML = "Pollination Contribution to Vitamin A in " + current_year;
       colorScheme = d3.schemeGreens[6];
       dataset = 'dataset/country_va.csv';
+      dataset_graph = 'dataset/plot_vitamin.csv';
+      unmet_need_dataset = 'dataset/unmet_need_vitamin.csv';
+      updateGraph(previousCountryClicked);
       break;
     case "Energy":
       current_viz = "Energy";
       title.innerHTML = "Pollination Contribution to Energy in " + current_year;
       colorScheme = d3.schemeReds[6];
       dataset = 'dataset/country_energy.csv';
+      dataset_graph = 'dataset/plot_energy.csv';
+      unmet_need_dataset = 'dataset/unmet_need_energy.csv';
+      updateGraph(previousCountryClicked);
       break;
     case "Folate":
       current_viz = "Folate";
       title.innerHTML = "Pollination Contribution to Folate in " + current_year;
       colorScheme = d3.schemePurples[6];
       dataset = 'dataset/country_fo.csv';
+      dataset_graph = 'dataset/plot_folate.csv';
+      unmet_need_dataset = 'dataset/unmet_need_folate.csv';
+      updateGraph(previousCountryClicked);
       break;
   }
   colorScale = d3.scaleThreshold()
@@ -215,10 +183,12 @@ function updateData(data_type) {
     .range(colorScheme);
   updateLegend(colorScale);
   let promise = new Promise(function(resolve, reject) {
+    global_unmet = load(unmet_need_dataset);
     loadGlobalData(dataset);
     setTimeout(() => resolve(1), 10);
   });
   promise.then(function(result) {
+    update_percentages(current_year);
     accessData();
   });
 }
@@ -356,7 +326,7 @@ let title = document.getElementById("box-3-header").firstElementChild;
 //let population = document.getElementById("box_population").firstElementChild;
 //let production = document.getElementById('box_production').firstElementChild;
 let current_nature_contribution = 28;
-let current_unmet_need = 85;
+let current_unmet_need = 61;
 
 function clicked(d) {
   if (active.node() === this) return reset();
@@ -419,7 +389,6 @@ function clicked(d) {
   current_unmet_need = current_unmet_data[active_info.__data__.properties.iso3];
   change_nature_percentage(current_nature_contribution, current_unmet_need);
   updateGraph(previousCountryClicked);
-  //population.innerHTML = "Population: " + format_number(current_population_data[active_info.__data__.properties.iso3]);
 }
 
 function showData(coordinates) {
@@ -494,7 +463,7 @@ var formatToData = function(d) {
     if (d == 2150) return 2050;
 }
 
-function select_contribution_energy(period) {
+function update_percentages(period) {
   d3.csv(dataset, function(error, data) {
     data.forEach(function(d) {
       data_c[d.iso3] = global_data_c[d.iso3][period];
@@ -556,7 +525,7 @@ let slider = d3.sliderHorizontal()
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1850";
       current_year = "1850";
       removeSSPs();
-      select_contribution_energy("1850");
+      update_percentages("1850");
       // update_population("1850");
       // update_production("1850");
     }
@@ -565,7 +534,7 @@ let slider = d3.sliderHorizontal()
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1900";
       current_year = "1900";
       removeSSPs();
-      select_contribution_energy("1900");
+      update_percentages("1900");
       // update_population("1900");
       // update_production("1900");
     }
@@ -574,7 +543,7 @@ let slider = d3.sliderHorizontal()
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1910";
       current_year = "1910";
       removeSSPs();
-      select_contribution_energy("1910");
+      update_percentages("1910");
       // update_population("1910");
       // update_production("1910");
     }
@@ -583,7 +552,7 @@ let slider = d3.sliderHorizontal()
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1945";
       current_year = "1945";
       removeSSPs();
-      select_contribution_energy("1945");
+      update_percentages("1945");
       // update_population("1945");
       // update_production("1945");
     }
@@ -592,7 +561,7 @@ let slider = d3.sliderHorizontal()
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 1980";
       current_year = "1980";
       removeSSPs();
-      select_contribution_energy("1980");
+      update_percentages("1980");
       // update_population("1980");
       // update_production("1980");
     }
@@ -601,7 +570,7 @@ let slider = d3.sliderHorizontal()
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 2015";
       current_year = "2015";
       removeSSPs();
-      select_contribution_energy("2015");
+      update_percentages("2015");
       // update_population("2015");
       // update_production("2015");
     }
@@ -609,7 +578,7 @@ let slider = d3.sliderHorizontal()
     if (val == 2150) {
       showSSPs();
       title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
-      select_contribution_energy(current_SSP);
+      update_percentages(current_SSP);
       // update_population(current_SSP);
       // update_production(current_SSP);
     }
@@ -646,7 +615,7 @@ function change_period(period){
       selector.style.backgroundColor = "#4d7ea9";
       current_SSP = "SSP5";
     }
-    select_contribution_energy(current_SSP);
+    update_percentages(current_SSP);
     title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
     // update_population(current_SSP);
     // update_production(current_SSP);
