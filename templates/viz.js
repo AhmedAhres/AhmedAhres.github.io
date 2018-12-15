@@ -27,13 +27,6 @@ initialize_unmet();
 let checked3D = "true";
 let checked2D = "false";
 
-
-let selector = document.getElementById("selector");
-selector.style.left = 0;
-selector.style.width = 10.5 + "vh";
-selector.style.backgroundColor = "#777777";
-selector.innerHTML = "SSP1";
-
 var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
 var previousCountryClicked = 'WLD';
@@ -215,7 +208,7 @@ let arc = d3.arc()
 
 let svg1 = d3.select(".docsChart").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.5 + "," + height_circle * 1.1 + ")");
+    .attr("transform", "translate(" + width_circle * 1.5 + "," + height_circle * 1.3 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -231,7 +224,7 @@ let percentComplete = svg1.append("text")
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle * 1.1 + ")");
+    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
@@ -329,14 +322,14 @@ function load(dataset) {
 let contribution_text = document.getElementsByClassName("small-title")[0];
 let unmet_text = document.getElementsByClassName("title-unmet")[0];
 let colorScale_energy = d3.scaleOrdinal()
-        .domain(["unmet", "contribution"])
-        .range(["#4fb1fe", "#d73027"]);
+        .domain(["contribution", "unmet"])
+        .range(["#d73027", "#4fb1fe"]);
 let colorScale_vitamin = d3.scaleOrdinal()
-        .domain(["unmet", "contribution"])
-        .range(["#4fb1fe", "#91cf60"]);
+        .domain(["contribution", "unmet"])
+        .range(["#91cf60", "#4fb1fe"]);
 let colorScale_folate = d3.scaleOrdinal()
-        .domain(["unmet", "contribution"])
-        .range(["#4fb1fe", "#41037e"]);
+        .domain(["contribution", "unmet"])
+        .range(["#41037e", "#4fb1fe"]);
 
 function updateData(data_type) {
   switch(data_type) {
@@ -408,7 +401,7 @@ function makeLegend(colorScale) {
   // Getting the Legend and setting the color scale on the legend
   var g_legend = svg_legend.append("g")
       .attr("class", "legendThreshold")
-      .attr("transform", "translate(10,20)");
+      .attr("transform", "translate(0,20)");
 
   g_legend.append("text")
       .attr("class", "caption")
@@ -768,11 +761,16 @@ function change_percentage_animation(contribution, unmet) {
   });
 }
 
-function change_period(period){
-    var ssp1 = document.getElementById("ssp1");
-    var ssp3 = document.getElementById("ssp3");
-    var ssp5 = document.getElementById("ssp5");
-    var selector = document.getElementById("selector");
+let ssp1 = document.getElementById("ssp1");
+let ssp3 = document.getElementById("ssp3");
+let ssp5 = document.getElementById("ssp5");
+let selector = document.getElementById("selector");
+selector.style.left = 0;
+selector.style.width = 10.5 + "vh";
+selector.style.backgroundColor = "#777777";
+selector.innerHTML = "SSP1";
+
+function change_period(period) {
     if (period === "ssp1") {
       selector.style.left = 0;
       selector.style.width = ssp1.clientWidth + "px";
@@ -786,7 +784,7 @@ function change_period(period){
       selector.style.backgroundColor = "#418d92";
       current_SSP = "SSP3";
     } else {
-      selector.style.left = ssp1.clientWidth + ssp3.clientWidth + 1 + "px";
+      selector.style.left = ssp1.clientWidth  + ssp3.clientWidth + 1 + "px";
       selector.style.width = ssp5.clientWidth + "px";
       selector.innerHTML = "SSP5";
       selector.style.backgroundColor = "#4d7ea9";
