@@ -342,7 +342,7 @@ function updateData(data_type) {
       dataset = 'dataset/country_va.csv';
       dataset_graph = 'dataset/plot_vitamin.csv';
       unmet_need_dataset = 'dataset/unmet_need_vitamin.csv';
-      color = colorScale_vitamin;
+      color_graph = colorScale_vitamin;
       updateGraph(previousCountryClicked);
       break;
     case "Energy":
@@ -355,7 +355,7 @@ function updateData(data_type) {
       dataset = 'dataset/country_energy.csv';
       dataset_graph = 'dataset/plot_energy.csv';
       unmet_need_dataset = 'dataset/unmet_need_energy.csv';
-      color = colorScale_energy;
+      color_graph = colorScale_energy;
       updateGraph(previousCountryClicked);
       break;
     case "Folate":
@@ -368,7 +368,7 @@ function updateData(data_type) {
       dataset = 'dataset/country_fo.csv';
       dataset_graph = 'dataset/plot_folate.csv';
       unmet_need_dataset = 'dataset/unmet_need_folate.csv';
-      color = colorScale_folate;
+      color_graph = colorScale_folate;
       updateGraph(previousCountryClicked);
       break;
   }
@@ -786,7 +786,7 @@ let y_graph = d3.scaleLinear().range([height_plot, 0]);
 updateGraph('WLD');
 
 // set the colour scale
-let color = colorScale_energy;
+let color_graph = colorScale_energy;
 
 function updateGraph(country) {
   var svg_remove = d3.select(".graph");
@@ -826,7 +826,7 @@ let svg_plot = d3.select(".graph")
           svg_plot.append("path")
               .attr("class", "line2")
               .style("stroke", function() { // Add the colours dynamically
-                  return d.color = color(d.key); })
+                  return d.color_graph = color_graph(d.key); })
               .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign an ID
               .attr("d", line_draw(d.values));
 
@@ -836,7 +836,7 @@ let svg_plot = d3.select(".graph")
               .attr("y", height_plot + (margin.bottom/2)+ 5)
               .attr("class", "legend")    // style the legend
               .style("fill", function() { // Add the colours dynamically
-                  return d.color = color(d.key); })
+                  return d.color_graph = color_graph(d.key); })
               .text(d.key);
 
       });

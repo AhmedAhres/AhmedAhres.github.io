@@ -399,7 +399,7 @@ img {
   transform: translateY(550%) rotate(-90deg);
   font-size: 1.15vw;
   font-family: ourFont;
-  margin: 0;
+  margin: 0vh;
   color: black;
   display: -moz-box /* Keeps the heading on a single line */;
   text-decoration: none;
