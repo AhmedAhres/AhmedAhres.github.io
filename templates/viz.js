@@ -321,14 +321,14 @@ function load(dataset) {
 let contribution_text = document.getElementsByClassName("small-title")[0];
 let unmet_text = document.getElementsByClassName("title-unmet")[0];
 let colorScale_energy = d3.scaleOrdinal()
-        .domain(["unmet", "contribution"])
-        .range(["#4fb1fe", "#d73027"]);
+        .domain(["contribution", "unmet"])
+        .range(["#d73027", "#4fb1fe"]);
 let colorScale_vitamin = d3.scaleOrdinal()
-        .domain(["unmet", "contribution"])
-        .range(["#4fb1fe", "#91cf60"]);
+        .domain(["contribution", "unmet"])
+        .range(["#91cf60", "#4fb1fe"]);
 let colorScale_folate = d3.scaleOrdinal()
-        .domain(["unmet", "contribution"])
-        .range(["#4fb1fe", "#41037e"]);
+        .domain(["contribution", "unmet"])
+        .range(["#41037e", "#4fb1fe"]);
 
 function updateData(data_type) {
   switch(data_type) {
