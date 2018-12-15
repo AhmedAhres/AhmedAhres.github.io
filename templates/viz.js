@@ -81,8 +81,8 @@ coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,1
 
 let countryName = document.getElementById("box-3-header-2").firstElementChild;
 let title = document.getElementById("box-3-header").firstElementChild;
-let current_nature_contribution = 28;
-let current_unmet_need = 61;
+let current_nature_contribution = 33;
+let current_unmet_need = 57;
 
 let years = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"];
 let actualData = ["1850", "1900", "1910", "1945", "1980", "2015", "2050"];
@@ -98,19 +98,21 @@ var formatToData = function(d) {
 }
 
 let current_SSP = "SSP1";
-let current_year = "1980"
+let current_year = "1945"
 let slider = d3.sliderHorizontal()
   .min(1850)
   .max(2150)
   .step(50)
-  .default("2050")
+  .default("2000")
   .width(400)
   .tickValues(years)
   .tickFormat(formatToData)
   .on("onchange", val => {
     // Here, the value we check for is still the original one, not the formatted one
     if (val == 1850) {
-      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1850";
+      title.innerHTML = "Pollination Contribution to Nutrion (" + current_viz + ") in 1850";
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in 1850?";
       current_year = "1850";
       removeSSPs();
       select_contribution_energy("1850");
@@ -119,7 +121,9 @@ let slider = d3.sliderHorizontal()
     }
 
     if (val == 1900) {
-      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1900";
+      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1900";
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in 1900?";
       current_year = "1900";
       removeSSPs();
       select_contribution_energy("1900");
@@ -128,7 +132,9 @@ let slider = d3.sliderHorizontal()
     }
 
     if (val == 1950) {
-      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1910";
+      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1910";
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in 1910?";
       current_year = "1910";
       removeSSPs();
       select_contribution_energy("1910");
@@ -137,7 +143,9 @@ let slider = d3.sliderHorizontal()
     }
 
     if (val == 2000) {
-      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1945";
+      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1945";
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in 1945?";
       current_year = "1945";
       removeSSPs();
       select_contribution_energy("1945");
@@ -146,7 +154,9 @@ let slider = d3.sliderHorizontal()
     }
 
     if (val == 2050) {
-      title.innerHTML = "Pollination Contribution to " + current_viz + " in 1980";
+      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1980";
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in 1980?";
       current_year = "1980";
       removeSSPs();
       select_contribution_energy("1980");
@@ -155,7 +165,9 @@ let slider = d3.sliderHorizontal()
     }
 
     if (val == 2100) {
-      title.innerHTML = "Pollination Contribution to " + current_viz + " in 2015";
+      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2015";
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in 2015?";
       current_year = "2015";
       removeSSPs();
       select_contribution_energy("2015");
@@ -164,9 +176,12 @@ let slider = d3.sliderHorizontal()
 
     if (val == 2150) {
       showSSPs();
-      title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
+      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2050 - " + current_SSP;
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in " + current_SSP + "?";
       select_contribution_energy(current_SSP);
       update_percentages(current_SSP);
+      current_year = current_SSP;
       //update_2D(current_SSP);
     }
  });
@@ -193,7 +208,7 @@ let arc = d3.arc()
 
 let svg1 = d3.select(".docsChart").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.1 + "," + height_circle * 1.1 + ")");
+    .attr("transform", "translate(" + width_circle * 1.5 + "," + height_circle * 1.1 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -209,7 +224,7 @@ let percentComplete = svg1.append("text")
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.3 + "," + height_circle * 1.1 + ")");
+    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle * 1.1 + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
@@ -303,36 +318,57 @@ function load(dataset) {
   return result;
 }
 
+let contribution_text = document.getElementsByClassName("small-title")[0];
+let unmet_text = document.getElementsByClassName("title-unmet")[0];
+let colorScale_energy = d3.scaleOrdinal()
+        .domain(["unmet", "contribution"])
+        .range(["#4fb1fe", "#d73027"]);
+let colorScale_vitamin = d3.scaleOrdinal()
+        .domain(["unmet", "contribution"])
+        .range(["#4fb1fe", "#91cf60"]);
+let colorScale_folate = d3.scaleOrdinal()
+        .domain(["unmet", "contribution"])
+        .range(["#4fb1fe", "#41037e"]);
+
 function updateData(data_type) {
   switch(data_type) {
     case "Vitamin":
       current_viz = "Vitamin A";
-      title.innerHTML = "Pollination Contribution to Vitamin A in " + current_year;
+      title.innerHTML = "Pollination Contribution to Nutrition (Vitamin A) in " + current_year;
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in " + current_year + "?";
+      unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?";
       colorScheme = d3.schemeGreens[6];
       dataset = 'dataset/country_va.csv';
       dataset_graph = 'dataset/plot_vitamin.csv';
       unmet_need_dataset = 'dataset/unmet_need_vitamin.csv';
-      color = d3.scaleOrdinal(d3.schemeSet2);
+      color = colorScale_vitamin;
       updateGraph(previousCountryClicked);
       break;
     case "Energy":
-      current_viz = "Energy";
-      title.innerHTML = "Pollination Contribution to Energy in " + current_year;
+      current_viz = "Food Energy";
+      title.innerHTML = "Pollination Contribution to Nutrition (Food Energy) in " + current_year;
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in " + current_year + "?";
+      unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?";
       colorScheme = d3.schemeReds[6];
       dataset = 'dataset/country_energy.csv';
       dataset_graph = 'dataset/plot_energy.csv';
       unmet_need_dataset = 'dataset/unmet_need_energy.csv';
-      color = d3.scaleOrdinal(d3.schemeSet1);
+      color = colorScale_energy;
       updateGraph(previousCountryClicked);
       break;
     case "Folate":
       current_viz = "Folate";
-      title.innerHTML = "Pollination Contribution to Folate in " + current_year;
+      title.innerHTML = "Pollination Contribution to Nutrition (Folate) in " + current_year;
+      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+      + current_viz  + " in " + current_year + "?";
+      unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?"
       colorScheme = d3.schemePurples[6];
       dataset = 'dataset/country_fo.csv';
       dataset_graph = 'dataset/plot_folate.csv';
       unmet_need_dataset = 'dataset/unmet_need_folate.csv';
-      color = d3.scaleOrdinal(d3.schemeCategory20b);
+      color = colorScale_folate;
       updateGraph(previousCountryClicked);
       break;
   }
@@ -370,7 +406,7 @@ function makeLegend(colorScale) {
       .attr("class", "caption")
       .attr("x", 0)
       .attr("y", -4)
-      .text("% contribution");
+      .text("% contrib.");
 
   var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
   var legend = d3.legendColor()
@@ -717,8 +753,10 @@ function change_period(period){
       current_SSP = "SSP5";
     }
     select_contribution_energy(current_SSP);
-    title.innerHTML = "Pollination Contribution to " + current_viz + " in 2050 - " + current_SSP;
+    title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2050 - " + current_SSP;
     update_percentages(current_SSP);
+    contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+    + current_viz  + " in " + current_SSP + "?";
     //update_2D(current_SSP);
   }
 
@@ -748,7 +786,7 @@ let y_graph = d3.scaleLinear().range([height_plot, 0]);
 updateGraph('WLD');
 
 // set the colour scale
-let color = d3.scaleOrdinal(d3.schemeSet1);
+let color = colorScale_energy;
 
 function updateGraph(country) {
   var svg_remove = d3.select(".graph");
