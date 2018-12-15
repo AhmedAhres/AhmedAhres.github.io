@@ -56,7 +56,12 @@ var tip = d3.tip()
 .offset([-10, 0])
   // Here d -> is basically the data which is given to the circle -> right now it is just lat long
   .html(function(d) {
-    return "<strong> Folate: <span>" + d[0] + "</span></strong>";
+    if(checked2D == "false") {
+      return "<strong> Folate: <span>" + d[0] + "</span></strong>";
+    } else {
+      console.log(d[2]);
+      return "<strong> Folate: <span>" + d[2] + "</span></strong>";
+    }
   })
 // Adding tip to the svg
 svg.call(tip);
@@ -444,6 +449,8 @@ function projection2D() {
     changeProjection(true);
     checked2D = "true";
     checked3D = "false";
+    let coordstoplot = initialize_2D(current_year, data_2D);
+    showData(coordstoplot);
   }
 }
 
@@ -585,7 +592,7 @@ function clicked(d) {
     }, {});
 
   // Get 2D points for the map
-  let coordstoplot = initialize_2D('1900', country_data_2D);
+  let coordstoplot = initialize_2D(current_year, country_data_2D);
 
   if(Object.keys(country_data_2D).length != 0) {
     if(previousCountryClicked !== null) {
@@ -688,17 +695,23 @@ function select_contribution_energy(period) {
     });
   }
   if(checked2D == "true") {
-    d3.csv('dataset/pixel_energy.csv', function(error, data) {
+    d3.csv(dataset_2D, function(error, data) {
       let promise = new Promise(function(resolve, reject) {
         // loadGlobalData('dataset/pixel_energy.csv');
         setTimeout(() => resolve(1), 10);
       });
       promise.then(function(result) {
         // TODO: Make the year not hard coded
-          let coordstoplot = initialize_2D('1900', data_2D);
-          showData(coordstoplot);
+          let coordstoplot = initialize_2D(period, data_2D);
+          // svg.selectAll('.plot-point').remove();
+          // showData(coordstoplot);
+          g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
+            // console.log(d);
+            color = d[2] || 0 ;
+            return colorScale(color);
+          })
+            });
       });
-    });
 
 }
 }
