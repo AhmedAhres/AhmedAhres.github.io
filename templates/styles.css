@@ -546,7 +546,6 @@ img {
     fill: none;
     stroke: grey;
     stroke-width: 1.7;
-    shape-rendering: crispEdges;
 }
 .legend {
     font-size: 1.9vh;
