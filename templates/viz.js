@@ -7,6 +7,7 @@ let waypoint = new Waypoint({
 
 // Current dataset depending on what we visualize
 let dataset = 'dataset/country_energy.csv';
+let dataset_2D = 'dataset/pixel_energy.csv';
 let current_viz = "Food Energy";
 let colorScheme = d3.schemeReds[6];
 let unmet_need_dataset = 'dataset/unmet_need_energy.csv'
@@ -70,6 +71,7 @@ makeLegend(colorScale);
 
 
 loadGlobalData(dataset);
+var data_2D = load(dataset_2D);
 
 // Calling the ready function to render everything even chloropleth
 ready();
@@ -117,6 +119,7 @@ let slider = d3.sliderHorizontal()
       removeSSPs();
       select_contribution_energy("1850");
       update_percentages("1850");
+
       //update_2D("1850");
     }
 
@@ -275,14 +278,16 @@ function update_percentages(period) {
     current_nature_contribution = data_c[previousCountryClicked];
     current_unmet_need = current_unmet_data[previousCountryClicked];
     change_percentage_animation(current_nature_contribution, current_unmet_need);
-    g.selectAll("path").attr("fill", function (d) {
-          // Pull data for particular iso and set color - Not able to fill it
-          if(d.type == 'Feature') {
-              d.total = data_c[d.properties.iso3] || 0;
-          } else {
-          }
-          return colorScale(d.total);
-      })
+    if ( checked3D == 'true'){
+        g.selectAll("path").attr("fill", function (d) {
+            // Pull data for particular iso and set color - Not able to fill it
+            if(d.type == 'Feature') {
+                d.total = data_c[d.properties.iso3] || 0;
+            } else {
+            }
+            return colorScale(d.total);
+        }
+    )}
   });
   });
 }
@@ -298,11 +303,10 @@ function showNow() {
 function loadGlobalData(dataset) {
     global_data_c = load(dataset);
     data_c = {};
-    data_2D = {};
     d3.csv(dataset, function(error, data) {
       data.forEach(function(d) {
         data_c[d.iso3] = global_data_c[d.iso3][current_year];
-        data_2D[d.iso3] = [global_data_c[d.iso3]['lat'],global_data_c[d.iso3]['long'],global_data_c[d.iso3][current_year]];
+        // data_2D[d.iso3] = [global_data_c[d.iso3]['lat'],global_data_c[d.iso3]['long'],global_data_c[d.iso3][current_year]];
       });
 
     });
@@ -342,7 +346,7 @@ function updateData(data_type) {
       dataset = 'dataset/country_va.csv';
       dataset_graph = 'dataset/plot_vitamin.csv';
       unmet_need_dataset = 'dataset/unmet_need_vitamin.csv';
-      color = colorScale_vitamin;
+      color_graph = colorScale_vitamin;
       updateGraph(previousCountryClicked);
       break;
     case "Energy":
@@ -355,7 +359,7 @@ function updateData(data_type) {
       dataset = 'dataset/country_energy.csv';
       dataset_graph = 'dataset/plot_energy.csv';
       unmet_need_dataset = 'dataset/unmet_need_energy.csv';
-      color = colorScale_energy;
+      color_graph = colorScale_energy;
       updateGraph(previousCountryClicked);
       break;
     case "Folate":
@@ -368,7 +372,7 @@ function updateData(data_type) {
       dataset = 'dataset/country_fo.csv';
       dataset_graph = 'dataset/plot_folate.csv';
       unmet_need_dataset = 'dataset/unmet_need_folate.csv';
-      color = colorScale_folate;
+      color_graph = colorScale_folate;
       updateGraph(previousCountryClicked);
       break;
   }
@@ -426,6 +430,7 @@ function projection3D() {
   checked3D = document.getElementById("checked3D").value;
   checked2D = document.getElementById("checked2D").value;
   if(checked3D === 'true') {
+    svg.selectAll('.plot-point').remove();
     changeProjection(false);
     checked3D = "true";
     check2D = "false";
@@ -572,19 +577,31 @@ function clicked(d) {
 
   countryName.innerHTML = active_info.__data__.properties.name;
 
-  if(active_info.__data__.properties.iso3 in coordinates) {
+  country_data_2D = Object.keys(data_2D).filter(function(k) {
+        return k.indexOf(active_info.__data__.properties.iso3) == 0;
+    }).reduce(function(newData, k) {
+        newData[k] = data_2D[k];
+        return newData;
+    }, {});
+
+  // Get 2D points for the map
+  let coordstoplot = initialize_2D('1900', country_data_2D);
+
+  if(Object.keys(country_data_2D).length != 0) {
     if(previousCountryClicked !== null) {
         svg.selectAll('.plot-point').remove();
     }
+
     // The regions should appear after we zoom in the country
     setTimeout(function() {
-        showData(coordinates[active_info.__data__.properties.iso3]);
+        showData(coordstoplot);
     }, 751) // Should be more than 750 -> more than duration
   } else {
     if(previousCountryClicked !== null) {
         svg.selectAll('.plot-point').remove();
     }
   }
+
   previousCountryClicked = active_info.__data__.properties.iso3
   current_nature_contribution = data_c[active_info.__data__.properties.iso3];
   current_unmet_need = current_unmet_data[active_info.__data__.properties.iso3];
@@ -663,48 +680,37 @@ function select_contribution_energy(period) {
               // Pull data for particular iso and set color - Not able to fill it
               if(d.type == 'Feature') {
                   d.total = data_c[d.properties.iso3] || 0;
+                  return colorScale(d.total);
+
               } else {
               }
-              return colorScale(d.total);
           });
     });
   }
   if(checked2D == "true") {
     d3.csv('dataset/pixel_energy.csv', function(error, data) {
       let promise = new Promise(function(resolve, reject) {
-        loadGlobalData('dataset/pixel_energy.csv');
+        // loadGlobalData('dataset/pixel_energy.csv');
         setTimeout(() => resolve(1), 10);
       });
       promise.then(function(result) {
-        coordstoplot = [];
-        for (var key in data_2D) {
-          coordstoplot.push([data_2D[key][0],data_2D[key][1],data_2D[key][2]]);
-        }
-        showData(coordstoplot);
-        // setTimeout(function() {
-        //     showData(coordstoplot);
-        // }, 800);
+        // TODO: Make the year not hard coded
+          let coordstoplot = initialize_2D('1900', data_2D);
+          showData(coordstoplot);
       });
     });
 
 }
 }
 
-// let global_2D = load('dataset/pixel_energy.csv');
-// let coordstoplot = [];
-// function initialize_2D() {
-//   for (var key in data_2D) {
-//       coordstoplot.push([global_2D[key][0],global_2D[key][1],global_2D[key][2]]);
-//     }
-// }
-//
-// function update_2D(period) {
-//   d3.csv(data_production, function(error, data) {
-//     data.forEach(function(d) {
-//       coordstoplot[d.iso3] = global_2D[d.iso3][period];
-//     });
-//   });
-// }
+function initialize_2D(period, data_) {
+  let coordstoplot = [];
+  for (var key in data_) {
+    coordstoplot.push([data_[key]['lat'], data_[key]['long'], data_[key][period]]);
+  }
+  return coordstoplot;
+}
+
 
 function change_percentage_animation(contribution, unmet) {
   let contrib_interpolation = d3.interpolate(progress, contribution);
@@ -786,7 +792,7 @@ let y_graph = d3.scaleLinear().range([height_plot, 0]);
 updateGraph('WLD');
 
 // set the colour scale
-let color = colorScale_energy;
+let color_graph = colorScale_energy;
 
 function updateGraph(country) {
   var svg_remove = d3.select(".graph");
@@ -826,7 +832,7 @@ let svg_plot = d3.select(".graph")
           svg_plot.append("path")
               .attr("class", "line2")
               .style("stroke", function() { // Add the colours dynamically
-                  return d.color = color(d.key); })
+                  return d.color_graph = color_graph(d.key); })
               .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign an ID
               .attr("d", line_draw(d.values));
 
@@ -836,7 +842,7 @@ let svg_plot = d3.select(".graph")
               .attr("y", height_plot + (margin.bottom/2)+ 5)
               .attr("class", "legend")    // style the legend
               .style("fill", function() { // Add the colours dynamically
-                  return d.color = color(d.key); })
+                  return d.color_graph = color_graph(d.key); })
               .text(d.key);
 
       });
