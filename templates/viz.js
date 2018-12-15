@@ -29,15 +29,24 @@ let checked2D = "false";
 
 var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
-var previousCountryClicked = 'WLD';
-var path, projection, zoom = null;
-var inertia;
+let previousCountryClicked = 'WLD';
+let path, projection, zoom = null;
+let inertia;
 
-var svg = d3.select(".box.box-2").append("svg")
+let svg = d3.select(".box-2.map1").append("svg")
     .attr("width", width)
     .attr("height", height)
     .on("click", stopped, true);
-var g = svg.append('g');
+let svg_map2 = d3.select(".box-2.map2").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", stopped, true);
+
+let g = svg.append('g');
+let g_map2 = svg_map2.append('g');
+
+let projection_new = d3.geoNaturalEarth().scale(d3.min([width / 2, height / 2])*0.45).translate([width / 2, height / 2]).precision(.1);
+let path_new = d3.geoPath().projection(projection_new);
 
 // Add projection to the viz
 changeProjection(false);
@@ -67,7 +76,8 @@ loadGlobalData(dataset);
 var data_2D = load(dataset_2D);
 
 // Calling the ready function to render everything even chloropleth
-ready();
+ready(g, path);
+ready(g_map2, path_new);
 
 // Lat - Long Coordinates for Nigeria - Example
 // Data is in Lat Long, but for coding the sequence is Long Lat
@@ -337,12 +347,13 @@ function updateData(data_type) {
       unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?";
       colorScheme = d3.schemeGreens[6];
       dataset = 'dataset/country_va.csv';
+      dataset_2D = 'dataset/pixel_vitamin.csv';
       dataset_graph = 'dataset/plot_vitamin.csv';
       unmet_need_dataset = 'dataset/unmet_need_vitamin.csv';
       color_graph = colorScale_vitamin;
       updateGraph(previousCountryClicked);
-
       break;
+
     case "Energy":
       current_viz = "Food Energy";
       title.innerHTML = "Pollination Contribution to Nutrition (Food Energy) in " + current_year;
@@ -351,11 +362,13 @@ function updateData(data_type) {
       unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?";
       colorScheme = d3.schemeReds[6];
       dataset = 'dataset/country_energy.csv';
+      dataset_2D = 'dataset/pixel_energy.csv';
       dataset_graph = 'dataset/plot_energy.csv';
       unmet_need_dataset = 'dataset/unmet_need_energy.csv';
       color_graph = colorScale_energy;
       updateGraph(previousCountryClicked);
       break;
+
     case "Folate":
       current_viz = "Folate";
       title.innerHTML = "Pollination Contribution to Nutrition (Folate) in " + current_year;
@@ -364,6 +377,7 @@ function updateData(data_type) {
       unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?"
       colorScheme = d3.schemePurples[6];
       dataset = 'dataset/country_fo.csv';
+      dataset_2D = 'dataset/pixel_folate.csv';
       dataset_graph = 'dataset/plot_folate.csv';
       unmet_need_dataset = 'dataset/unmet_need_folate.csv';
       color_graph = colorScale_folate;
@@ -425,6 +439,10 @@ function updateLegend(colorScale) {
   svg_legend.selectAll('*').remove();
   makeLegend(colorScale);
 }
+var map1 = document.getElementsByClassName('box-2 map1')[0];
+map1.setAttribute("style", "height: 50%;");
+var map2 = document.getElementsByClassName('box-2 map2')[0];
+map2.setAttribute("style", "width: 0; height: 0");
 
 function projection3D() {
   checked3D = document.getElementById("checked3D").value;
@@ -434,6 +452,11 @@ function projection3D() {
     changeProjection(false);
     checked3D = "true";
     check2D = "false";
+    //let map1 = document.getElementsByClassName('.box-2.map1')[0];
+    //map1.attr("width", 0).attr("height", 0);
+    map2.setAttribute("style", "width: 0; height: 0");
+    map1.setAttribute("style", "width: 100%; height: 100%");
+    svg.attr("transform", "translate(0, 0)");
   }
 }
 
@@ -445,7 +468,11 @@ function projection2D() {
     checked2D = "true";
     checked3D = "false";
     let coordstoplot = initialize_2D(current_year, data_2D);
-    showData(coordstoplot);
+    showData(coordstoplot);;
+    map2.setAttribute("style", "width: 100%; height: 50%;");
+    map1.setAttribute("style", "width: 100%; height: 50%;");
+    svg.attr("transform", "translate(0, 0) scale(0.8)");
+    svg_map2.attr("transform", "translate(0, 0) scale(0.8)");
   }
 }
 
@@ -498,7 +525,7 @@ function changeProjection(sliderChecked) {
   svg.selectAll('path').transition().duration(500).attr('d', path);
 }
 
-function ready() {
+function ready(g, path) {
   d3.json("world/countries.json", function(error, data) {
     if (error) throw error;
 
@@ -614,7 +641,6 @@ function clicked(d) {
 function showData(coordinates) {
     // Add circles to the country which has been selected
     // Removing part is within
-    console.log(checked3D, checked3D == 'true');
     if(checked3D == 'true') {
     g.selectAll(".plot-point")
         .data(coordinates).enter()
@@ -628,7 +654,6 @@ function showData(coordinates) {
         })
         .attr("r", "1px")
         .attr("fill", function (d) {
-          // console.log(d);
           color = d[2] || 0 ;
           return colorScale(color);
         })
@@ -648,7 +673,6 @@ function showData(coordinates) {
             .attr("width", "3")
             .attr("height", "3")
             .attr("fill", function (d) {
-              // console.log(d);
               color = d[2] || 0 ;
               return colorScale(color);
             })
@@ -705,30 +729,27 @@ function select_contribution_energy(period) {
               if(d.type == 'Feature') {
                   d.total = data_c[d.properties.iso3] || 0;
                   return colorScale(d.total);
-
               } else {
               }
           });
     });
   }
   if(checked2D == "true") {
-    d3.csv(dataset_2D, function(error, data) {
-      let promise = new Promise(function(resolve, reject) {
-        // loadGlobalData('dataset/pixel_energy.csv');
-        setTimeout(() => resolve(1), 10);
-      });
-      promise.then(function(result) {
-        // TODO: Make the year not hard coded
-          let coordstoplot = initialize_2D(period, data_2D);
-          // svg.selectAll('.plot-point').remove();
-          // showData(coordstoplot);
-          g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
-            // console.log(d);
-            color = d[2] || 0 ;
-            return colorScale(color);
-          })
-            });
-      });
+    let promise = new Promise(function(resolve, reject) {
+      data_2D = load(dataset_2D);
+      setTimeout(() => resolve(1), 10);
+    });
+    promise.then(function(result) {
+      // TODO: Make the year not hard coded
+        let coordstoplot = initialize_2D(period, data_2D);
+        console.log(dataset_2D, data_2D);
+        // svg.selectAll('.plot-point').remove();
+        // showData(coordstoplot);
+        g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
+          color = d[2] || 0 ;
+          return colorScale(color);
+        })
+    });
 
 }
 }
