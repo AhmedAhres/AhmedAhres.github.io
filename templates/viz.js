@@ -26,13 +26,6 @@ initialize_unmet();
 let checked3D = true;
 let checked2D = false;
 
-
-let selector = document.getElementById("selector");
-selector.style.left = 0;
-selector.style.width = 10.5 + "vh";
-selector.style.backgroundColor = "#777777";
-selector.innerHTML = "SSP1";
-
 var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
 var previousCountryClicked = 'WLD';
@@ -728,26 +721,31 @@ function change_percentage_animation(contribution, unmet) {
   });
 }
 
-function change_period(period){
-    var ssp1 = document.getElementById("ssp1");
-    var ssp3 = document.getElementById("ssp3");
-    var ssp5 = document.getElementById("ssp5");
-    var selector = document.getElementById("selector");
+let ssp1 = document.getElementById("ssp1");
+let ssp3 = document.getElementById("ssp3");
+let ssp5 = document.getElementById("ssp5");
+let selector = document.getElementById("selector");
+selector.style.left = 0;
+selector.style.width = 10.5 + "vh";
+selector.style.backgroundColor = "#777777";
+selector.innerHTML = "SSP1";
+
+function change_period(period) {
     if (period === "ssp1") {
       selector.style.left = 0;
-      selector.style.width = (ssp1.clientWidth / 10) + "vh";
+      selector.style.width = ssp1.clientWidth + "px";
       selector.style.backgroundColor = "#777777";
       selector.innerHTML = "SSP1";
       current_SSP = "SSP1";
     } else if (period === "ssp3") {
-      selector.style.left = (ssp1.clientWidth / 10) + "vh";
-      selector.style.width = (ssp3.clientWidth / 10) + "vh";
+      selector.style.left = ssp1.clientWidth + "px";
+      selector.style.width = ssp3.clientWidth + "px";
       selector.innerHTML = "SSP3";
       selector.style.backgroundColor = "#418d92";
       current_SSP = "SSP3";
     } else {
-      selector.style.left = (ssp1.clientWidth / 10) + (ssp3.clientWidth / 10) + 0.5 + "vh";
-      selector.style.width = (ssp5.clientWidth / 10) + "vh";
+      selector.style.left = ssp1.clientWidth  + ssp3.clientWidth + 1 + "px";
+      selector.style.width = ssp5.clientWidth + "px";
       selector.innerHTML = "SSP5";
       selector.style.backgroundColor = "#4d7ea9";
       current_SSP = "SSP5";
