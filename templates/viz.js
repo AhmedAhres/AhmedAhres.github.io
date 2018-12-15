@@ -56,11 +56,7 @@ var tip = d3.tip()
 .offset([-10, 0])
   // Here d -> is basically the data which is given to the circle -> right now it is just lat long
   .html(function(d) {
-    if(checked2D == "false") {
-      return "<strong> Folate: <span>" + d[0] + "</span></strong>";
-    } else {
-      return "<strong> Folate: <span>" + d[2] + "</span></strong>";
-    }
+      return "<strong>" + current_viz + ": <span>" + d[2] + "</span></strong>";
   })
 // Adding tip to the svg
 svg.call(tip);
@@ -352,6 +348,7 @@ function updateData(data_type) {
       unmet_need_dataset = 'dataset/unmet_need_vitamin.csv';
       color_graph = colorScale_vitamin;
       updateGraph(previousCountryClicked);
+
       break;
     case "Energy":
       current_viz = "Food Energy";
@@ -391,6 +388,7 @@ function updateData(data_type) {
   });
   promise.then(function(result) {
     update_percentages(current_year);
+    select_contribution_energy(current_year);
     accessData();
   });
 }
@@ -398,8 +396,13 @@ function updateData(data_type) {
 function accessData() {
   g.selectAll("path").attr("fill", function (d){
     // Pull data for particular iso and set color - Not able to fill it
-    d.total = data_c[d.properties.iso3] || 0;
-    return colorScale(d.total);
+    if (checked3D == 'true'){
+      d.total = data_c[d.properties.iso3] || 0;
+      return colorScale(d.total);
+    }else{
+      return '#D3D3D3';
+    }
+
   })
   .attr("d", path);
 }
@@ -866,6 +869,7 @@ let svg_plot = d3.select(".graph")
           svg_plot.append("path")
               .attr("class", "line2")
               .style("stroke", function() { // Add the colours dynamically
+
                   return d.color_graph = color_graph(d.key); })
               .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign an ID
               .attr("d", line_draw(d.values));
@@ -876,7 +880,9 @@ let svg_plot = d3.select(".graph")
               .attr("y", height_plot + (margin.bottom/2)+ 5)
               .attr("class", "legend")    // style the legend
               .style("fill", function() { // Add the colours dynamically
-                  return d.color_graph = color_graph(d.key); })
+                  return d.color_graph = color_graph(d.key);
+
+                   })
               .text(d.key);
 
       });
