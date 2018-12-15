@@ -395,7 +395,7 @@ img {
 }
 
 .button-title {
-  width: 100%;
+  width: 5vh;
   transform: translateY(550%) rotate(-90deg);
   font-size: 1.15vw;
   font-family: ourFont;
