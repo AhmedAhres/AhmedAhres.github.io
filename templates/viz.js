@@ -24,8 +24,8 @@ function initialize_unmet() {
 
 initialize_unmet();
 
-let checked3D = true;
-let checked2D = false;
+let checked3D = "true";
+let checked2D = "false";
 
 
 let selector = document.getElementById("selector");
@@ -59,7 +59,6 @@ var tip = d3.tip()
     if(checked2D == "false") {
       return "<strong> Folate: <span>" + d[0] + "</span></strong>";
     } else {
-      console.log(d[2]);
       return "<strong> Folate: <span>" + d[2] + "</span></strong>";
     }
   })
@@ -474,7 +473,7 @@ function changeProjection(sliderChecked) {
       });
 
       // Make the map black
-      g.selectAll('path').attr('fill', '000').on("click", null);
+      g.selectAll('path').attr('fill', '#D3D3D3').on("click", null);
   } else {
     projection = d3.geoOrthographic()
       .scale(planet_radius*0.844)
@@ -619,7 +618,8 @@ function clicked(d) {
 function showData(coordinates) {
     // Add circles to the country which has been selected
     // Removing part is within
-
+    console.log(checked3D, checked3D == 'true');
+    if(checked3D == 'true') {
     g.selectAll(".plot-point")
         .data(coordinates).enter()
         .append("circle")
@@ -638,6 +638,27 @@ function showData(coordinates) {
         })
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);
+      } else {
+        g.selectAll(".plot-point")
+            .data(coordinates).enter()
+            .append("rect")
+            .classed('plot-point', true)
+            .attr("x", function (d) {
+                return projection(d)[0];
+            })
+            .attr("y", function (d) {
+                return projection(d)[1];
+            })
+            .attr("width", "3")
+            .attr("height", "3")
+            .attr("fill", function (d) {
+              // console.log(d);
+              color = d[2] || 0 ;
+              return colorScale(color);
+            })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);
+      }
   }
 
   function zoomed() {
