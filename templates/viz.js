@@ -400,7 +400,7 @@ function makeLegend(colorScale) {
   // Getting the Legend and setting the color scale on the legend
   var g_legend = svg_legend.append("g")
       .attr("class", "legendThreshold")
-      .attr("transform", "translate(10,20)");
+      .attr("transform", "translate(0,20)");
 
   g_legend.append("text")
       .attr("class", "caption")
