@@ -114,16 +114,12 @@ line {
 }
 
 .box-2 {
-  width: 61%;
-  padding-right: 0.5vh;
-  padding-top: 0vh;
-  padding-left: 0vh;
-  padding-bottom: 0vh;
+  width: 60%;
 }
 
 .box-3 {
   background-color: white;
-  width: 31.7%;
+  width: 30%;
   font-size: 1vh;
 }
 
@@ -139,10 +135,6 @@ line {
   flex-direction: column;
   margin-top: 2vh;
   margin-left: -2vh;
-  display: flex;
-  flex-flow: row wrap;
-  /* Then we define how is distributed the remaining space */
-  justify-content: space-around;
 }
 
 .box-small2 {
@@ -159,11 +151,6 @@ line {
 
 img {
   opacity: 1;
-}
-
-.img2 {
-  width: 3vh;
-  height: auto;
 }
 
 .centered {
