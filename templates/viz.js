@@ -5,8 +5,12 @@ let waypoint = new Waypoint({
   }
 });
 
+var checked3D = "true";
+var checked2D = "false";
+
 // Current dataset depending on what we visualize
 let dataset = 'dataset/country_energy.csv';
+let dataset_2D = 'dataset/pixel_energy.csv';
 let data_population = 'dataset/population.csv';
 let data_production = 'dataset/country_energy.csv'
 let current_viz = "Food Energy";
@@ -47,6 +51,13 @@ var svg = d3.select(".box.box-2").append("svg")
     .on("click", stopped, true);
 var g = svg.append('g');
 
+var svg_two = d3.select(".box.box-2").append("svg")
+    .attr("width", 0)
+    .attr("height", 0)
+    .attr("transform", "translate(0,-171)")
+    .on("click", stopped, true);
+var g_two = svg_two.append('g');
+
 // Add projection to the viz
 changeProjection(false);
 
@@ -57,8 +68,7 @@ var tip = d3.tip()
 .offset([-10, 0])
   // Here d -> is basically the data which is given to the circle -> right now it is just lat long
   .html(function(d) {
-    // console.log(d);
-    return "<strong> Folate: <span>" + d[0] + "</span></strong>";
+    return "<strong> Folate: <span>" + d[2] + "</span></strong>";
   })
 // Adding tip to the svg
 svg.call(tip);
@@ -71,24 +81,16 @@ var colorScale = d3.scaleThreshold()
 var svg_legend = d3.select(".box.box-1").append("svg");
 makeLegend(colorScale);
 
-// // Loading the data for the testing file - Chloropleth
-// let global_data_c = load(dataset);
-// let data_c = {};
-// d3.csv(dataset, function(error, data) {
-//   data.forEach(function(d) {
-//     data_c[d.iso3] = global_data_c[d.iso3]["1945"];
-//   });
-// });
-
 loadGlobalData(dataset);
+var data_2D = load(dataset_2D);
+
+
+var projection_new = d3.geoNaturalEarth().scale(d3.min([width / 2, height / 2])*0.45).translate([width / 2, height / 2]).precision(.1);
+var path_new = d3.geoPath().projection(projection_new);
 
 // Calling the ready function to render everything even chloropleth
-ready();
-
-// Lat - Long Coordinates for Nigeria - Example
-// Data is in Lat Long, but for coding the sequence is Long Lat
-var coordinates = {};
-coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
+ready(g, path);
+ready(g_two, path_new);
 
 let countryName = document.getElementById("box-3-header-2").firstElementChild;
 let title = document.getElementById("box-3-header").firstElementChild;
@@ -129,7 +131,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1850");
       update_population("1850");
       update_production("1850");
-      update_2D("1850");
+      // update_2D("1850");
     }
 
     if (val == 1900) {
@@ -139,7 +141,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1900");
       update_population("1900");
       update_production("1900");
-      update_2D("1900");
+      // update_2D("1900");
     }
 
     if (val == 1950) {
@@ -149,7 +151,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1910");
       update_population("1910");
       update_production("1910");
-      update_2D("1910");
+      // update_2D("1910");
     }
 
     if (val == 2000) {
@@ -159,7 +161,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1945");
       update_population("1945");
       update_production("1945");
-      update_2D("1945");
+      // update_2D("1945");
     }
 
     if (val == 2050) {
@@ -169,7 +171,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy("1980");
       update_population("1980");
       update_production("1980");
-      update_2D("1980");
+      // update_2D("1980");
     }
 
     if (val == 2100) {
@@ -187,7 +189,7 @@ let slider = d3.sliderHorizontal()
       select_contribution_energy(current_SSP);
       update_population(current_SSP);
       update_production(current_SSP);
-      update_2D(current_SSP);
+      // update_2D(current_SSP);
     }
  });
 
@@ -211,34 +213,34 @@ let arc = d3.arc()
     .innerRadius(58)
     .outerRadius(66);
 
-let svg1 = d3.select(".docsChart").append("svg")
+let svg_arc_one = d3.select(".docsChart").append("svg")
     .append("g")
     .attr("transform", "translate(" + width_circle * 1.1 + "," + height_circle * 1.1 + ")");
 
-svg1.append("path")
+svg_arc_one.append("path")
     .attr("fill", "#E6E7E8")
     .attr("d", arc.endAngle(twoPi));
 
-let foreground = svg1.append("path")
+let foreground = svg_arc_one.append("path")
     .attr("fill", "#00D2B6");
 
-let percentComplete = svg1.append("text")
+let percentComplete = svg_arc_one.append("text")
     .attr("text-anchor", "middle")
     .attr("dy", "0.3em");
 
 // Unmet need percentage starts here
-let svg2 = d3.select(".docsChart2").append("svg")
+let svg_arc_two = d3.select(".docsChart2").append("svg")
     .append("g")
     .attr("transform", "translate(" + width_circle * 1.3 + "," + height_circle * 1.1 + ")");
 
-svg2.append("path")
+svg_arc_two.append("path")
       .attr("fill", "#E6E7E8")
       .attr("d", arc.endAngle(twoPi));
 
-let foreground2 = svg2.append("path")
+let foreground2 = svg_arc_two.append("path")
       .attr("fill", "#00D2B6");
 
-let percentComplete2 = svg2.append("text")
+let percentComplete2 = svg_arc_two.append("text")
       .attr("text-anchor", "middle")
       .attr("dy", "0.3em");
 
@@ -317,28 +319,23 @@ function showNow() {
 // End of popup window
 
 function loadGlobalData(dataset) {
-    global_data_c = load(dataset);
-    data_c = {};
-    data_2D = {};
-    d3.csv(dataset, function(error, data) {
-      data.forEach(function(d) {
-        data_c[d.iso3] = global_data_c[d.iso3][current_year];
-        console.log(current_year);
-        data_2D[d.iso3] = [global_data_c[d.iso3]['lat'],global_data_c[d.iso3]['long'],global_data_c[d.iso3][current_year]];
-      });
-
+  global_data_c = load(dataset);
+  data_c = {};
+  d3.csv(dataset, function(error, data) {
+    data.forEach(function(d) {
+      data_c[d.iso3] = global_data_c[d.iso3][current_year];
+      // data_2D[d.iso3] = [global_data_c[d.iso3]['lat'],global_data_c[d.iso3]['long'],global_data_c[d.iso3][current_year],global_data_c[d.iso3]['fid']];
     });
-  }
-
-
+  });
+}
 
 function load(dataset) {
-    let result = {};
-    d3.csv(dataset, function(error, data) {
-      data.forEach(function(d) {
-        result[d.iso3] = d;
-        });
-      });
+  let result = {};
+  d3.csv(dataset, function(error, data) {
+    data.forEach(function(d) {
+      result[d.iso3] = d;
+    });
+  });
   return result;
 }
 
@@ -415,22 +412,29 @@ function updateLegend(colorScale) {
 }
 
 function projection3D() {
-  var checked3D = document.getElementById("checked3D").value;
-  var checked2D = document.getElementById("checked2D").value;
+  checked3D = document.getElementById("checked3D").value;
+  checked2D = document.getElementById("checked2D").value;
   if(checked3D === 'true') {
     changeProjection(false);
     checked3D = "true";
     check2D = "false";
+    svg.attr("transform", "translate(0,0)");
+    svg.attr("width", width).attr("height", height);
+    svg_two.attr("width", 0).attr("height", 0);
   }
 }
 
 function projection2D() {
-  var checked2D = document.getElementById("checked2D").value;
-  var checked3D = document.getElementById("checked3D").value;
+  checked2D = document.getElementById("checked2D").value;
+  checked3D = document.getElementById("checked3D").value;
   if(checked2D === 'false') {
     changeProjection(true);
     checked2D = "true";
     checked3D = "false";
+    svg.attr("transform", "translate(0,-171) scale(0.8)");
+    svg_two.attr("transform", "translate(0,-171) scale(0.8)");
+    svg.attr("width", width).attr("height", height / 1.5);
+    svg_two.attr("width", width).attr("height", height / 1.5);
   }
 }
 
@@ -455,6 +459,7 @@ function changeProjection(sliderChecked) {
 
       // Make the map black
       g.selectAll('path').attr('fill', '000').on("click", null);
+      g_two.selectAll('path').attr('fill', '000').on("click", null);
   } else {
     projection = d3.geoOrthographic()
       .scale(planet_radius*0.844)
@@ -483,12 +488,12 @@ function changeProjection(sliderChecked) {
   svg.selectAll('path').transition().duration(500).attr('d', path);
 }
 
-function ready() {
+function ready(group, path) {
   d3.json("world/countries.json", function(error, data) {
     if (error) throw error;
 
     var features = topojson.feature(data, data.objects.units).features;
-    g.selectAll("path")
+    group.selectAll("path")
       .data(features)
       .enter().append("path")
         // Chloropleth code
@@ -502,7 +507,7 @@ function ready() {
         .attr("class", "feature")
         .on("click", clicked);
     // Creates a mesh around the border
-    g.append("path")
+    group.append("path")
         .datum(topojson.mesh(data, data.objects.units, function(a, b) { return a !== b; }))
         .attr("class", "mesh")
         .attr("d", path);
@@ -564,13 +569,24 @@ function clicked(d) {
 
   countryName.innerHTML = active_info.__data__.properties.name;
 
-  if(active_info.__data__.properties.iso3 in coordinates) {
+  country_data_2D = Object.keys(data_2D).filter(function(k) {
+        return k.indexOf(active_info.__data__.properties.iso3) == 0;
+    }).reduce(function(newData, k) {
+        newData[k] = data_2D[k];
+        return newData;
+    }, {});
+
+  // Get 2D points for the map
+  let coordstoplot = initialize_2D('1900', country_data_2D);
+
+  if(Object.keys(country_data_2D).length != 0) {
     if(previousCountryClicked !== null) {
         svg.selectAll('.plot-point').remove();
     }
+
     // The regions should appear after we zoom in the country
     setTimeout(function() {
-        showData(coordinates[active_info.__data__.properties.iso3]);
+        showData(coordstoplot);
     }, 751) // Should be more than 750 -> more than duration
   } else {
     if(previousCountryClicked !== null) {
@@ -588,24 +604,25 @@ function showData(coordinates) {
     // Add circles to the country which has been selected
     // Removing part is within
 
-    g.selectAll(".plot-point")
-        .data(coordinates).enter()
-        .append("circle")
-        .classed('plot-point', true)
-        .attr("cx", function (d) {
-            return projection(d)[0];
-        })
-        .attr("cy", function (d) {
-            return projection(d)[1];
-        })
-        .attr("r", "1px")
-        .attr("fill", function (d) {
-          // console.log(d);
-          color = d[2] || 0 ;
-          return colorScale(color);
-        })
-        .on('mouseover', tip.show)
-        .on('mouseout', tip.hide);
+  g.selectAll(".plot-point")
+    .data(coordinates).enter()
+    .append("circle")
+    .classed('plot-point', true)
+    .attr("cx", function (d) {
+        return projection(d)[0];
+    })
+    .attr("cy", function (d) {
+        return projection(d)[1];
+    })
+    .attr("r", "1px")
+    // .attr("width", "10")
+    // .attr("height", "10")
+    .attr("fill", function (d) {
+      color = d[2] || 0 ;
+      return colorScale(color);
+    })
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide);
   }
 
   function zoomed() {
@@ -640,11 +657,11 @@ function showData(coordinates) {
       population.innerHTML = "Population: " + format_number(current_population_data[previousCountryClicked]);
   }
 
-  // If the drag behavior prevents the default click,
-  // also stop propagation so we don’t click-to-zoom.
-  function stopped() {
-    if (d3.event.defaultPrevented) d3.event.stopPropagation();
-  }
+// If the drag behavior prevents the default click,
+// also stop propagation so we don’t click-to-zoom.
+function stopped() {
+  if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
 
 function select_contribution_energy(period) {
   if(checked3D == "true") {
@@ -663,41 +680,29 @@ function select_contribution_energy(period) {
               return colorScale(d.total);
           });
     });
-  } else {
-    d3.csv('dataset/pixel_energy.csv', function(error, data) {
+  }
+
+  if(checked2D == "true") {
+    d3.csv(dataset_2D, function(error, data) {
       let promise = new Promise(function(resolve, reject) {
-        loadGlobalData('dataset/pixel_energy.csv');
         setTimeout(() => resolve(1), 10);
       });
       promise.then(function(result) {
-        coordstoplot = [];
-        for (var key in data_2D) {
-          coordstoplot.push([data_2D[key][0],data_2D[key][1],data_2D[key][2]]);
-        }
+
+      	// TODO: Make the year not hard coded
+        let coordstoplot = initialize_2D('1900', data_2D);
         showData(coordstoplot);
-        // setTimeout(function() {
-        //     showData(coordstoplot);
-        // }, 800);
       });
     });
-
-}
-}
-
-let global_2D = load('dataset/pixel_energy.csv');
-let coordstoplot = [];
-function initialize_2D() {
-  for (var key in data_2D) {
-      coordstoplot.push([global_2D[key][0],global_2D[key][1],global_2D[key][2]]);
-    }
+  }
 }
 
-function update_2D(period) {
-  d3.csv(data_production, function(error, data) {
-    data.forEach(function(d) {
-      coordstoplot[d.iso3] = global_2D[d.iso3][period];
-    });
-  });
+function initialize_2D(period, data_) {
+  let coordstoplot = [];
+  for (var key in data_) {
+    coordstoplot.push([data_[key]['lat'], data_[key]['long'], data_[key][period]]);
+  }
+  return coordstoplot;
 }
 
 function change_nature_percentage(contribution, unmet) {
