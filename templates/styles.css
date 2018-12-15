@@ -352,6 +352,7 @@ input:checked + .slider:before {
 
 #ac-wrapper {
     position: fixed;
+    z-index: 10000 !important;
     top: 0;
     left: 0;
     width: 100%;
