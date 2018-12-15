@@ -111,16 +111,19 @@ line {
 
 .box-1 {
   width: 7%;
+  box-sizing: border-box;
 }
 
 .box-2 {
   width: 60%;
+  box-sizing: border-box;
 }
 
 .box-3 {
   background-color: white;
   width: 30%;
   font-size: 1vh;
+  box-sizing: border-box;
 }
 
 .description_text {
@@ -377,6 +380,7 @@ img {
 
 .parent-button-div {
   width: 3%;
+  box-sizing: border-box;
 }
 
 .button-title {
@@ -507,11 +511,11 @@ img {
 }
 
 .box_unmet {
-  flex-basis: 37%;
+  flex-basis: 35%;
 }
 
 .box_contribution {
-  flex-basis: 48%;
+  flex-basis: 45%;
 }
 
 .docsChart2 {
@@ -521,7 +525,8 @@ img {
 }
 
 .small-title {
-  margin-left: -3.8vh;
+  margin-left: -2vh;
+  margin-top: 5vh;
 }
 
 .axis path,
