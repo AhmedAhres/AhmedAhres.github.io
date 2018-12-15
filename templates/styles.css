@@ -96,7 +96,6 @@ line {
 #box-3-header-2 {
   text-align: center;
   margin-top: -1vh;
-  margin-bottom: -0.5vh;
   font-size: 2.5vh;
 }
 
@@ -244,7 +243,7 @@ img {
 
 .switch_3_ways{
   margin: auto;
-  margin-top: 2%;
+  margin-top: 0%;
   margin-bottom: 2%;
   font-size:2.2vh;
   font-family: ourFont;
@@ -260,7 +259,6 @@ img {
 .switch.ssp3,
 .switch.ssp5{
   cursor:pointer;
-  position:relative;
   display:block;
   float:left;
   -webkit-transition: 300ms ease-out;
