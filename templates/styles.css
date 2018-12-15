@@ -46,17 +46,16 @@ html, body {
   text-align: center;
   color: gray;
   font-family: ourFont;
-  font-size: 36px;
-  padding: 20px;
+  font-size: 3.6vh;
+  padding: 2vh;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-/* TODO: Change font and change it into % without breaking it LOL!; */
 .legendThreshold {
-    font-size: 12px;
+    font-size: 40%;
     font-family: sans-serif;
 }
 
@@ -116,10 +115,10 @@ line {
 
 .box-2 {
   width: 61%;
-  padding-right: 5px;
-  padding-top: 0px;
-  padding-left: 0px;
-  padding-bottom: 0px;
+  padding-right: 0.5vh;
+  padding-top: 0vh;
+  padding-left: 0vh;
+  padding-bottom: 0vh;
 }
 
 .box-3 {
@@ -176,7 +175,7 @@ img {
   font-size: 7vh;
   font-weight: bold;
   font-family: "ourFont",sans-serif;
-  text-shadow: 0px 2px 3px #555;
+  text-shadow: 0vh 2vh 3vh #555;
 }
 
 .topleft {
@@ -239,7 +238,7 @@ img {
   float: left;
   width: 31.5%;
   height: 2vh;
-  padding: 10px;
+  padding: 1vh;
 }
 
 .switch_3_ways{
@@ -281,10 +280,10 @@ img {
   color:white;
   width: 2vh;
 
-  -moz-box-shadow: 0px 2px 13px 0px #9b9b9b;
-  -webkit-box-shadow: 0px 2px 13px 0px #9b9b9b;
-  -o-box-shadow: 0px 2px 13px 0px #9b9b9b;
-  box-shadow: 0px 2px 13px 0px #9b9b9b;
+  -moz-box-shadow: 0vh 0.2vh 1.3vh 0vh #9b9b9b;
+  -webkit-box-shadow: 0vh 0.2vh 1.3vh 0vh #9b9b9b;
+  -o-box-shadow: 0vh 0.2vh 1.3vh 0vh #9b9b9b;
+  box-shadow: 0vh 0.2vh 1.3vh 0vh #9b9b9b;
   left: 0;
   background-color: #777777;
   filter:progid:DXImageTransform.Microsoft.Shadow(color=#9b9b9b, Direction=180, Strength=13);
@@ -293,9 +292,9 @@ img {
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
-  margin-bottom: 20px;
+  width: 6vh;
+  height: 3.5vh;
+  margin-bottom: 2vh;
   display: flex;
 }
 
@@ -308,40 +307,11 @@ img {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
 
 /* for the popup window */
 .grad1 {
@@ -360,9 +330,9 @@ input:checked + .slider:before {
 }
 
 #popup {
-    border-radius: 18px;
-    -moz-border-radius: 18px;
-    -webkit-border-radius: 18px;
+    border-radius: 1.8vh;
+    -moz-border-radius: 1.8vh;
+    -webkit-border-radius: 1.8vh;
     height: 50%;
     width: 50%;
     margin: 0;
@@ -387,8 +357,8 @@ input:checked + .slider:before {
    font-family: 'ourFont', sans-serif;
    font-weight: 400;
    font-size: 2vh;
-   line-height: 120%;
-   text-shadow: 0px 1px 0px #999, 0px 2px 0px #888;
+   line-height: 110%;
+   text-shadow: 0vh 0.1vh 0vh #999, 0vh 0.2vh 0vh #888;
    text-align: left;
    }
 
@@ -396,27 +366,27 @@ input:checked + .slider:before {
   width: 100%;
   height: 33.3%;
   background: #DDD;
-  border-left: solid 6px rgb(65, 3, 126);
+  border-left: solid 0.6vh rgb(65, 3, 126);
   font-weight: bold;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+  box-shadow: 0vh 0.2vh 0.2vh rgba(0, 0, 0, 0.29);
 }
 
 .vitamin-button {
   width: 100%;
   height: 33.3%;
   background: #DDD;
-  border-left: solid 6px rgb(145, 207, 96);
+  border-left: solid 0.6vh rgb(145, 207, 96);
   font-weight: bold;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+  box-shadow: 0vh 0.2vh 0.2vh rgba(0, 0, 0, 0.29);
 }
 
 .energy-button {
   width: 100%;
   height: 33.3%;
   background: #DDD;
-  border-left: solid 6px rgb(215, 48, 39);
+  border-left: solid 0.6vh rgb(215, 48, 39);
   font-weight: bold;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+  box-shadow: 0vh 0.2vh 0.2vh rgba(0, 0, 0, 0.29);
 }
 
 .parent-button-div {
@@ -426,7 +396,7 @@ input:checked + .slider:before {
 
 .button-title {
   width: 100%;
-  transform: translateY(570%) rotate(-90deg);
+  transform: translateY(550%) rotate(-90deg);
   font-size: 1.15vw;
   font-family: ourFont;
   margin: 0;
@@ -445,15 +415,15 @@ input:checked + .slider:before {
 }
 
 .folate-button:hover {
-  box-shadow: 4px 4px 18px rgba(33,33,33,.7);
+  box-shadow: 1vh 1vh 5vh rgba(33,33,33,.7);
 }
 
 .vitamin-button:hover {
-  box-shadow: 4px 4px 18px rgba(33,33,33,.7);
+  box-shadow: 1vh 1vh 5vh rgba(33,33,33,.7);
 }
 
 .energy-button:hover {
-  box-shadow: 4px 4px 18px rgba(33,33,33,.7);
+  box-shadow: 1vh 1vh 5vh rgba(33,33,33,.7);
 }
 
 .d3-tip {
@@ -486,22 +456,22 @@ input:checked + .slider:before {
 }
 
 .info-button {
-  width:60px;
-  height:40px;
-  margin-bottom: 20px;
+  width:6vh;
+  height:4vh;
+  margin-bottom: 2vh;
 }
 
 .switch-proj {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
-  margin-bottom: 20px;
+  width: 6vh;
+  height: 3.4vh;
+  margin-bottom: 2vh;
   display: flex;
 }
 
 .map-button {
-  margin-left: 5px;
+  margin-left: 0.5vh;
 }
 
 .info-button:hover {
@@ -534,7 +504,7 @@ input:checked + .slider:before {
 .ver-bar {
   border-left: 0.3vh solid rgba(0,0,0,0.25);
   height: 25vh;
-  margin-left: -4vh;
+  margin-left: -3vh;
   top: 0;
 }
 
@@ -568,7 +538,7 @@ input:checked + .slider:before {
 }
 
 .small-title {
-  margin-left: -4.3vh
+  margin-left: -3.8vh;
 }
 
 .axis path,

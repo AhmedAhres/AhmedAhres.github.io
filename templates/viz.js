@@ -208,7 +208,7 @@ let arc = d3.arc()
 
 let svg1 = d3.select(".docsChart").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.5 + "," + height_circle * 1.1 + ")");
+    .attr("transform", "translate(" + width_circle * 1.5 + "," + height_circle * 1.3 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -224,7 +224,7 @@ let percentComplete = svg1.append("text")
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle * 1.1 + ")");
+    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
@@ -735,19 +735,19 @@ function change_period(period){
     var selector = document.getElementById("selector");
     if (period === "ssp1") {
       selector.style.left = 0;
-      selector.style.width = ssp1.clientWidth + "px";
+      selector.style.width = (ssp1.clientWidth / 10) + "vh";
       selector.style.backgroundColor = "#777777";
       selector.innerHTML = "SSP1";
       current_SSP = "SSP1";
     } else if (period === "ssp3") {
-      selector.style.left = ssp1.clientWidth + "px";
-      selector.style.width = ssp3.clientWidth + "px";
+      selector.style.left = (ssp1.clientWidth / 10) + "vh";
+      selector.style.width = (ssp3.clientWidth / 10) + "vh";
       selector.innerHTML = "SSP3";
       selector.style.backgroundColor = "#418d92";
       current_SSP = "SSP3";
     } else {
-      selector.style.left = ssp1.clientWidth + ssp3.clientWidth + 1 + "px";
-      selector.style.width = ssp5.clientWidth + "px";
+      selector.style.left = (ssp1.clientWidth / 10) + (ssp3.clientWidth / 10) + 0.5 + "vh";
+      selector.style.width = (ssp5.clientWidth / 10) + "vh";
       selector.innerHTML = "SSP5";
       selector.style.backgroundColor = "#4d7ea9";
       current_SSP = "SSP5";
