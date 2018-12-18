@@ -552,5 +552,6 @@ img {
     text-anchor: middle;
 }
 .graph {
+  margin-left: -3vh;
   margin-top: 2vh;
 }
