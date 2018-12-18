@@ -6,6 +6,7 @@ let waypoint = new Waypoint({
 });
 
 // Current dataset depending on what we visualize
+let firstTime = true ;
 let dataset = 'dataset/country_energy.csv';
 let dataset_2D = 'dataset/pixel_energy.csv';
 let current_viz = "Food Energy";
@@ -87,10 +88,7 @@ var data_2D = load(dataset_2D);
 ready(g, path);
 ready(g_map2, path_new);
 
-// Lat - Long Coordinates for Nigeria - Example
-// Data is in Lat Long, but for coding the sequence is Long Lat
-var coordinates = {};
-coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
+
 
 let countryName = document.getElementById("box-3-header-2").firstElementChild;
 let title = document.getElementById("box-3-header").firstElementChild;
@@ -212,6 +210,15 @@ function update_percentages(period) {
     )}
   });
   });
+}
+
+function make2015staticMap() {
+  if(firstTime){
+    console.log('called static');
+    let coordstoplot = initialize_2D("2015", data_2D);
+    showData(g_map2, coordstoplot);
+    firstTime = false ;
+  }
 }
 
 function hideNow(e) {
@@ -397,13 +404,16 @@ function projection2D() {
     .attr("height", $(".map1").height() * 1.5)
     .attr("transform", "translate(0, -180) scale(0.8)");
 
+    console.log(firstTime);
+    make2015staticMap();
+
     document.getElementById("checked2D").disabled = true;
     document.getElementById("checked3D").disabled = false;
     d3.select(".map-slider").html("");
     runSlider("SSP1", false)
     createSlider();
     // Plot points on the map
-    showData(coordstoplot);
+    showData(g, coordstoplot);
   }
 }
 
@@ -555,7 +565,7 @@ function clicked(d) {
 
     // The regions should appear after we zoom in the country
     setTimeout(function() {
-        showData(coordstoplot);
+        showData(g, coordstoplot);
     }, 751) // Should be more than 750 -> more than duration
   } else {
     if(previousCountryClicked !== null) {
@@ -570,11 +580,11 @@ function clicked(d) {
   updateGraph(previousCountryClicked);
 }
 // plot points on the map
-function showData(coordinates) {
+function showData(the_g, coordinates) {
     // Add circles to the country which has been selected
     // Removing part is within
     if(checked3D == 'true') {
-    g.selectAll(".plot-point")
+    the_g.selectAll(".plot-point")
         .data(coordinates).enter()
         .append("circle")
         .classed('plot-point', true)
@@ -593,7 +603,7 @@ function showData(coordinates) {
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);
       } else {
-        g.selectAll(".plot-point")
+        the_g.selectAll(".plot-point")
             .data(coordinates).enter()
             .append("rect")
             .classed('plot-point', true)
@@ -678,13 +688,17 @@ function select_contribution_energy(period) {
       promise.then(function(result) {
         // TODO: Make the year not hard coded
           let coordstoplot = initialize_2D(period, data_2D);
-          // svg.selectAll('.plot-point').remove();
-          // showData(coordstoplot);
           g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
             // console.log(d);
             color = d[2] || 0 ;
             return colorScale(color);
-          })
+          });
+          let coordstoplot_static = initialize_2D('2015', data_2D);
+          g_map2.selectAll(".plot-point").data(coordstoplot_static).attr("fill", function (d) {
+            // console.log(d);
+            color = d[2] || 0 ;
+            return colorScale(color);
+          });
             });
       });
 
