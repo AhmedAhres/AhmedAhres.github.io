@@ -126,6 +126,14 @@ line {
   box-sizing: border-box;
 }
 
+.box-3-2d {
+  background-color: white;
+  width: 30%;
+  font-size: 1vh;
+  box-sizing: border-box;
+}
+
+
 .description_text {
   font-family: ourFont, sans-serif;
   font-size: 2vh;
@@ -490,18 +498,9 @@ img {
 
 .ver-bar {
   border-left: 0.3vh solid rgba(0,0,0,0.25);
-  height: 25vh;
+  height: 30vh;
   margin-left: -3vh;
   top: 0;
-}
-
-#box_population {
-  flex-basis: 33%;
-  margin-right: 5vh;
-}
-
-#box_production {
-  flex-basis: 33%;
 }
 
  .docsChart {
@@ -511,11 +510,11 @@ img {
 }
 
 .box_unmet {
-  flex-basis: 35%;
+  flex-basis: 38%;
 }
 
 .box_contribution {
-  flex-basis: 45%;
+  flex-basis: 50%;
 }
 
 .docsChart2 {
@@ -542,4 +541,53 @@ img {
 }
 .graph {
   margin-top: 2vh;
+}
+
+#limit {
+    stroke: #FED966;
+    stroke-width: 3;
+    stroke-dasharray: 3 6;
+}
+
+.bar {
+  fill: #80cbc4;
+}
+
+.grid path {
+    stroke-width: 3;
+}
+
+.grid .tick line3 {
+    stroke: #9FAAAE;
+    stroke-opacity: 0.2;
+}
+
+.divergence {
+  font-size: 14px;
+  fill: #2F4A6D;
+}
+
+.value {
+  font-size: 14px;
+  fill: #fff;
+}
+
+.labelGraph {
+  margin-top: -5vh;
+}
+
+.labelGraph90 {
+  margin-top: -20vh;
+  margin-left: -45vh;
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
+.grid .tick line {
+  stroke: #9FAAAE;
+  stroke-opacity: 0.3;
 }

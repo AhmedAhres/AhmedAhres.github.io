@@ -186,7 +186,7 @@ let group = d3.select(".box.box-2").append("svg")
   .attr("width", 900)
   .attr("height", 70)
   .append("g")
-  .attr("transform", "translate(" + 200 + "," + 12 + ")")
+  .attr("transform", "translate(" + 300 + "," + 12 + ")")
   .call(slider);
 
 // Pollination contribution percentage starts here
@@ -204,7 +204,7 @@ let arc = d3.arc()
 
 let svg1 = d3.select(".docsChart").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.5 + "," + height_circle * 1.3 + ")");
+    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle * 1.2 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -220,7 +220,7 @@ let percentComplete = svg1.append("text")
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle + ")");
+    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle * 1.3 + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
@@ -430,6 +430,8 @@ function projection3D() {
   checked3D = document.getElementById("checked3D").value;
   checked2D = document.getElementById("checked2D").value;
   if(checked3D === 'true') {
+    document.getElementsByClassName('box box-3')[0].style.display = "flex";
+    document.getElementsByClassName('box box-3')[1].style.display = "none";
     svg.selectAll('.plot-point').remove();
     changeProjection(false);
     checked3D = "true";
@@ -441,6 +443,8 @@ function projection2D() {
   checked2D = document.getElementById("checked2D").value;
   checked3D = document.getElementById("checked3D").value;
   if(checked2D === 'false') {
+    document.getElementsByClassName('box box-3')[0].style.display = "none";
+    document.getElementsByClassName('box box-3')[1].style.display = "flex";
     changeProjection(true);
     checked2D = "true";
     checked3D = "false";
@@ -614,7 +618,6 @@ function clicked(d) {
 function showData(coordinates) {
     // Add circles to the country which has been selected
     // Removing part is within
-    console.log(checked3D, checked3D == 'true');
     if(checked3D == 'true') {
     g.selectAll(".plot-point")
         .data(coordinates).enter()
@@ -628,7 +631,6 @@ function showData(coordinates) {
         })
         .attr("r", "1px")
         .attr("fill", function (d) {
-          // console.log(d);
           color = d[2] || 0 ;
           return colorScale(color);
         })
@@ -648,7 +650,6 @@ function showData(coordinates) {
             .attr("width", "3")
             .attr("height", "3")
             .attr("fill", function (d) {
-              // console.log(d);
               color = d[2] || 0 ;
               return colorScale(color);
             })
@@ -723,7 +724,6 @@ function select_contribution_energy(period) {
           // svg.selectAll('.plot-point').remove();
           // showData(coordstoplot);
           g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
-            // console.log(d);
             color = d[2] || 0 ;
             return colorScale(color);
           })
@@ -813,6 +813,28 @@ function removeSSPs() {
   document.getElementsByClassName('nav-bar-hidden')[0].style.display = "none";
 }
 
+let numbers = [1,2,3,4,5,6,7,8,9];
+let formatToYears = function(d) {
+  // TO BE OPTIMIZED WITH A DICTIONARY
+    if (d == 1) return 1850;
+    if (d == 2) return 1900;
+    if (d == 3) return 1910;
+    if (d == 4) return 1945;
+    if (d == 5) return 1980;
+    if (d == 6) return 2015;
+    if (d == 7) return "SSP1";
+    if (d == 8) return "SSP3";
+    if (d == 9) return "SSP5";
+}
+
+let numbersToContinents = function(d) {
+  // TO BE OPTIMIZED WITH A DICTIONARY
+    if (d == 1) return "Asia";
+    if (d == 2) return "Africa";
+    if (d == 3) return "America";
+    if (d == 4) return "Europe";
+}
+
 let dataset_graph = "dataset/plot_energy.csv";
 
 // Set the dimensions of the canvas / graph
@@ -885,20 +907,6 @@ let svg_plot = d3.select(".graph")
 
       });
 
-  let numbers = [1,2,3,4,5,6,7,8,9];
-  let formatToYears = function(d) {
-    // TO BE OPTIMIZED WITH A DICTIONARY
-      if (d == 1) return 1850;
-      if (d == 2) return 1900;
-      if (d == 3) return 1910;
-      if (d == 4) return 1945;
-      if (d == 5) return 1980;
-      if (d == 6) return 2015;
-      if (d == 7) return "SSP1";
-      if (d == 8) return "SSP3";
-      if (d == 9) return "SSP5";
-  }
-
   // Add the X Axis
   svg_plot.append("g")
       .attr("class", "axis")
@@ -912,3 +920,121 @@ let svg_plot = d3.select(".graph")
 
   });
 }
+
+let data_regions = {};
+
+function load2D(dataset) {
+    let result = {};
+    d3.csv(dataset, function(error, data) {
+      data.forEach(function(d) {
+        result[d.continent] = d;
+        });
+      });
+  return result;
+}
+
+let numbers2 = [1,2,3,4];
+let yScale2D = d3.scaleLinear().range([height_plot, 0]).domain([0,10]);
+let xScale2D = d3.scaleLinear()
+    .range([0, width_plot])
+    .domain([0,5]);
+
+function initializeGraph2D() {
+
+  let svg2D = d3.select('.graph2d');
+  let chart = svg2D.append('g')
+  .append("svg")
+      .attr("width", width_plot + margin.left + margin.right)
+      .attr("height", height_plot + margin.top + margin.bottom)
+  .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+  chart.append('g')
+  .call(d3.axisLeft(yScale2D));
+
+
+  chart.append('g')
+    .attr("transform", "translate(0," + height_plot + ")")
+    .call(d3.axisBottom(xScale2D).ticks(4).tickFormat(numbersToContinents));
+
+  let data_regions_array = Object.values(data_regions);
+
+  const barGroups = chart.selectAll()
+      .data(data_regions_array)
+      .enter()
+      .append('g')
+
+
+  barGroups
+  .append('rect')
+  .attr('class', 'bar')
+  .attr('x', (d) => xScale2D(d.continent) - 25)
+  .attr('y', (d) => yScale2D(d.value))
+  .attr('height', (d) => height_plot - yScale2D(d.value))
+  .attr('width', '50')
+  .on('mouseenter', function (actual, i) {
+        d3.selectAll('.value')
+          .attr('opacity', 0)
+
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr('opacity', 0.6)
+          .attr('width', '60');
+
+        const y = yScale2D(actual.value);
+
+        line = chart.append('line')
+          .attr('id', 'limit')
+          .attr('x1', 0)
+          .attr('y1', y)
+          .attr('x2', width_plot)
+          .attr('y2', y);
+
+        barGroups.append('text')
+          .attr('class', 'divergence')
+          .attr('x', (a) => xScale2D(a.continent) + 1 / 2)
+          .attr('y', (a) => yScale2D(a.value) + 15)
+          .attr('fill', 'white')
+          .attr('text-anchor', 'middle')
+          .text((a, idx) => {
+            const divergence = (a.value - actual.value).toFixed(1)
+
+            let text = ''
+            if (divergence > 0) text += '+'
+            text += `${divergence}M`
+
+            return idx !== i ? text : '';
+          })
+      }).on('mouseleave', function () {
+        d3.selectAll('.value')
+          .attr('opacity', 1)
+
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr('opacity', 1)
+          .attr('width', '50')
+
+        chart.selectAll('#limit').remove()
+        chart.selectAll('.divergence').remove()
+      });
+
+      barGroups
+      .append('text')
+      .attr('class', 'value')
+      .attr('x', (a) => xScale2D(a.continent) + 1 / 2)
+      .attr('y', (a) => yScale2D(a.value) + 15)
+      .attr('text-anchor', 'middle')
+      .text((a) => `${a.value}M`)
+
+}
+
+let promise_graph2d = new Promise(function(resolve, reject) {
+  data_regions = load2D('dataset/ssp1_regions.csv');
+  setTimeout(() => resolve(1), 10);
+});
+promise_graph2d.then(function(result) {
+  initializeGraph2D();
+});
