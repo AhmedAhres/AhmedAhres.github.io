@@ -116,14 +116,22 @@ line {
 
 .box-2 {
   width: 60%;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
+/* For the maps and slider  */
+.map1 { grid-area: 'map1'; }
+.map2 { grid-area: 'map2';  }
+.map-slider { grid-area: 'map-slider' }
 
 .box-3 {
   background-color: white;
   width: 30%;
   font-size: 1vh;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .description_text {
@@ -381,6 +389,7 @@ img {
 .parent-button-div {
   width: 3%;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .button-title {

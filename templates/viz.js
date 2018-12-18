@@ -33,14 +33,31 @@ var previousCountryClicked = 'WLD';
 var path, projection, zoom = null;
 var inertia;
 
-var svg = d3.select(".box.box-2").append("svg")
+let svg = d3.select(".map1").append("svg")
     .attr("width", width)
     .attr("height", height)
     .on("click", stopped, true);
-var g = svg.append('g');
+
+let svg_map2 = d3.select(".map2").append("svg")
+    .attr("width", 0)
+    .attr("height", 0)
+    .on("click", stopped, true);
+
+let g = svg.append('g');
+let g_map2 = svg_map2.append('g');
+
+let projection_new = d3.geoNaturalEarth().scale(d3.min([width / 2, height / 2])*0.45).translate([width / 2, height / 2]).precision(.1);
+let path_new = d3.geoPath().projection(projection_new);
+
+var map1 = document.getElementsByClassName('map1')[0];
+var map2 = document.getElementsByClassName('map2')[0];
+
+map1.setAttribute("style", "width: 100%; height: 94%;");
+map2.setAttribute("style", "width: 0; height: 0;");
 
 // Add projection to the viz
 changeProjection(false);
+
 
 // Adding tip for hover
 var tip = d3.tip()
@@ -67,7 +84,8 @@ loadGlobalData(dataset);
 var data_2D = load(dataset_2D);
 
 // Calling the ready function to render everything even chloropleth
-ready();
+ready(g, path);
+ready(g_map2, path_new);
 
 // Lat - Long Coordinates for Nigeria - Example
 // Data is in Lat Long, but for coding the sequence is Long Lat
@@ -80,114 +98,25 @@ let current_nature_contribution = 33;
 let current_unmet_need = 57;
 
 let years = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"];
+let sliderSSPs=['50','100','150']
 let actualData = ["1850", "1900", "1910", "1945", "1980", "2015", "2050"];
 
 var formatToData = function(d) {
   // TO BE OPTIMIZED WITH A DICTIONARY
     if (d == 1850 || d == 1900) return d;
-    if (d == 1950) return 1910;
-    if (d == 2000) return 1945;
-    if (d == 2050) return 1980;
-    if (d == 2100) return 2015;
-    if (d == 2150) return 2050;
+    else if (d == 1950) return 1910;
+    else if (d == 2000) return 1945;
+    else if (d == 2050) return 1980;
+    else if (d == 2100) return 2015;
+    else if (d == 2150) return 2050;
+    else if (d == 50) return "SSP1";
+    else if (d == 100) return "SSP3";
+    else return "SSP5";
 }
 
 let current_SSP = "SSP1";
 let current_year = "1945"
-let slider = d3.sliderHorizontal()
-  .min(1850)
-  .max(2150)
-  .step(50)
-  .default("2000")
-  .width(400)
-  .tickValues(years)
-  .tickFormat(formatToData)
-  .on("onchange", val => {
-    // Here, the value we check for is still the original one, not the formatted one
-    if (val == 1850) {
-      title.innerHTML = "Pollination Contribution to Nutrion (" + current_viz + ") in 1850";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1850?";
-      current_year = "1850";
-      removeSSPs();
-      select_contribution_energy("1850");
-      update_percentages("1850");
-
-      //update_2D("1850");
-    }
-
-    if (val == 1900) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1900";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1900?";
-      current_year = "1900";
-      removeSSPs();
-      select_contribution_energy("1900");
-      update_percentages("1900");
-      //update_2D("1900");
-    }
-
-    if (val == 1950) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1910";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1910?";
-      current_year = "1910";
-      removeSSPs();
-      select_contribution_energy("1910");
-      update_percentages("1910");
-      //update_2D("1910");
-    }
-
-    if (val == 2000) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1945";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1945?";
-      current_year = "1945";
-      removeSSPs();
-      select_contribution_energy("1945");
-      update_percentages("1945");
-      //update_2D("1945");
-    }
-
-    if (val == 2050) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1980";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1980?";
-      current_year = "1980";
-      removeSSPs();
-      select_contribution_energy("1980");
-      update_percentages("1980");
-      //update_2D("1980");
-    }
-
-    if (val == 2100) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2015";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 2015?";
-      current_year = "2015";
-      removeSSPs();
-      select_contribution_energy("2015");
-      update_percentages("2015");
-    }
-
-    if (val == 2150) {
-      showSSPs();
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2050 - " + current_SSP;
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in " + current_SSP + "?";
-      select_contribution_energy(current_SSP);
-      update_percentages(current_SSP);
-      current_year = current_SSP;
-      //update_2D(current_SSP);
-    }
- });
-
-let group = d3.select(".box.box-2").append("svg")
-  .attr("width", 900)
-  .attr("height", 70)
-  .append("g")
-  .attr("transform", "translate(" + 200 + "," + 12 + ")")
-  .call(slider);
+createSlider();
 
 // Pollination contribution percentage starts here
 let width_circle = 65,
@@ -434,6 +363,17 @@ function projection3D() {
     changeProjection(false);
     checked3D = "true";
     check2D = "false";
+
+    map2.setAttribute("style", "width: 0; height: 0;");
+    map1.setAttribute("style", "width: 100%; height: 94%;");
+    svg.attr("transform", "translate(0, 0)");
+    svg_map2.attr("width", 0).attr("height", 0);
+
+    document.getElementById("checked3D").disabled = true;
+    document.getElementById("checked2D").disabled = false;
+    d3.select(".map-slider").html("");
+    runSlider("1945", false)
+    createSlider();
   }
 }
 
@@ -445,6 +385,24 @@ function projection2D() {
     checked2D = "true";
     checked3D = "false";
     let coordstoplot = initialize_2D(current_year, data_2D);
+
+    // Change the size of the maps
+    svg.attr("width", $(".map1").width())
+    .attr("height", $(".map1").height())
+    .attr("transform", "translate(0, -200) scale(0.8)");
+    map1.setAttribute("style", "width: 100%; height: 47%;");
+
+    map2.setAttribute("style", "width: 100%; height: 47%;");
+    svg_map2.attr("width", $(".map1").width())
+    .attr("height", $(".map1").height() * 1.5)
+    .attr("transform", "translate(0, -180) scale(0.8)");
+
+    document.getElementById("checked2D").disabled = true;
+    document.getElementById("checked3D").disabled = false;
+    d3.select(".map-slider").html("");
+    runSlider("SSP1", false)
+    createSlider();
+    // Plot points on the map
     showData(coordstoplot);
   }
 }
@@ -470,6 +428,7 @@ function changeProjection(sliderChecked) {
 
       // Make the map black
       g.selectAll('path').attr('fill', '#D3D3D3').on("click", null);
+      g_map2.selectAll('path').attr('fill', '#D3D3D3').on("click", null);
   } else {
     projection = d3.geoOrthographic()
       .scale(planet_radius*0.844)
@@ -498,7 +457,7 @@ function changeProjection(sliderChecked) {
   svg.selectAll('path').transition().duration(500).attr('d', path);
 }
 
-function ready() {
+function ready(g, path) {
   d3.json("world/countries.json", function(error, data) {
     if (error) throw error;
 
@@ -614,7 +573,6 @@ function clicked(d) {
 function showData(coordinates) {
     // Add circles to the country which has been selected
     // Removing part is within
-    console.log(checked3D, checked3D == 'true');
     if(checked3D == 'true') {
     g.selectAll(".plot-point")
         .data(coordinates).enter()
@@ -811,6 +769,76 @@ function showSSPs() {
 function removeSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "none";
   document.getElementsByClassName('nav-bar-hidden')[0].style.display = "none";
+}
+
+function createSlider() {
+  let min_year, max_year, width, default_, tickvalues;
+  if(checked2D == "false") {
+    min_year = 1850;
+    max_year = 2150;
+    width = 400;
+    default_ =  "2000";
+    tickvalues = years;
+
+  } else {
+    min_year = 50;
+    max_year = 150;
+    width = 400;
+    default_ = "50";
+    tickvalues = sliderSSPs;
+  }
+  let slider = d3.sliderHorizontal()
+    .min(min_year)
+    .max(max_year)
+    .step(50)
+    .default(default_)
+    .width(width)
+    .tickValues(tickvalues)
+    .tickFormat(formatToData)
+    .on("onchange", val => {
+      if(checked3D == "true") {
+        // Here, the value we check for is still the original one, not the formatted one
+        if (val == 1850) runSlider("1850", false);
+        if (val == 1900) runSlider("1900", false);
+        if (val == 1950) runSlider("1910", false);
+        if (val == 2000) runSlider("1945", false);
+        if (val == 2050) runSlider("1980", false);
+        if (val == 2100) runSlider("2015", false);
+        if (val == 2150) runSlider("2050", true);
+      } else {
+        if (val == 50) runSlider("SSP1", false);
+        if (val == 100) runSlider("SSP3", false);
+        if (val == 150) runSlider("SSP5", false);
+      }
+   });
+
+  let group = d3.select(".map-slider").append("svg")
+    .attr("width", 900)
+    .attr("height", 70)
+    .append("g")
+    .attr("transform", "translate(" + 200 + "," + 12 + ")")
+    .call(slider);
+}
+
+function runSlider(period, if_ssp) {
+  if(!if_ssp) {
+    title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in " + period;
+    contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+    + current_viz  + " in " + period + "?";
+    current_year = period;
+    removeSSPs();
+    select_contribution_energy(period);
+    update_percentages(period);
+  } else {
+    if (checked3D == "true") showSSPs();
+    if (checked2D == "true") change_period(period);
+    title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2050 - " + current_SSP;
+    contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+    + current_viz  + " in " + current_SSP + "?";
+    select_contribution_energy(current_SSP);
+    update_percentages(current_SSP);
+    current_year = current_SSP;
+  }
 }
 
 let dataset_graph = "dataset/plot_energy.csv";
