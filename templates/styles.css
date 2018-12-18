@@ -161,7 +161,7 @@ line {
 }
 
 img {
-  opacity: 1;
+  opacity: 0.85;
 }
 
 .centered {
@@ -169,11 +169,13 @@ img {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #fff;
+  color: white;
   font-size: 7vh;
   font-weight: bold;
   font-family: "ourFont",sans-serif;
-  text-shadow: 0vh 2vh 3vh #555;
+  /* text-shadow: 0vh 2vh 3vh #555; */
+  /* color: #860101; */
+  text-shadow: black 0vh 0vh 2vh;
 }
 
 .topleft {
