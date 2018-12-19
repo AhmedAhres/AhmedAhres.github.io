@@ -521,23 +521,23 @@ img {
   font-family: ourFont, sans-serif;
 }
 
-.box_unmet {
-  flex-basis: 35%;
-}
-
-.box_contribution {
-  flex-basis: 45%;
-}
-
 .docsChart2 {
  font-size: 3vh;
  fill: #5B8BE3;
  font-family: ourFont, sans-serif;
 }
 
+.box_unmet {
+  flex-basis: 10vw;
+}
+
+.box_contribution {
+  flex-basis: 13vw;
+}
+
 .small-title {
   margin-left: -2vh;
-  margin-top: 5vh;
+  margin-top: 4vh;
 }
 
 .axis path,
@@ -554,4 +554,6 @@ img {
 .graph {
   margin-left: -1vw;
   margin-top: 2vh;
+  width: 100%;
+  height:100%;
 }

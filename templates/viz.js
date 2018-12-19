@@ -117,8 +117,8 @@ let current_year = "1945"
 createSlider();
 
 // Pollination contribution percentage starts here
-let width_circle = 65,
-    height_circle = 65,
+let width_circle = 30,
+    height_circle = 30,
     twoPi = 2 * Math.PI,
     progress = 0,
     progress_unmet = 0,
@@ -131,7 +131,7 @@ let arc = d3.arc()
 
 let svg1 = d3.select(".docsChart").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.5 + "," + height_circle * 1.3 + ")");
+    .attr("transform", "translate(" + width_circle * 2.8 + "," + height_circle * 2.5 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -147,7 +147,7 @@ let percentComplete = svg1.append("text")
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle + ")");
+    .attr("transform", "translate(" + width_circle * 3.5 + "," + height_circle * 2.5 + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
@@ -858,7 +858,7 @@ function runSlider(period, if_ssp) {
 let dataset_graph = "dataset/plot_energy.csv";
 
 // Set the dimensions of the canvas / graph
-let margin = {top: 10, right: 20, bottom: 80, left: 50},
+let margin = {top: 30, right: 30, bottom: 80, left: 60},
     width_plot = 500 - margin.left - margin.right,
     height_plot = 300 - margin.top - margin.bottom;
 
@@ -885,6 +885,7 @@ let svg_plot = d3.select(".graph")
       .append("svg")
           .attr("width", width_plot + margin.left + margin.right)
           .attr("height", height_plot + margin.top + margin.bottom)
+          .attr("preserveAspectRatio", "xMinYMin meet")
       .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
@@ -916,8 +917,8 @@ let svg_plot = d3.select(".graph")
 
           // Add the Text
           svg_plot.append("text")
-              .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
-              .attr("y", height_plot + (margin.bottom/2)+ 5)
+              .attr("x", (legendSpace/2)+i*legendSpace + 5)  // space legend
+              .attr("y", height_plot + (margin.bottom/2) + 5)
               .attr("class", "legend")    // style the legend
               .style("fill", function() { // Add the colours dynamically
                   return d.color_graph = color_graph(d.key);
