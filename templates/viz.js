@@ -28,11 +28,11 @@ initialize_unmet();
 let checked3D = "true";
 let checked2D = "false";
 
-var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
+let width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
-var previousCountryClicked = 'WLD';
-var path, projection, zoom = null;
-var inertia;
+let previousCountryClicked = 'WLD';
+let path, projection, zoom = null;
+let inertia;
 
 let svg = d3.select(".map1").append("svg")
     .attr("width", width)
@@ -50,8 +50,8 @@ let g_map2 = svg_map2.append('g');
 let projection_new = d3.geoNaturalEarth().scale(d3.min([width / 2, height / 2])*0.45).translate([width / 2, height / 2]).precision(.1);
 let path_new = d3.geoPath().projection(projection_new);
 
-var map1 = document.getElementsByClassName('map1')[0];
-var map2 = document.getElementsByClassName('map2')[0];
+let map1 = document.getElementsByClassName('map1')[0];
+let map2 = document.getElementsByClassName('map2')[0];
 
 map1.setAttribute("style", "width: 100%; height: 94%;");
 map2.setAttribute("style", "width: 0; height: 0;");
@@ -61,7 +61,7 @@ changeProjection(false);
 
 
 // Adding tip for hover
-var tip = d3.tip()
+let tip = d3.tip()
   .attr('class', 'd3-tip')
 
 .offset([-10, 0])
@@ -73,16 +73,16 @@ var tip = d3.tip()
 svg.call(tip);
 
 //Data and color scale and legend
-var colorScale = d3.scaleThreshold()
+let colorScale = d3.scaleThreshold()
     .domain([20, 40, 60, 80, 99, 100])
     .range(colorScheme);
 // Getting the Legend and setting the color scale on the legend
-var svg_legend = d3.select(".box.box-1").append("svg");
+let svg_legend = d3.select(".box.box-1").append("svg");
 makeLegend(colorScale);
 
 
 loadGlobalData(dataset);
-var data_2D = load(dataset_2D);
+let data_2D = load(dataset_2D);
 
 // Calling the ready function to render everything even chloropleth
 ready(g, path);
@@ -99,7 +99,7 @@ let years = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"];
 let sliderSSPs=['50','100','150']
 let actualData = ["1850", "1900", "1910", "1945", "1980", "2015", "2050"];
 
-var formatToData = function(d) {
+let formatToData = function(d) {
   // TO BE OPTIMIZED WITH A DICTIONARY
     if (d == 1850 || d == 1900) return d;
     else if (d == 1950) return 1910;
@@ -131,6 +131,7 @@ let arc = d3.arc()
 
 let svg1 = d3.select(".docsChart").append("svg")
     .attr("class", "percentage")
+    .attr('preserveAspectRatio','xMinYMin')
     .append("g")
     .attr("transform", "translate(" + width_circle * 2.4 + "," + height_circle * 2.5 + ")");
 
@@ -148,8 +149,9 @@ let percentComplete = svg1.append("text")
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
     .attr("class", "percentage")
+    .attr('preserveAspectRatio','xMinYMin')
     .append("g")
-    .attr("transform", "translate(" + width_circle * 3 + "," + height_circle * 2.5 + ")");
+    .attr("transform", "translate(" + width_circle * 2.8 + "," + height_circle * 2.5 + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
@@ -340,7 +342,7 @@ function accessData() {
 
 function makeLegend(colorScale) {
   // Getting the Legend and setting the color scale on the legend
-  var g_legend = svg_legend.append("g")
+  let g_legend = svg_legend.append("g")
       .attr("class", "legendThreshold")
       .attr("transform", "translate(0,20)");
 
@@ -350,8 +352,8 @@ function makeLegend(colorScale) {
       .attr("y", -4)
       .text("% contrib.");
 
-  var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
-  var legend = d3.legendColor()
+  let labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
+  let legend = d3.legendColor()
       .labels(function (d) { return labels[d.i]; })
       .shapePadding(4)
       .scale(colorScale);
@@ -473,7 +475,7 @@ function ready(g, path) {
   d3.json("world/countries.json", function(error, data) {
     if (error) throw error;
 
-    var features = topojson.feature(data, data.objects.units).features;
+    let features = topojson.feature(data, data.objects.units).features;
     g.selectAll("path")
       .data(features)
       .enter().append("path")
@@ -518,7 +520,7 @@ function clicked(d) {
   // For centering the globe to that particular country
   geo_centroid = d3.geoCentroid(active_info.__data__);
 
-  var bounds = path.bounds(d),
+  let bounds = path.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
       dy = bounds[1][1] - bounds[0][1],
       x = (bounds[0][0] + bounds[1][0]) / 2,
@@ -535,7 +537,7 @@ function clicked(d) {
   svg.transition()
       .duration(750)
       .tween('rotate', function() {
-        var r = d3.interpolate(projection.rotate(), [-geo_centroid[0], -geo_centroid[1]]);
+        let r = d3.interpolate(projection.rotate(), [-geo_centroid[0], -geo_centroid[1]]);
         return function(t) {
           projection.rotate(r(t));
           svg.selectAll("path").attr("d", path);
@@ -709,7 +711,7 @@ function select_contribution_energy(period) {
 
 function initialize_2D(period, data_) {
   let coordstoplot = [];
-  for (var key in data_) {
+  for (let key in data_) {
     coordstoplot.push([data_[key]['lat'], data_[key]['long'], data_[key][period]]);
   }
   return coordstoplot;
@@ -874,7 +876,7 @@ updateGraph('WLD');
 let color_graph = colorScale_energy;
 
 function updateGraph(country) {
-  var svg_remove = d3.select(".graph");
+  let svg_remove = d3.select(".graph");
   svg_remove.selectAll("*").remove();
 
 let line_draw = d3.line()
