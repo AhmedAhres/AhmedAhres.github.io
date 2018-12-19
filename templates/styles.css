@@ -502,7 +502,7 @@ img {
 .ver-bar {
   border-left: 0.3vh solid rgba(0,0,0,0.25);
   height: 30vh;
-  margin-left: -3vh;
+  margin-left: -2vh;
   top: 0;
 }
 
@@ -516,23 +516,23 @@ img {
 }
 
  .docsChart {
-  font-size: 3vh;
+  font-size: 2.5vh;
   fill: #5B8BE3;
   font-family: ourFont, sans-serif;
 }
 
 .docsChart2 {
- font-size: 3vh;
+ font-size: 2.5vh;
  fill: #5B8BE3;
  font-family: ourFont, sans-serif;
 }
 
 .box_unmet {
-  flex-basis: 10vw;
+  flex-basis: 6vw;
 }
 
 .box_contribution {
-  flex-basis: 12vw;
+  flex-basis: 11vw;
 }
 
 .small-title {
@@ -553,7 +553,6 @@ img {
 }
 .graph {
   margin-left: -2.7vw;
-  margin-top: 2vh;
 }
 
 .svg_graph {

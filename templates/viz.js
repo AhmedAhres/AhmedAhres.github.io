@@ -117,8 +117,8 @@ let current_year = "1945"
 createSlider();
 
 // Pollination contribution percentage starts here
-let width_circle = 30,
-    height_circle = 30,
+let width_circle = 20,
+    height_circle = 20,
     twoPi = 2 * Math.PI,
     progress = 0,
     progress_unmet = 0,
@@ -126,14 +126,14 @@ let width_circle = 30,
 
 let arc = d3.arc()
     .startAngle(0)
-    .innerRadius(58)
-    .outerRadius(66);
+    .innerRadius(55)
+    .outerRadius(62);
 
 let svg1 = d3.select(".docsChart").append("svg")
     .attr("class", "percentage")
     .attr('preserveAspectRatio','xMinYMin')
     .append("g")
-    .attr("transform", "translate(" + width_circle * 2.4 + "," + height_circle * 2.5 + ")");
+    .attr("transform", "translate(" + width_circle * 4 + "," + height_circle * 3.5 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -151,7 +151,7 @@ let svg2 = d3.select(".docsChart2").append("svg")
     .attr("class", "percentage")
     .attr('preserveAspectRatio','xMinYMin')
     .append("g")
-    .attr("transform", "translate(" + width_circle * 2.8 + "," + height_circle * 2.5 + ")");
+    .attr("transform", "translate(" + width_circle * 4.4 + "," + height_circle * 3.5 + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
