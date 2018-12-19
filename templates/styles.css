@@ -554,11 +554,9 @@ img {
 .graph {
   margin-left: -1vw;
   margin-top: 2vh;
-  width: 100%;
-  height:100%;
 }
 
 .svg_graph {
-  width: 28vw;
-  height: 28vh;
+  width: 26.3vw;
+  height: 26vh;
 }
