@@ -501,7 +501,7 @@ img {
 
 .ver-bar {
   border-left: 0.3vh solid rgba(0,0,0,0.25);
-  height: 25vh;
+  height: 30vh;
   margin-left: -3vh;
   top: 0;
 }
@@ -532,7 +532,7 @@ img {
 }
 
 .box_contribution {
-  flex-basis: 13vw;
+  flex-basis: 12vw;
 }
 
 .small-title {
@@ -552,7 +552,7 @@ img {
     text-anchor: middle;
 }
 .graph {
-  margin-left: -2vw;
+  margin-left: -2.7vw;
   margin-top: 2vh;
 }
 

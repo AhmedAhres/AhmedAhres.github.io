@@ -132,7 +132,7 @@ let arc = d3.arc()
 let svg1 = d3.select(".docsChart").append("svg")
     .attr("class", "percentage")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 2.8 + "," + height_circle * 2.5 + ")");
+    .attr("transform", "translate(" + width_circle * 2.4 + "," + height_circle * 2.5 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -149,7 +149,7 @@ let percentComplete = svg1.append("text")
 let svg2 = d3.select(".docsChart2").append("svg")
     .attr("class", "percentage")
     .append("g")
-    .attr("transform", "translate(" + width_circle * 3.5 + "," + height_circle * 2.5 + ")");
+    .attr("transform", "translate(" + width_circle * 3 + "," + height_circle * 2.5 + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
