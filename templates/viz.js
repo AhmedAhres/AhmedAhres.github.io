@@ -11,9 +11,16 @@ let dataset_2D = 'dataset/pixel_energy.csv';
 let current_viz = "Food Energy";
 let colorScheme = d3.schemeReds[6];
 let unmet_need_dataset = 'dataset/unmet_need_energy.csv'
-
 let global_unmet = load(unmet_need_dataset);
 let current_unmet_data = {};
+
+// We initialize all elements that will be changing their innerHTML
+let title_bar = document.getElementById("bar_title");
+let countryName = document.getElementById("box-3-header-2").firstElementChild;
+let title = document.getElementById("box-3-header").firstElementChild;
+let contribution_text = document.getElementsByClassName("small-title")[0];
+let unmet_text = document.getElementsByClassName("title-unmet")[0];
+
 function initialize_unmet() {
     d3.csv(unmet_need_dataset, function(error, data) {
       data.forEach(function(d) {
@@ -74,8 +81,6 @@ ready();
 var coordinates = {};
 coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
 
-let countryName = document.getElementById("box-3-header-2").firstElementChild;
-let title = document.getElementById("box-3-header").firstElementChild;
 let current_nature_contribution = 33;
 let current_unmet_need = 57;
 
@@ -315,8 +320,6 @@ function load(dataset) {
   return result;
 }
 
-let contribution_text = document.getElementsByClassName("small-title")[0];
-let unmet_text = document.getElementsByClassName("title-unmet")[0];
 let colorScale_energy = d3.scaleOrdinal()
         .domain(["contribution", "unmet"])
         .range(["#d73027", "#4fb1fe"]);
@@ -921,8 +924,6 @@ let svg_plot = d3.select(".graph")
   });
 }
 
-let data_regions = {};
-
 function load2D(dataset) {
     let result = {};
     d3.csv(dataset, function(error, data) {
@@ -933,14 +934,17 @@ function load2D(dataset) {
   return result;
 }
 
-let numbers2 = [1,2,3,4];
-let yScale2D = d3.scaleLinear().range([height_plot, 0]).domain([0,10]);
-let xScale2D = d3.scaleLinear()
-    .range([0, width_plot])
-    .domain([0,5]);
+let data_regions = {};
+let data_regions_array = {};
 
-function initializeGraph2D() {
+// Here we initialize the 2D graph
+function initializeBarGraph() {
 
+  // Initisalize the x and y scale
+  let yScale2D = d3.scaleLinear().range([height_plot, 0]).domain([0,10]);
+  let xScale2D = d3.scaleLinear().range([0, width_plot]).domain([0,5]);
+
+  // Select the SVG for the bar graph
   let svg2D = d3.select('.graph2d');
   let chart = svg2D.append('g')
   .append("svg")
@@ -950,21 +954,21 @@ function initializeGraph2D() {
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
+  // Put the y scale (people in millions)
   chart.append('g')
   .call(d3.axisLeft(yScale2D));
 
-
+  // Put the x scale (continents)
+  // We use tickformat such that continents are evenly separated
   chart.append('g')
     .attr("transform", "translate(0," + height_plot + ")")
     .call(d3.axisBottom(xScale2D).ticks(4).tickFormat(numbersToContinents));
 
-  let data_regions_array = Object.values(data_regions);
-
+  // We add for each data point a rectangle
   const barGroups = chart.selectAll()
       .data(data_regions_array)
       .enter()
-      .append('g')
-
+      .append('g');
 
   barGroups
   .append('rect')
@@ -973,6 +977,7 @@ function initializeGraph2D() {
   .attr('y', (d) => yScale2D(d.value))
   .attr('height', (d) => height_plot - yScale2D(d.value))
   .attr('width', '50')
+  // We take care of the interaction
   .on('mouseenter', function (actual, i) {
         d3.selectAll('.value')
           .attr('opacity', 0)
@@ -1021,6 +1026,7 @@ function initializeGraph2D() {
         chart.selectAll('.divergence').remove()
       });
 
+      // We add the value in the middle of the rectangle
       barGroups
       .append('text')
       .attr('class', 'value')
@@ -1028,13 +1034,21 @@ function initializeGraph2D() {
       .attr('y', (a) => yScale2D(a.value) + 15)
       .attr('text-anchor', 'middle')
       .text((a) => `${a.value}M`)
-
 }
 
-let promise_graph2d = new Promise(function(resolve, reject) {
-  data_regions = load2D('dataset/ssp1_regions.csv');
-  setTimeout(() => resolve(1), 10);
-});
-promise_graph2d.then(function(result) {
-  initializeGraph2D();
-});
+// Function to update bar graph in 2D given the dataset
+// A promise is used to make sure that the dataset is loaded before displaying
+// the graph. The dataset is passed as a parameter to be able
+//to change the dataset depending on what is being visualized
+function updateBarGraph(dataset) {
+  let promise_graph2d = new Promise(function(resolve, reject) {
+    data_regions = load2D(dataset);
+    setTimeout(() => resolve(1), 10);
+  });
+  promise_graph2d.then(function(result) {
+    data_regions_array = Object.values(data_regions);
+    initializeBarGraph();
+  });
+}
+
+updateBarGraph('dataset/ssp1_regions.csv');

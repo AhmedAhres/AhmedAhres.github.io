@@ -104,6 +104,7 @@
                 <ul>
                   <li>All the information about the world or selected country is displayed.</li>
                   <li>You can choose what information to display by clicking on the buttons.</li>
+                  <li>In 2D, you can hover over of the bar graph to compare different continents.</li>
                  </ul>
               </li>
               <li>On the bottom:
@@ -123,11 +124,6 @@
 <div class="box-container" id = '3rd_box'>
   <div class="box box-1">
     <button class="info-button" name="answer" value="info" onclick="showNow()"><i class="fa fa-info-circle fa-3x"></i></button>
-
-    <div class="switch-proj" id="projectionChangeChecked">
-      <button class="globe-button" onclick="projection3D()" value="true" id="checked3D"><i class="fa fa-globe fa-2x"></i></button>
-      <button class="map-button" onclick="projection2D()" value="false" id="checked2D"><i class="fa fa-map fa-2x"></i></button>
-    </div>
 
   </div>
   <div class="box box-2">
@@ -172,12 +168,12 @@
       <div class="nav-bar"> </div>
     </h1>
     <h2 id="story"> Pollinators need good foraging resources, places that are rich in
-      flowers pollen and nectar. They need a place to nest and to eat, and a natural,
+      pollen and nectar. They need to nest and to eat in a natural,
       non-toxic environment.  </h2>
-    <img src="Bee-post.jpg" class="img-story"> </img>
-    <h2 id="story"> However, The absence of an appropriate habitat
+    <img src="images/bee.jpg" class="img-story"> </img>
+    <h2 id="story"> However, the absence of an appropriate habitat
     for bees could lead to a continuous decline in pollination, affecting millions of people. </h2>
-    <h2> People (in millions) impacted in different continents </h2>
+    <h2 id ="bar_title"> People (in millions) impacted in different continents in 2050 - SSP1 </h2>
     <div class="graph2d"> </div>
     <h2 class="labelGraph"> Continents </h2>
     <h1 id="box-3-header">

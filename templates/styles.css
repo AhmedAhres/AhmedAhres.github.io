@@ -90,15 +90,14 @@ line {
 }
 
 #box-3-header {
-  font-size: 2.8vh;
+  font-size: 2.5vh;
 }
 
 #box-3-header-2 {
   text-align: center;
   margin-top: -1vh;
-  font-size: 2.5vh;
+  font-size: 2.4vh;
 }
-l
 
 #text-box {
   text-align: left;
@@ -550,19 +549,22 @@ img {
 }
 
 .img-story {
-  height: 22%;
+  margin-top: 1vh;
+  width: 108%;
+  margin-left: -1.1vw;
+  margin-bottom: 1vh;
 }
 .bar {
   fill: #80cbc4;
 }
 
 .divergence {
-  font-size: 14px;
-  fill: #2F4A6D;
+  font-size: 1.5em;
+  fill: #fff;
 }
 
 .value {
-  font-size: 14px;
+  font-size: 1.5em;
   fill: #fff;
 }
 
