@@ -130,7 +130,7 @@ let arc = d3.arc()
     .outerRadius(66);
 
 let svg1 = d3.select(".docsChart").append("svg")
-    .attr("width", "180")
+    .attr("class", "percentage")
     .append("g")
     .attr("transform", "translate(" + width_circle * 2.8 + "," + height_circle * 2.5 + ")");
 
@@ -147,7 +147,7 @@ let percentComplete = svg1.append("text")
 
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
-    .attr("width", "180")
+    .attr("class", "percentage")
     .append("g")
     .attr("transform", "translate(" + width_circle * 3.5 + "," + height_circle * 2.5 + ")");
 
