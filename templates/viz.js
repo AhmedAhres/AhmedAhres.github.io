@@ -130,6 +130,7 @@ let arc = d3.arc()
     .outerRadius(66);
 
 let svg1 = d3.select(".docsChart").append("svg")
+    .attr("width", "180")
     .append("g")
     .attr("transform", "translate(" + width_circle * 2.8 + "," + height_circle * 2.5 + ")");
 
@@ -146,6 +147,7 @@ let percentComplete = svg1.append("text")
 
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
+    .attr("width", "180")
     .append("g")
     .attr("transform", "translate(" + width_circle * 3.5 + "," + height_circle * 2.5 + ")");
 
@@ -883,8 +885,7 @@ let line_draw = d3.line()
   // Adds the svg canvas
 let svg_plot = d3.select(".graph")
       .append("svg")
-          .attr("width", width_plot + margin.left + margin.right)
-          .attr("height", height_plot + margin.top + margin.bottom)
+          .attr("class", "svg_graph")
           .attr("preserveAspectRatio", "xMinYMin meet")
       .append("g")
           .attr("transform",

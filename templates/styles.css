@@ -469,7 +469,7 @@ img {
 }
 
 .map-button {
-  margin-left: 0.5vh;
+  margin-left: 0.5vw;
 }
 
 .info-button:hover {
@@ -556,4 +556,9 @@ img {
   margin-top: 2vh;
   width: 100%;
   height:100%;
+}
+
+.svg_graph {
+  width: 28vw;
+  height: 28vh;
 }
