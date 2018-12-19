@@ -98,11 +98,7 @@ line {
   margin-top: -1vh;
   font-size: 2.5vh;
 }
-
-#box-3-sub-header {
-  text-align: left;
-  font-size: 2vh;
-}
+l
 
 #text-box {
   text-align: left;
@@ -549,17 +545,15 @@ img {
     stroke-dasharray: 3 6;
 }
 
+#story {
+  fill: blue;
+}
+
+.img-story {
+  height: 22%;
+}
 .bar {
   fill: #80cbc4;
-}
-
-.grid path {
-    stroke-width: 3;
-}
-
-.grid .tick line3 {
-    stroke: #9FAAAE;
-    stroke-opacity: 0.2;
 }
 
 .divergence {
@@ -574,20 +568,4 @@ img {
 
 .labelGraph {
   margin-top: -5vh;
-}
-
-.labelGraph90 {
-  margin-top: -20vh;
-  margin-left: -45vh;
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-}
-
-.grid path {
-  stroke-width: 0;
-}
-
-.grid .tick line {
-  stroke: #9FAAAE;
-  stroke-opacity: 0.3;
 }
