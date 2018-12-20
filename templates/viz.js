@@ -21,6 +21,12 @@ let title = document.getElementById("box-3-header").firstElementChild;
 let contribution_text = document.getElementsByClassName("small-title")[0];
 let unmet_text = document.getElementsByClassName("title-unmet")[0];
 
+// We instantiate the bar chart object for the 2D section
+let BarGraphObject = new BarGraph();
+
+// We initialize it at SSP1
+BarGraphObject.updateBarGraph('dataset/ssp1_regions.csv');
+
 function initialize_unmet() {
     d3.csv(unmet_need_dataset, function(error, data) {
       data.forEach(function(d) {
@@ -827,14 +833,6 @@ let formatToYears = function(d) {
     if (d == 7) return "SSP1";
     if (d == 8) return "SSP3";
     if (d == 9) return "SSP5";
-}
-
-let numbersToContinents = function(d) {
-  // TO BE OPTIMIZED WITH A DICTIONARY
-    if (d == 1) return "Asia";
-    if (d == 2) return "Africa";
-    if (d == 3) return "America";
-    if (d == 4) return "Europe";
 }
 
 let dataset_graph = "dataset/plot_energy.csv";
