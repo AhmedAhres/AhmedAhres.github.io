@@ -71,7 +71,7 @@ class BarGraph {
       .attr('x', (d) => xScale2D(d.continent) - 18)
       .attr('y', (d) => yScale2D(d.log_value))
       .attr('height', (d) => height_plot - yScale2D(d.log_value))
-      .attr('width', '42')
+      .attr('width', '41')
       // We take care of the interaction
       .on('mouseenter', function(actual, i) {
         d3.selectAll('.divergence')
@@ -115,7 +115,7 @@ class BarGraph {
           .transition()
           .duration(300)
           .attr('opacity', 1)
-          .attr('width', '42')
+          .attr('width', '41')
 
         chart.selectAll('#limit').remove()
         chart.selectAll('.divergence').remove()
