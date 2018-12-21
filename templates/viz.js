@@ -7,7 +7,7 @@ let waypoint = new Waypoint({
 
 // Current dataset depending on what we visualize
 let firstTime = true ;
-let dataset = 'dataset/country_energy.csv';
+let dataset = 'dataset/country_en.csv';
 let dataset_2D = 'dataset/pixel_energy.csv';
 let current_viz = "Food Energy";
 let colorScheme = d3.schemeReds[6];
@@ -15,6 +15,7 @@ let unmet_need_dataset = 'dataset/unmet_need_energy.csv'
 
 let global_unmet = load(unmet_need_dataset);
 let current_unmet_data = {};
+let title_map = document.getElementById("title_2d_change");
 function initialize_unmet() {
     d3.csv(unmet_need_dataset, function(error, data) {
       data.forEach(function(d) {
@@ -22,6 +23,8 @@ function initialize_unmet() {
       });
     });
 }
+
+let region_text = "Pollination Contribution to Food Energy";
 
 // We instantiate the bar chart object for the 2D section
 let BarGraphObject = new BarGraph();
@@ -73,7 +76,7 @@ let tip = d3.tip()
 .offset([-10, 0])
   // Here d -> is basically the data which is given to the circle -> right now it is just lat long
   .html(function(d) {
-      return "<strong>" + current_viz + ": <span>" + d[2] + "</span></strong>";
+      return "<strong>" + region_text + ": <span>" + d[2] + "</span></strong>" + "%";
   })
 // Adding tip to the svg
 svg.call(tip);
@@ -94,11 +97,10 @@ let data_2D = load(dataset_2D);
 ready(g, path);
 ready(g_map2, path_new);
 
-
-
 let countryName = document.getElementById("box-3-header-2").firstElementChild;
 let title = document.getElementById("box-3-header").firstElementChild;
-let current_nature_contribution = 33;
+let current_nature_contribution = 35;
+// Change unmet need with the world data in 1945 !!!
 let current_unmet_need = 57;
 
 let years = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"];
@@ -277,13 +279,16 @@ function updateData(data_type) {
   switch(data_type) {
     case "Vitamin":
       current_viz = "Vitamin A";
+      region_text = "Pollination Contribution to Vitamin A";
       title.innerHTML = "Pollination Contribution to Nutrition (Vitamin A) in " + current_year;
       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
       + current_viz  + " in " + current_year + "?";
       unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?";
       colorScheme = d3.schemeGreens[6];
+      title_map.innerHTML = "Pollination Contribution to " +  current_viz + " in 2015 (Top) vs " + current_SSP + " (Bottom)";
       dataset = 'dataset/country_va.csv';
       dataset_graph = 'dataset/plot_vitamin.csv';
+      dataset_2D = 'dataset/pixel_va.csv';
       unmet_need_dataset = 'dataset/unmet_need_vitamin.csv';
       color_graph = colorScale_vitamin;
       updateGraph(previousCountryClicked);
@@ -291,27 +296,33 @@ function updateData(data_type) {
       break;
     case "Energy":
       current_viz = "Food Energy";
+      region_text = "Pollination Contribution to Food Energy";
       title.innerHTML = "Pollination Contribution to Nutrition (Food Energy) in " + current_year;
       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
       + current_viz  + " in " + current_year + "?";
       unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?";
+      title_map.innerHTML = "Pollination Contribution to " +  current_viz + " in 2015 (Top) vs " + current_SSP + " (Bottom)";
       colorScheme = d3.schemeReds[6];
-      dataset = 'dataset/country_energy.csv';
+      dataset = 'dataset/country_en.csv';
       dataset_graph = 'dataset/plot_energy.csv';
+      dataset_2D = 'dataset/pixel_energy.csv';
       unmet_need_dataset = 'dataset/unmet_need_energy.csv';
       color_graph = colorScale_energy;
       updateGraph(previousCountryClicked);
       break;
     case "Folate":
       current_viz = "Folate";
+      region_text = "Pollination Contribution to Folate";
       title.innerHTML = "Pollination Contribution to Nutrition (Folate) in " + current_year;
       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
       + current_viz  + " in " + current_year + "?";
       unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?"
+      title_map.innerHTML = "Pollination Contribution to " +  current_viz + " in 2015 (Top) vs " + current_SSP + " (Bottom)";
       colorScheme = d3.schemePurples[6];
       dataset = 'dataset/country_fo.csv';
       dataset_graph = 'dataset/plot_folate.csv';
       unmet_need_dataset = 'dataset/unmet_need_folate.csv';
+      dataset_2D = 'dataset/pixel_fo.csv';
       color_graph = colorScale_folate;
       updateGraph(previousCountryClicked);
       break;
@@ -692,7 +703,7 @@ function select_contribution_energy(period) {
               }
           });
           // Update the regions data with the slider when zoomed in
-          let coordstoplot = initialize_2D(period, data_2D);
+          let coordstoplot = initialize_2D(period, country_data_2D);
           g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
             // console.log(d);
             color = d[2] || 0 ;
@@ -844,14 +855,20 @@ function createSlider() {
         if (val == 50) {
           runSlider("SSP1", false);
           BarGraphObject.updateBarGraph('dataset/ssp1_impacted.csv');
+          title_map.innerHTML = "Pollination Contribution to " +  current_viz + " in 2015 (Top) vs SSP1 (Bottom)";
+          current_SSP = "SSP1";
           }
         if (val == 100) {
           runSlider("SSP3", false);
           BarGraphObject.updateBarGraph('dataset/ssp3_impacted.csv');
+          title_map.innerHTML = "Pollination Contribution to " +  current_viz + " in 2015 (Top) vs SSP3 (Bottom)";
+          current_SSP = "SSP3";
         }
         if (val == 150) {
           runSlider("SSP5", false);
           BarGraphObject.updateBarGraph('dataset/ssp5_impacted.csv');
+          title_map.innerHTML = "Pollination Contribution to " +  current_viz + " in 2015 (Top) vs SSP5 (Bottom)";
+          current_SSP = "SSP5";
       }
     }
    });
