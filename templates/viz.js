@@ -862,7 +862,7 @@ function runSlider(period, if_ssp) {
 let dataset_graph = "dataset/plot_energy.csv";
 
 // Set the dimensions of the canvas / graph
-let margin = {top: 30, right: 30, bottom: 80, left: 60},
+let margin = {top: 30, right: 30, bottom: 80, left: 50},
     width_plot = 500 - margin.left - margin.right,
     height_plot = 300 - margin.top - margin.bottom;
 
