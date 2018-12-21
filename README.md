@@ -1,18 +1,23 @@
-# DataVizProject
-
+# Pollination Contribution to Nutrition - EPFL Data Visualization Project
 
 ## Running the visualization
 
-The visualization can be seen by visiting the following url: https://ahmedahres.github.io/templates/
+The visualization can be seen in the following url: https://ahmedahres.github.io/templates/
 
-Currently, the 2 level visualization only works for the country of Nigeria.
+## Description
 
-## Setting up Python Environment
+This data visualization analyzes the pollination contribution to various food nutriments since 1850. This project is part of Stanford University's Natural Capital Project. In this project, we aim to show the world how the increase use of pesticides and higher tempratures are decreasing the pollination contribution to nutrition, and how this will affect millions of people in the future.
 
-The Python version which are using as part of the backend is Python 3.
+## Files description
 
-To set up the appropriate Python environment, one would need to install the libraries with the right version.
+- The source code is available in the templates folder in ***viz.js***, ***lineGraph.js*** and ***barGraph.js***.
+- The folder dataset in templates contains all the csv files used in the visualization
+- The libraries folder in templates contains all the libraries used
+- The countries folders contains json files to describe the country borders
+- The images folder contains the images used in the visualization
 
-You can do this using the requirements.txt file: `pip install -r requirements.txt`
+- The powerpoint and docx files in the main repo folder contain explanation of the dataset provided to us
 
-To run the Python flask server, do the command: `python index.py` and that should open a localhost server.
+## Screen cast
+
+A screen cast explaining the visualization is available in the following link: https://www.youtube.com/watch?v=roVLf6Jssmo&feature=youtu.be
