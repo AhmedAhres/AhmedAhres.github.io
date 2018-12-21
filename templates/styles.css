@@ -532,11 +532,11 @@ img {
 }
 
 .box_unmet {
-  flex-basis: 6vw;
+  flex-basis: 11vw;
 }
 
 .box_contribution {
-  flex-basis: 11vw;
+  flex-basis: 13vw;
 }
 
 .small-title {

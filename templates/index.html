@@ -124,7 +124,6 @@
 <div class="box-container" id = '3rd_box'>
   <div class="box box-1">
     <button class="info-button" name="answer" value="info" onclick="showNow()"><i class="fa fa-info-circle fa-3x"></i></button>
-
     <div class="switch-proj" id="projectionChangeChecked">
       <button class="globe-button" onclick="projection3D()" value="true" id="checked3D"><i class="fa fa-globe fa-2x"></i></button>
       <button class="map-button" onclick="projection2D()" value="false" id="checked2D"><i class="fa fa-map fa-2x"></i></button>
@@ -164,7 +163,7 @@
         </div>
         <div class="ver-bar"> </div>
         <div class="box_unmet">
-        <h4 class="title-unmet"> What is the percentage of people who's need in Food Energy is not met? </h4>
+        <h4 class="title-unmet"> What is the percentage of pollination-dependent production loss? </h4>
         <div class="docsChart2"> </div>
         </div>
       </div>
@@ -172,7 +171,7 @@
 
   <div class="box box-3" style="display:none;">
     <h1 id="box-3-header">
-      <div id="title_2d_change"> Pollination Contribution to Food Energy in 2015 (Top) vs SSP1 (Bottom) </div>
+      <div id="title_2d_change"> Pollination Contribution to Food Energy in 2015 (Bottom) vs SSP1 (Top) </div>
       <div class="nav-bar"> </div>
     </h1>
     <h2 id="story"> Pollinators need good foraging resources, places that are rich in
@@ -203,6 +202,7 @@
   </div>
 
 </div>
+<script src="lineGraph.js"></script>
 <script src="barGraph.js"></script>
 <script src="viz.js"></script>
 </body>
