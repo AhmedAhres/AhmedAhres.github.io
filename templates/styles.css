@@ -494,6 +494,10 @@ img {
   background-color: white;
 }
 
+.graph2d {
+  margin-left: -5vw;
+}
+
 .nav-bar {
   border-bottom: 0.2vh solid rgba(0, 0, 0, 0.25);
   color: gray;
