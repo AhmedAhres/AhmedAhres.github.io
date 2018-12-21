@@ -178,4 +178,3 @@ function initialize_2D(period, data_) {
   }
   return coordstoplot;
 }
-

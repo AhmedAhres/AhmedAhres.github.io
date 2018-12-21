@@ -1,4 +1,3 @@
-
 // Initialize the 3D projection for ready
 function ready(g, path) {
   d3.json("world/countries.json", function(error, data) {
@@ -76,7 +75,7 @@ function projection3D() {
     map2.setAttribute("style", "width: 0; height: 0;");
     map1.setAttribute("style", "width: 100%; height: 94%;");
 
-    // Make the svg map2 
+    // Make the svg map2
     svg.attr("transform", "translate(0, 0)");
     svg_map2.attr("width", 0).attr("height", 0);
 
@@ -91,4 +90,3 @@ function projection3D() {
     createSlider();
   }
 }
-

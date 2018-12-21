@@ -21,7 +21,7 @@ let svg_arc1 = d3.select(".docsChart").append("svg")
   .append("g")
   .attr(
     "transform",
-    "translate(" + width_circle * 3.5  + "," + height_circle * 3.5 + ")");
+    "translate(" + width_circle * 3.5 + "," + height_circle * 3.5 + ")");
 // Setting the fill color and the arc angle for the type of data for arc1
 svg_arc1.append("path")
   .attr("fill", "#E6E7E8")
