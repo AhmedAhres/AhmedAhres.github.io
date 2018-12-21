@@ -102,8 +102,9 @@
               </li>
               <li>On the right:
                 <ul>
-                  <li>All the information about the world or country is displayed.</li>
+                  <li>All the information about the world or selected country is displayed.</li>
                   <li>You can choose what information to display by clicking on the buttons.</li>
+                  <li>In 2D, you can hover over of the bar graph to compare different continents.</li>
                  </ul>
               </li>
               <li>On the bottom:
@@ -135,7 +136,7 @@
     <div class="map2"></div>
     <div class="map-slider"></div>
   </div>
-  <div class="box box-3">
+  <div class="box box-3" style="display:flex;">
     <h1 id="box-3-header">
       <div> Pollination Contribution to Nutrition (Food Energy) in 1945 </div>
       <div class="nav-bar"> </div>
@@ -169,6 +170,26 @@
       </div>
   </div>
 
+  <div class="box box-3" style="display:none;">
+    <h1 id="box-3-header">
+      <div> Pollination Contribution to Nutrition (Food Energy) in 2015 </div>
+      <div class="nav-bar"> </div>
+    </h1>
+    <h2 id="story"> Pollinators need good foraging resources, places that are rich in
+      pollen and nectar. They need to nest and to eat in a natural,
+      non-toxic environment.  </h2>
+    <img src="images/bee.jpg" class="img-story"> </img>
+    <h2 id="story"> However, the absence of an appropriate habitat
+    for bees could lead to a continuous decline in pollination, affecting millions of people. </h2>
+    <h2 id ="bar_title"> People (in millions) impacted in different continents in 2050 - SSP1 </h2>
+    <div class="graph2d"> </div>
+    <h2 class="labelGraph"> Continents </h2>
+    <h1 id="box-3-header">
+      <div class="nav-bar"> </div>
+      <div> Change in Pollination Contribution to Nutrition (Food Energy) in SSP1 </div>
+    </h1>
+  </div>
+
   <!-- Add buttons for folate, vitamin, energy  -->
   <div class="parent-button-div">
     <div class="folate-button">
@@ -183,6 +204,7 @@
   </div>
 
 </div>
+<script src="barGraph.js"></script>
 <script src="viz.js"></script>
 </body>
 </html>
