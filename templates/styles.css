@@ -563,3 +563,37 @@ img {
 .percentage {
   width: 10vw;
 }
+
+#limit {
+    stroke: #FED966;
+    stroke-width: 3;
+    stroke-dasharray: 3 6;
+}
+
+#story {
+  fill: blue;
+}
+
+.img-story {
+  margin-top: 1vh;
+  width: 108%;
+  margin-left: -1.1vw;
+  margin-bottom: 1vh;
+}
+.bar {
+  fill: #80cbc4;
+}
+
+.divergence {
+  font-size: 1.5em;
+  fill: #fff;
+}
+
+.value {
+  font-size: 1.5em;
+  fill: #fff;
+}
+
+.labelGraph {
+  margin-top: -5vh;
+}
