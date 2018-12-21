@@ -534,6 +534,7 @@ img {
   font-size: 2.5vh;
   fill: #5B8BE3;
   font-family: ourFont, sans-serif;
+
 }
 
 .box_unmet {
@@ -541,7 +542,7 @@ img {
 }
 
 .box_contribution {
-  flex-basis: 13vw;
+  flex-basis: 11vw;
 }
 
 .small-title {
