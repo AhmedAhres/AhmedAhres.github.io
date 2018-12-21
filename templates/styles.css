@@ -90,18 +90,13 @@ line {
 }
 
 #box-3-header {
-  font-size: 2.8vh;
+  font-size: 2.5vh;
 }
 
 #box-3-header-2 {
   text-align: center;
   margin-top: -1vh;
-  font-size: 2.5vh;
-}
-
-#box-3-sub-header {
-  text-align: left;
-  font-size: 2vh;
+  font-size: 2.4vh;
 }
 
 #text-box {
@@ -133,6 +128,14 @@ line {
   box-sizing: border-box;
   overflow: hidden;
 }
+
+.box-3-2d {
+  background-color: white;
+  width: 30%;
+  font-size: 1vh;
+  box-sizing: border-box;
+}
+
 
 .description_text {
   font-family: ourFont, sans-serif;
@@ -506,26 +509,18 @@ img {
   top: 0;
 }
 
-#box_population {
-  flex-basis: 33%;
-  margin-right: 5vh;
-}
-
-#box_production {
-  flex-basis: 33%;
-}
-
  .docsChart {
   font-size: 2.5vh;
   fill: #5B8BE3;
   font-family: ourFont, sans-serif;
 }
 
+
 .docsChart2 {
  font-size: 2.5vh;
  fill: #5B8BE3;
  font-family: ourFont, sans-serif;
-}
+  
 
 .box_unmet {
   flex-basis: 6vw;
@@ -562,4 +557,38 @@ img {
 
 .percentage {
   width: 10vw;
+}
+
+#limit {
+    stroke: #FED966;
+    stroke-width: 3;
+    stroke-dasharray: 3 6;
+}
+
+#story {
+  fill: blue;
+}
+
+.img-story {
+  margin-top: 1vh;
+  width: 108%;
+  margin-left: -1.1vw;
+  margin-bottom: 1vh;
+}
+.bar {
+  fill: #80cbc4;
+}
+
+.divergence {
+  font-size: 1.5em;
+  fill: #fff;
+}
+
+.value {
+  font-size: 1.5em;
+  fill: #fff;
+}
+
+.labelGraph {
+  margin-top: -5vh;
 }

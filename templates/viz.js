@@ -12,9 +12,22 @@ let dataset_2D = 'dataset/pixel_energy.csv';
 let current_viz = "Food Energy";
 let colorScheme = d3.schemeReds[6];
 let unmet_need_dataset = 'dataset/unmet_need_energy.csv'
-
 let global_unmet = load(unmet_need_dataset);
 let current_unmet_data = {};
+
+// We initialize all elements that will be changing their innerHTML
+let title_bar = document.getElementById("bar_title");
+let countryName = document.getElementById("box-3-header-2").firstElementChild;
+let title = document.getElementById("box-3-header").firstElementChild;
+let contribution_text = document.getElementsByClassName("small-title")[0];
+let unmet_text = document.getElementsByClassName("title-unmet")[0];
+
+// We instantiate the bar chart object for the 2D section
+let BarGraphObject = new BarGraph();
+
+// We initialize it at SSP1
+BarGraphObject.updateBarGraph('dataset/ssp1_regions.csv');
+
 function initialize_unmet() {
     d3.csv(unmet_need_dataset, function(error, data) {
       data.forEach(function(d) {
@@ -90,8 +103,6 @@ ready(g_map2, path_new);
 
 
 
-let countryName = document.getElementById("box-3-header-2").firstElementChild;
-let title = document.getElementById("box-3-header").firstElementChild;
 let current_nature_contribution = 33;
 let current_unmet_need = 57;
 
@@ -114,6 +125,102 @@ let formatToData = function(d) {
 
 let current_SSP = "SSP1";
 let current_year = "1945"
+// <<<<<<< story-telling-2d
+// let slider = d3.sliderHorizontal()
+//   .min(1850)
+//   .max(2150)
+//   .step(50)
+//   .default("2000")
+//   .width(400)
+//   .tickValues(years)
+//   .tickFormat(formatToData)
+//   .on("onchange", val => {
+//     // Here, the value we check for is still the original one, not the formatted one
+//     if (val == 1850) {
+//       title.innerHTML = "Pollination Contribution to Nutrion (" + current_viz + ") in 1850";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1850?";
+//       current_year = "1850";
+//       removeSSPs();
+//       select_contribution_energy("1850");
+//       update_percentages("1850");
+
+//       //update_2D("1850");
+//     }
+
+//     if (val == 1900) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1900";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1900?";
+//       current_year = "1900";
+//       removeSSPs();
+//       select_contribution_energy("1900");
+//       update_percentages("1900");
+//       //update_2D("1900");
+//     }
+
+//     if (val == 1950) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1910";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1910?";
+//       current_year = "1910";
+//       removeSSPs();
+//       select_contribution_energy("1910");
+//       update_percentages("1910");
+//       //update_2D("1910");
+//     }
+
+//     if (val == 2000) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1945";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1945?";
+//       current_year = "1945";
+//       removeSSPs();
+//       select_contribution_energy("1945");
+//       update_percentages("1945");
+//       //update_2D("1945");
+//     }
+
+//     if (val == 2050) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1980";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1980?";
+//       current_year = "1980";
+//       removeSSPs();
+//       select_contribution_energy("1980");
+//       update_percentages("1980");
+//       //update_2D("1980");
+//     }
+
+//     if (val == 2100) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2015";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 2015?";
+//       current_year = "2015";
+//       removeSSPs();
+//       select_contribution_energy("2015");
+//       update_percentages("2015");
+//     }
+
+//     if (val == 2150) {
+//       showSSPs();
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2050 - " + current_SSP;
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in " + current_SSP + "?";
+//       select_contribution_energy(current_SSP);
+//       update_percentages(current_SSP);
+//       current_year = current_SSP;
+//       //update_2D(current_SSP);
+//     }
+//  });
+
+// let group = d3.select(".box.box-2").append("svg")
+//   .attr("width", 900)
+//   .attr("height", 70)
+//   .append("g")
+//   .attr("transform", "translate(" + 300 + "," + 12 + ")")
+//   .call(slider);
+
 createSlider();
 
 // Pollination contribution percentage starts here
@@ -255,8 +362,6 @@ function load(dataset) {
   return result;
 }
 
-let contribution_text = document.getElementsByClassName("small-title")[0];
-let unmet_text = document.getElementsByClassName("title-unmet")[0];
 let colorScale_energy = d3.scaleOrdinal()
         .domain(["contribution", "unmet"])
         .range(["#d73027", "#4fb1fe"]);
@@ -370,6 +475,8 @@ function projection3D() {
   checked3D = document.getElementById("checked3D").value;
   checked2D = document.getElementById("checked2D").value;
   if(checked3D === 'true') {
+    document.getElementsByClassName('box box-3')[0].style.display = "flex";
+    document.getElementsByClassName('box box-3')[1].style.display = "none";
     svg.selectAll('.plot-point').remove();
     changeProjection(false);
     checked3D = "true";
@@ -383,7 +490,7 @@ function projection3D() {
     document.getElementById("checked3D").disabled = true;
     document.getElementById("checked2D").disabled = false;
     d3.select(".map-slider").html("");
-    runSlider("1945", false)
+    ("1945", false)
     createSlider();
   }
 }
@@ -392,6 +499,8 @@ function projection2D() {
   checked2D = document.getElementById("checked2D").value;
   checked3D = document.getElementById("checked3D").value;
   if(checked2D === 'false') {
+    document.getElementsByClassName('box box-3')[0].style.display = "none";
+    document.getElementsByClassName('box box-3')[1].style.display = "flex";
     changeProjection(true);
     checked2D = "true";
     checked3D = "false";
@@ -600,7 +709,6 @@ function showData(the_g, coordinates) {
         })
         .attr("r", "1px")
         .attr("fill", function (d) {
-          // console.log(d);
           color = d[2] || 0 ;
           return colorScale(color);
         })
@@ -620,7 +728,6 @@ function showData(the_g, coordinates) {
             .attr("width", "3")
             .attr("height", "3")
             .attr("fill", function (d) {
-              // console.log(d);
               color = d[2] || 0 ;
               return colorScale(color);
             })
@@ -693,7 +800,6 @@ function select_contribution_energy(period) {
         // TODO: Make the year not hard coded
           let coordstoplot = initialize_2D(period, data_2D);
           g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
-            // console.log(d);
             color = d[2] || 0 ;
             return colorScale(color);
           });
@@ -716,7 +822,6 @@ function initialize_2D(period, data_) {
   }
   return coordstoplot;
 }
-
 
 function change_percentage_animation(contribution, unmet) {
   let contrib_interpolation = d3.interpolate(progress, contribution);
@@ -787,6 +892,21 @@ function showSSPs() {
 function removeSSPs() {
   document.getElementsByClassName('switch_3_ways')[0].style.display = "none";
   document.getElementsByClassName('nav-bar-hidden')[0].style.display = "none";
+}
+
+
+let numbers = [1,2,3,4,5,6,7,8,9];
+let formatToYears = function(d) {
+  // TO BE OPTIMIZED WITH A DICTIONARY
+    if (d == 1) return 1850;
+    if (d == 2) return 1900;
+    if (d == 3) return 1910;
+    if (d == 4) return 1945;
+    if (d == 5) return 1980;
+    if (d == 6) return 2015;
+    if (d == 7) return "SSP1";
+    if (d == 8) return "SSP3";
+    if (d == 9) return "SSP5";
 }
 
 function createSlider() {
@@ -930,20 +1050,6 @@ let svg_plot = d3.select(".graph")
               .text(d.key);
 
       });
-
-  let numbers = [1,2,3,4,5,6,7,8,9];
-  let formatToYears = function(d) {
-    // TO BE OPTIMIZED WITH A DICTIONARY
-      if (d == 1) return 1850;
-      if (d == 2) return 1900;
-      if (d == 3) return 1910;
-      if (d == 4) return 1945;
-      if (d == 5) return 1980;
-      if (d == 6) return 2015;
-      if (d == 7) return "SSP1";
-      if (d == 8) return "SSP3";
-      if (d == 9) return "SSP5";
-  }
 
   // Add the X Axis
   svg_plot.append("g")
