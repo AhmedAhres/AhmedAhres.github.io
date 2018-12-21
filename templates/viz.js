@@ -29,9 +29,6 @@ let region_text = "Pollination Contribution to Food Energy";
 // We instantiate the bar chart object for the 2D section
 let BarGraphObject = new BarGraph();
 
-// We initialize it at SSP1
-BarGraphObject.updateBarGraph('dataset/ssp1_impacted.csv');
-
 initialize_unmet();
 
 let checked3D = "true";
@@ -226,7 +223,6 @@ function update_percentages(period) {
 
 function make2015staticMap() {
   if(firstTime){
-    console.log('called static');
     let coordstoplot = initialize_2D("2015", data_2D);
     showData(g_map2, coordstoplot);
     firstTime = false ;
@@ -411,6 +407,8 @@ function projection2D() {
   checked2D = document.getElementById("checked2D").value;
   checked3D = document.getElementById("checked3D").value;
   if(checked2D === 'false') {
+    BarGraphObject.updateBarGraph('dataset/ssp1_impacted.csv');
+    title_map.innerHTML = "Pollination Contribution to " +  current_viz + " in 2015 (Top) vs SSP1 (Bottom)";
     changeProjection(true);
     document.getElementsByClassName('box box-3')[0].style.display = "none";
     document.getElementsByClassName('box box-3')[1].style.display = "flex";
@@ -429,7 +427,6 @@ function projection2D() {
     .attr("height", $(".map1").height() * 1.5)
     .attr("transform", "translate(0, -180) scale(0.8)");
 
-    console.log(firstTime);
     make2015staticMap();
 
     document.getElementById("checked2D").disabled = true;
@@ -621,7 +618,6 @@ function showData(the_g, coordinates) {
         })
         .attr("r", "1px")
         .attr("fill", function (d) {
-          // console.log(d);
           color = d[2] || 0 ;
           return colorScale(color);
         })
@@ -641,7 +637,6 @@ function showData(the_g, coordinates) {
             .attr("width", "3")
             .attr("height", "3")
             .attr("fill", function (d) {
-              // console.log(d);
               color = d[2] || 0 ;
               return colorScale(color);
             })
@@ -705,7 +700,6 @@ function select_contribution_energy(period) {
           // Update the regions data with the slider when zoomed in
           let coordstoplot = initialize_2D(period, country_data_2D);
           g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
-            // console.log(d);
             color = d[2] || 0 ;
             return colorScale(color);
           });
@@ -721,13 +715,11 @@ function select_contribution_energy(period) {
         // TODO: Make the year not hard coded
           let coordstoplot = initialize_2D(period, data_2D);
           g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
-            // console.log(d);
             color = d[2] || 0 ;
             return colorScale(color);
           });
           let coordstoplot_static = initialize_2D('2015', data_2D);
           g_map2.selectAll(".plot-point").data(coordstoplot_static).attr("fill", function (d) {
-            // console.log(d);
             color = d[2] || 0 ;
             return colorScale(color);
           });
