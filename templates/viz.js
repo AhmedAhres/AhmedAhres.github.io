@@ -691,6 +691,13 @@ function select_contribution_energy(period) {
               } else {
               }
           });
+          // Update the regions data with the slider when zoomed in
+          let coordstoplot = initialize_2D(period, data_2D);
+          g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
+            // console.log(d);
+            color = d[2] || 0 ;
+            return colorScale(color);
+          });
     });
   }
   if(checked2D == "true") {
