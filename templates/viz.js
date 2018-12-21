@@ -23,6 +23,12 @@ function initialize_unmet() {
     });
 }
 
+// // We instantiate the bar chart object for the 2D section
+// let BarGraphObject = new BarGraph();
+//
+// // We initialize it at SSP1
+// BarGraphObject.updateBarGraph('dataset/ssp1_regions.csv');
+
 initialize_unmet();
 
 let checked3D = "true";
