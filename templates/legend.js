@@ -75,7 +75,7 @@ function updateLegend(colorScale) {
 function updateLegendPosition(twoLegends) {
   if (twoLegends) {
     makeChangeLegend(changeColorScheme);
-    svg_change_legend.attr("transform", "translate(0, -450)");
+    svg_change_legend.attr("transform", "translate(0, -430)");
     svg_legend.attr("transform", "translate(0, 250)");
     svg_change_legend.attr("width", 100).attr("height", 170);
     document.getElementsByClassName('info-button')[0].style.top = "15%";

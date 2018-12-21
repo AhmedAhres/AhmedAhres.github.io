@@ -124,7 +124,6 @@ function load(dataset) {
 }
 
 let contribution_text = document.getElementsByClassName("small-title")[0];
-let unmet_text = document.getElementsByClassName("title-unmet")[0];
 let colorScale_energy = d3.scaleOrdinal()
   .domain(["contribution", "unmet"])
   .range(["#d73027", "#4fb1fe"]);
@@ -146,7 +145,6 @@ function updateData(data_type) {
       title.innerHTML = "Pollination Contribution to Nutrition (Vitamin A) in " + current_year;
       contribution_text.innerHTML = "What is the percentage of pollination contribution to " +
         current_viz + " in " + current_year + "?";
-      unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?";
       colorScheme = d3.schemeGreens[6];
       title_map.innerHTML = "Pollination Contribution to " + current_viz + " in 2015 (Bottom) vs " + current_SSP + " (Top)";
       dataset = 'dataset/country_va.csv';
@@ -163,7 +161,6 @@ function updateData(data_type) {
       title.innerHTML = "Pollination Contribution to Nutrition (Food Energy) in " + current_year;
       contribution_text.innerHTML = "What is the percentage of pollination contribution to " +
         current_viz + " in " + current_year + "?";
-      unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?";
       title_map.innerHTML = "Pollination Contribution to " + current_viz + " in 2015 (Bottom) vs " + current_SSP + " (Top)";
       colorScheme = d3.schemeReds[6];
       dataset = 'dataset/country_en.csv';
@@ -179,7 +176,6 @@ function updateData(data_type) {
       title.innerHTML = "Pollination Contribution to Nutrition (Folate) in " + current_year;
       contribution_text.innerHTML = "What is the percentage of pollination contribution to " +
         current_viz + " in " + current_year + "?";
-      unmet_text.innerHTML = "What is the percentage of people who's need in " + current_viz + " is not met?"
       title_map.innerHTML = "Pollination Contribution to " + current_viz + " in 2015 (Bottom) vs " + current_SSP + " (Top)";
       colorScheme = d3.schemePurples[6];
       dataset = 'dataset/country_fo.csv';
@@ -588,7 +584,6 @@ function reset() {
 function stopped() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
 }
-
 
 function initialize_2D(period, data_) {
   let coordstoplot = [];

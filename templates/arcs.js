@@ -11,8 +11,8 @@ let width_circle = 20,
 // Initialize the arcs
 let arc = d3.arc()
   .startAngle(0)
-  .innerRadius(55)
-  .outerRadius(62);
+  .innerRadius(52)
+  .outerRadius(59);
 
 // Pollination contribution to food energy arc initialization
 let svg_arc1 = d3.select(".docsChart").append("svg")
@@ -21,7 +21,7 @@ let svg_arc1 = d3.select(".docsChart").append("svg")
   .append("g")
   .attr(
     "transform",
-    "translate(" + width_circle * 4 + "," + height_circle * 3.5 + ")");
+    "translate(" + width_circle * 3.5  + "," + height_circle * 3.5 + ")");
 // Setting the fill color and the arc angle for the type of data for arc1
 svg_arc1.append("path")
   .attr("fill", "#E6E7E8")
@@ -39,7 +39,7 @@ let svg_arc2 = d3.select(".docsChart2").append("svg")
   .append("g")
   .attr(
     "transform",
-    "translate(" + width_circle * 4.4 + "," + height_circle * 3.5 + ")"
+    "translate(" + width_circle * 4.2 + "," + height_circle * 3.5 + ")"
   );
 // Setting the fill color and the arc angle for the type of data for arc2
 svg_arc2.append("path")
