@@ -54,7 +54,7 @@ changeProjection(false);
 let tip = d3.tip()
   .attr('class', 'd3-tip')
 
-  .offset([-10, 0])
+  .offset([50, 80])
   // Here d -> is basically the data which is given to the circle -> right now it is just lat long
   .html(function(d) {
     return "<strong>" + region_text + ": <span>" + d[2] + "</span></strong>" + "%";
