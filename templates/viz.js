@@ -27,7 +27,7 @@ function initialize_unmet() {
 let BarGraphObject = new BarGraph();
 
 // We initialize it at SSP1
-BarGraphObject.updateBarGraph('dataset/ssp1_regions.csv');
+BarGraphObject.updateBarGraph('dataset/ssp1_impacted.csv');
 
 initialize_unmet();
 
@@ -841,10 +841,19 @@ function createSlider() {
         if (val == 2100) runSlider("2015", false);
         if (val == 2150) runSlider("2050", true);
       } else {
-        if (val == 50) runSlider("SSP1", false);
-        if (val == 100) runSlider("SSP3", false);
-        if (val == 150) runSlider("SSP5", false);
+        if (val == 50) {
+          runSlider("SSP1", false);
+          BarGraphObject.updateBarGraph('dataset/ssp1_impacted.csv');
+          }
+        if (val == 100) {
+          runSlider("SSP3", false);
+          BarGraphObject.updateBarGraph('dataset/ssp3_impacted.csv');
+        }
+        if (val == 150) {
+          runSlider("SSP5", false);
+          BarGraphObject.updateBarGraph('dataset/ssp5_impacted.csv');
       }
+    }
    });
 
   let group = d3.select(".map-slider").append("svg")

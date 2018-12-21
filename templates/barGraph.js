@@ -30,6 +30,8 @@ class BarGraph {
 
   // Function to initialize the 2D graph
   initializeBarGraph() {
+    let svg_remove = d3.select(".graph2d");
+    svg_remove.selectAll("*").remove();
     // Initialize the x and y scale
     let yScale2D = d3.scaleLinear().range([height_plot, 0]).domain([0,10]);
     let xScale2D = d3.scaleLinear().range([0, width_plot]).domain([0,5]);
