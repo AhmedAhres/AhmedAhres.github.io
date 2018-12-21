@@ -80,7 +80,7 @@ class BarGraph {
 
           const y = yScale2D(actual.value);
 
-          line = chart.append('line')
+          let line = chart.append('line')
             .attr('id', 'limit')
             .attr('x1', 0)
             .attr('y1', y)

@@ -377,6 +377,8 @@ function projection3D() {
   checked2D = document.getElementById("checked2D").value;
   if(checked3D === 'true') {
     svg.selectAll('.plot-point').remove();
+    document.getElementsByClassName('box box-3')[0].style.display = "flex";
+    document.getElementsByClassName('box box-3')[1].style.display = "none";
     changeProjection(false);
     checked3D = "true";
     check2D = "false";
@@ -399,6 +401,8 @@ function projection2D() {
   checked3D = document.getElementById("checked3D").value;
   if(checked2D === 'false') {
     changeProjection(true);
+    document.getElementsByClassName('box box-3')[0].style.display = "none";
+    document.getElementsByClassName('box box-3')[1].style.display = "flex";
     checked2D = "true";
     checked3D = "false";
     let coordstoplot = initialize_2D(current_year, data_2D);
