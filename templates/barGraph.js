@@ -9,24 +9,24 @@ let data_regions_array = {};
 
 // Function to load the dataset
 function load2D(dataset) {
-    let result = {};
-    d3.csv(dataset, function(error, data) {
-      data.forEach(function(d) {
-        result[d.continent] = d;
-        });
-      });
+  let result = {};
+  d3.csv(dataset, function(error, data) {
+    data.forEach(function(d) {
+      result[d.continent] = d;
+    });
+  });
   return result;
 }
 
 // Used for formatting the X-axis of the bar graph
 let numbersToContinents = function(d) {
-    if (d == 0) return "Africa";
-    if (d == 1) return "Eurasia";
-    if (d == 2) return "N. America";
-    if (d == 3) return "N. Asia";
-    if (d == 4) return "Oceania";
-    if (d == 5) return "S. America";
-    if (d == 6) return "S. Asia";
+  if (d == 0) return "Africa";
+  if (d == 1) return "Eurasia";
+  if (d == 2) return "N. America";
+  if (d == 3) return "N. Asia";
+  if (d == 4) return "Oceania";
+  if (d == 5) return "S. America";
+  if (d == 6) return "S. Asia";
 }
 
 class BarGraph {
@@ -36,22 +36,22 @@ class BarGraph {
     let svg_remove = d3.select(".graph2d");
     svg_remove.selectAll("*").remove();
     // Initialize the x and y scale
-    let yScale2D = d3.scaleLinear().range([height_plot, 0]).domain([0,3]);
-    let xScale2D = d3.scaleLinear().range([0, width_plot + 40]).domain([-1,7]);
+    let yScale2D = d3.scaleLinear().range([height_plot, 0]).domain([0, 3]);
+    let xScale2D = d3.scaleLinear().range([0, width_plot + 40]).domain([-1, 7]);
 
     // Select the SVG for the bar graph
     let svg2D = d3.select('.graph2d');
     let chart = svg2D.append('g')
-    .append("svg")
-        .attr("width", width_plot + margin.left + margin.right)
-        .attr("height", height_plot + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
+      .append("svg")
+      .attr("width", width_plot + margin.left + margin.right)
+      .attr("height", height_plot + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
     // Put the y scale (people in millions)
     chart.append('g')
-    .call(d3.axisLeft(yScale2D));
+      .call(d3.axisLeft(yScale2D));
 
     // Put the x scale (continents)
     // We use tickformat such that continents are evenly separated
@@ -61,67 +61,67 @@ class BarGraph {
 
     // We add for each data point a rectangle
     const rectangles = chart.selectAll()
-        .data(data_regions_array)
-        .enter()
-        .append('g');
+      .data(data_regions_array)
+      .enter()
+      .append('g');
 
     rectangles
-    .append('rect')
-    .attr('class', 'bar')
-    .attr('x', (d) => xScale2D(d.continent) - 18)
-    .attr('y', (d) => yScale2D(d.log_value))
-    .attr('height', (d) => height_plot - yScale2D(d.log_value))
-    .attr('width', '42')
-    // We take care of the interaction
-    .on('mouseenter', function (actual, i) {
-          d3.selectAll('.divergence')
-            .attr('opacity', 0)
+      .append('rect')
+      .attr('class', 'bar')
+      .attr('x', (d) => xScale2D(d.continent) - 18)
+      .attr('y', (d) => yScale2D(d.log_value))
+      .attr('height', (d) => height_plot - yScale2D(d.log_value))
+      .attr('width', '42')
+      // We take care of the interaction
+      .on('mouseenter', function(actual, i) {
+        d3.selectAll('.divergence')
+          .attr('opacity', 0)
 
-          d3.select(this)
-            .transition()
-            .duration(300)
-            .attr('opacity', 0.6)
-            .attr('width', '44');
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr('opacity', 0.6)
+          .attr('width', '44');
 
-          const y = yScale2D(actual.log_value);
+        const y = yScale2D(actual.log_value);
 
-          let line = chart.append('line')
-            .attr('id', 'limit')
-            .attr('x1', 0)
-            .attr('y1', y)
-            .attr('x2', width_plot)
-            .attr('y2', y);
+        let line = chart.append('line')
+          .attr('id', 'limit')
+          .attr('x1', 0)
+          .attr('y1', y)
+          .attr('x2', width_plot)
+          .attr('y2', y);
 
-          rectangles.append('text')
-            .attr('class', 'divergence')
-            .attr('x', (a) => xScale2D(a.continent) + 4 / 2)
-            .attr('y', (a) => yScale2D(a.log_value) + 18)
-            .attr('fill', 'white')
-            .attr('text-anchor', 'middle')
-            .text((a, idx) => {
-              const divergence = (a.value - actual.value).toFixed(1)
+        rectangles.append('text')
+          .attr('class', 'divergence')
+          .attr('x', (a) => xScale2D(a.continent) + 4 / 2)
+          .attr('y', (a) => yScale2D(a.log_value) + 18)
+          .attr('fill', 'white')
+          .attr('text-anchor', 'middle')
+          .text((a, idx) => {
+            const divergence = (a.value - actual.value).toFixed(1)
 
-              let text = ''
-              if (divergence > 0) text += '+'
-              text += `${divergence}`
+            let text = ''
+            if (divergence > 0) text += '+'
+            text += `${divergence}`
 
-              return idx !== i ? text : '';
-            })
-        }).on('mouseleave', function () {
-          d3.selectAll('.value')
-            .attr('opacity', 1)
+            return idx !== i ? text : '';
+          })
+      }).on('mouseleave', function() {
+        d3.selectAll('.value')
+          .attr('opacity', 1)
 
-          d3.select(this)
-            .transition()
-            .duration(300)
-            .attr('opacity', 1)
-            .attr('width', '42')
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr('opacity', 1)
+          .attr('width', '42')
 
-          chart.selectAll('#limit').remove()
-          chart.selectAll('.divergence').remove()
+        chart.selectAll('#limit').remove()
+        chart.selectAll('.divergence').remove()
 
-          // We add the value in the middle of the rectangle
-          rectangles
+        // We add the value in the middle of the rectangle
+        rectangles
           .append('text')
           .attr('class', 'divergence')
           .attr('x', (a) => xScale2D(a.continent) + 4 / 2)
@@ -130,17 +130,17 @@ class BarGraph {
           .attr('text-anchor', 'middle')
           .text((a) => `${a.value}`)
 
-        });
+      });
 
-        // We add the value in the middle of the rectangle
-        rectangles
-        .append('text')
-        .attr('class', 'divergence')
-        .attr('x', (a) => xScale2D(a.continent) + 4 / 2)
-        .attr('y', (a) => yScale2D(a.log_value) + 18)
-        .attr('fill', 'white')
-        .attr('text-anchor', 'middle')
-        .text((a) => `${a.value}`)
+    // We add the value in the middle of the rectangle
+    rectangles
+      .append('text')
+      .attr('class', 'divergence')
+      .attr('x', (a) => xScale2D(a.continent) + 4 / 2)
+      .attr('y', (a) => yScale2D(a.log_value) + 18)
+      .attr('fill', 'white')
+      .attr('text-anchor', 'middle')
+      .text((a) => `${a.value}`)
   }
 
   // Method to update bar graph in 2D given the dataset

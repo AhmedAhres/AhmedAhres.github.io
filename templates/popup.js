@@ -8,13 +8,12 @@ let waypoint = new Waypoint({
 
 // For the popup window - controls the showing and hiding
 function PopUp(hideOrshow) {
-    if (hideOrshow == 'hide') {
-        document.getElementById('ac-wrapper').style.display = "none";
-    }
-    else if(localStorage.getItem("popupWasShown") == null) {
-        localStorage.setItem("popupWasShown",1);
-        document.getElementById('ac-wrapper').removeAttribute('style');
-    }
+  if (hideOrshow == 'hide') {
+    document.getElementById('ac-wrapper').style.display = "none";
+  } else if (localStorage.getItem("popupWasShown") == null) {
+    localStorage.setItem("popupWasShown", 1);
+    document.getElementById('ac-wrapper').removeAttribute('style');
+  }
 }
 
 // For hiding the popup window
