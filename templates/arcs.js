@@ -1,4 +1,6 @@
-// Pollination contribution percentage starts here
+// This class is for 3D
+
+// Initialize the variables which help us get to make arcs
 let width_circle = 20,
     height_circle = 20,
     twoPi = 2 * Math.PI,
@@ -6,46 +8,51 @@ let width_circle = 20,
     progress_unmet = 0,
     formatPercent = d3.format(".0%");
 
+// Initialize the arcs
 let arc = d3.arc()
     .startAngle(0)
     .innerRadius(55)
     .outerRadius(62);
 
-let svg1 = d3.select(".docsChart").append("svg")
+// Pollination contribution to food energy arc initialization
+let svg_arc1 = d3.select(".docsChart").append("svg")
     .attr("class", "percentage")
     .attr('preserveAspectRatio','xMinYMin')
     .append("g")
-    .attr("transform", "translate(" + width_circle * 4 + "," + height_circle * 3.5 + ")");
-
-svg1.append("path")
+    .attr(
+      "transform",
+      "translate(" + width_circle * 4 + "," + height_circle * 3.5 + ")");
+// Setting the fill color and the arc angle for the type of data for arc1
+svg_arc1.append("path")
     .attr("fill", "#E6E7E8")
     .attr("d", arc.endAngle(twoPi));
-
-let foreground = svg1.append("path")
+let foreground = svg_arc1.append("path")
     .attr("fill", "#00D2B6");
-
-let percentComplete = svg1.append("text")
+let percentComplete = svg_arc1.append("text")
     .attr("text-anchor", "middle")
     .attr("dy", "0.3em");
 
 // Unmet need percentage starts here
-let svg2 = d3.select(".docsChart2").append("svg")
+let svg_arc2 = d3.select(".docsChart2").append("svg")
     .attr("class", "percentage")
     .attr('preserveAspectRatio','xMinYMin')
     .append("g")
-    .attr("transform", "translate(" + width_circle * 4.4 + "," + height_circle * 3.5 + ")");
-
-svg2.append("path")
+    .attr(
+      "transform",
+      "translate(" + width_circle * 4.4 + "," + height_circle * 3.5 + ")"
+    );
+// Setting the fill color and the arc angle for the type of data for arc2
+svg_arc2.append("path")
       .attr("fill", "#E6E7E8")
       .attr("d", arc.endAngle(twoPi));
-
-let foreground2 = svg2.append("path")
+let foreground2 = svg_arc2.append("path")
       .attr("fill", "#00D2B6");
-
-let percentComplete2 = svg2.append("text")
+let percentComplete2 = svg_arc2.append("text")
       .attr("text-anchor", "middle")
       .attr("dy", "0.3em");
 
+// Update the percentages of the arcs in 3D Map depending upon the size and
+// type of the data
 function update_percentages(period) {
   d3.csv(dataset, function(error, data) {
     data.forEach(function(d) {
@@ -67,6 +74,9 @@ function update_percentages(period) {
   });
 }
 
+// Method for changing the percentage animation depending upon the type of data
+// Takes into account the percentage change and fill in the arc for that mapped
+// percentage.
 function change_percentage_animation(contribution, unmet) {
   let contrib_interpolation = d3.interpolate(progress, contribution);
   let unmet_interpolation = d3.interpolate(progress_unmet, unmet);
