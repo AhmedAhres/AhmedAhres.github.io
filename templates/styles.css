@@ -467,8 +467,6 @@ img {
   width: 7vh;
   height: 4vh;
   margin-bottom: 2vh;
-  padding: 0.2vw;
-  text-align: center;
 }
 
 .switch-proj {
@@ -480,12 +478,6 @@ img {
   display: flex;
 }
 
-.map-button {
-  padding: 0.4vw;
-  margin-left: 0.5vw;
-  text-align: center;
-}
-
 .info-button:hover {
   background-color: white;
 }
@@ -494,10 +486,8 @@ img {
   background-color: white;
 }
 
-.globe-button {
-    padding: 0.4vw;
+.map-button {
     margin-left: 0.5vw;
-    text-align: center;
 }
 
 .map-button:hover {

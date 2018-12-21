@@ -37,7 +37,7 @@ class BarGraph {
     svg_remove.selectAll("*").remove();
     // Initialize the x and y scale
     let yScale2D = d3.scaleLinear().range([height_plot, 0]).domain([0, 3]);
-    let xScale2D = d3.scaleLinear().range([0, width_plot + 40]).domain([-1, 7]);
+    let xScale2D = d3.scaleLinear().range([0, width_plot + 15]).domain([-1, 7]);
 
     // Select the SVG for the bar graph
     let svg2D = d3.select('.graph2d');
