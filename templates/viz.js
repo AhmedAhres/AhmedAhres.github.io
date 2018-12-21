@@ -6,6 +6,7 @@ let waypoint = new Waypoint({
 });
 
 // Current dataset depending on what we visualize
+let firstTime = true ;
 let dataset = 'dataset/country_energy.csv';
 let dataset_2D = 'dataset/pixel_energy.csv';
 let current_viz = "Food Energy";
@@ -40,23 +41,40 @@ initialize_unmet();
 let checked3D = "true";
 let checked2D = "false";
 
-var width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
+let width = $(".box.box-2").width(), height = $(".box.box-2").height(), active = d3.select(null);
 
-var previousCountryClicked = 'WLD';
-var path, projection, zoom = null;
-var inertia;
+let previousCountryClicked = 'WLD';
+let path, projection, zoom = null;
+let inertia;
 
-var svg = d3.select(".box.box-2").append("svg")
+let svg = d3.select(".map1").append("svg")
     .attr("width", width)
     .attr("height", height)
     .on("click", stopped, true);
-var g = svg.append('g');
+
+let svg_map2 = d3.select(".map2").append("svg")
+    .attr("width", 0)
+    .attr("height", 0)
+    .on("click", stopped, true);
+
+let g = svg.append('g');
+let g_map2 = svg_map2.append('g');
+
+let projection_new = d3.geoNaturalEarth().scale(d3.min([width / 2, height / 2])*0.45).translate([width / 2, height / 2]).precision(.1);
+let path_new = d3.geoPath().projection(projection_new);
+
+let map1 = document.getElementsByClassName('map1')[0];
+let map2 = document.getElementsByClassName('map2')[0];
+
+map1.setAttribute("style", "width: 100%; height: 94%;");
+map2.setAttribute("style", "width: 0; height: 0;");
 
 // Add projection to the viz
 changeProjection(false);
 
+
 // Adding tip for hover
-var tip = d3.tip()
+let tip = d3.tip()
   .attr('class', 'd3-tip')
 
 .offset([-10, 0])
@@ -68,141 +86,146 @@ var tip = d3.tip()
 svg.call(tip);
 
 //Data and color scale and legend
-var colorScale = d3.scaleThreshold()
+let colorScale = d3.scaleThreshold()
     .domain([20, 40, 60, 80, 99, 100])
     .range(colorScheme);
 // Getting the Legend and setting the color scale on the legend
-var svg_legend = d3.select(".box.box-1").append("svg");
+let svg_legend = d3.select(".box.box-1").append("svg");
 makeLegend(colorScale);
 
 
 loadGlobalData(dataset);
-var data_2D = load(dataset_2D);
+let data_2D = load(dataset_2D);
 
 // Calling the ready function to render everything even chloropleth
-ready();
+ready(g, path);
+ready(g_map2, path_new);
 
-// Lat - Long Coordinates for Nigeria - Example
-// Data is in Lat Long, but for coding the sequence is Long Lat
-var coordinates = {};
-coordinates['NGA'] = [[4.5, 13.5], [5.5, 13.5], [9.5, 9.5], [11.5, 8.5], [12.5,11.5]];
+
 
 let current_nature_contribution = 33;
 let current_unmet_need = 57;
 
 let years = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"];
+let sliderSSPs=['50','100','150']
 let actualData = ["1850", "1900", "1910", "1945", "1980", "2015", "2050"];
 
-var formatToData = function(d) {
+let formatToData = function(d) {
   // TO BE OPTIMIZED WITH A DICTIONARY
     if (d == 1850 || d == 1900) return d;
-    if (d == 1950) return 1910;
-    if (d == 2000) return 1945;
-    if (d == 2050) return 1980;
-    if (d == 2100) return 2015;
-    if (d == 2150) return 2050;
+    else if (d == 1950) return 1910;
+    else if (d == 2000) return 1945;
+    else if (d == 2050) return 1980;
+    else if (d == 2100) return 2015;
+    else if (d == 2150) return 2050;
+    else if (d == 50) return "SSP1";
+    else if (d == 100) return "SSP3";
+    else return "SSP5";
 }
 
 let current_SSP = "SSP1";
 let current_year = "1945"
-let slider = d3.sliderHorizontal()
-  .min(1850)
-  .max(2150)
-  .step(50)
-  .default("2000")
-  .width(400)
-  .tickValues(years)
-  .tickFormat(formatToData)
-  .on("onchange", val => {
-    // Here, the value we check for is still the original one, not the formatted one
-    if (val == 1850) {
-      title.innerHTML = "Pollination Contribution to Nutrion (" + current_viz + ") in 1850";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1850?";
-      current_year = "1850";
-      removeSSPs();
-      select_contribution_energy("1850");
-      update_percentages("1850");
+// <<<<<<< story-telling-2d
+// let slider = d3.sliderHorizontal()
+//   .min(1850)
+//   .max(2150)
+//   .step(50)
+//   .default("2000")
+//   .width(400)
+//   .tickValues(years)
+//   .tickFormat(formatToData)
+//   .on("onchange", val => {
+//     // Here, the value we check for is still the original one, not the formatted one
+//     if (val == 1850) {
+//       title.innerHTML = "Pollination Contribution to Nutrion (" + current_viz + ") in 1850";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1850?";
+//       current_year = "1850";
+//       removeSSPs();
+//       select_contribution_energy("1850");
+//       update_percentages("1850");
 
-      //update_2D("1850");
-    }
+//       //update_2D("1850");
+//     }
 
-    if (val == 1900) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1900";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1900?";
-      current_year = "1900";
-      removeSSPs();
-      select_contribution_energy("1900");
-      update_percentages("1900");
-      //update_2D("1900");
-    }
+//     if (val == 1900) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1900";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1900?";
+//       current_year = "1900";
+//       removeSSPs();
+//       select_contribution_energy("1900");
+//       update_percentages("1900");
+//       //update_2D("1900");
+//     }
 
-    if (val == 1950) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1910";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1910?";
-      current_year = "1910";
-      removeSSPs();
-      select_contribution_energy("1910");
-      update_percentages("1910");
-      //update_2D("1910");
-    }
+//     if (val == 1950) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1910";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1910?";
+//       current_year = "1910";
+//       removeSSPs();
+//       select_contribution_energy("1910");
+//       update_percentages("1910");
+//       //update_2D("1910");
+//     }
 
-    if (val == 2000) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1945";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1945?";
-      current_year = "1945";
-      removeSSPs();
-      select_contribution_energy("1945");
-      update_percentages("1945");
-      //update_2D("1945");
-    }
+//     if (val == 2000) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1945";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1945?";
+//       current_year = "1945";
+//       removeSSPs();
+//       select_contribution_energy("1945");
+//       update_percentages("1945");
+//       //update_2D("1945");
+//     }
 
-    if (val == 2050) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1980";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 1980?";
-      current_year = "1980";
-      removeSSPs();
-      select_contribution_energy("1980");
-      update_percentages("1980");
-      //update_2D("1980");
-    }
+//     if (val == 2050) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 1980";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 1980?";
+//       current_year = "1980";
+//       removeSSPs();
+//       select_contribution_energy("1980");
+//       update_percentages("1980");
+//       //update_2D("1980");
+//     }
 
-    if (val == 2100) {
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2015";
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in 2015?";
-      current_year = "2015";
-      removeSSPs();
-      select_contribution_energy("2015");
-      update_percentages("2015");
-    }
+//     if (val == 2100) {
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2015";
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in 2015?";
+//       current_year = "2015";
+//       removeSSPs();
+//       select_contribution_energy("2015");
+//       update_percentages("2015");
+//     }
 
-    if (val == 2150) {
-      showSSPs();
-      title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2050 - " + current_SSP;
-      contribution_text.innerHTML = "What is the percentage of pollination contribution to "
-      + current_viz  + " in " + current_SSP + "?";
-      select_contribution_energy(current_SSP);
-      update_percentages(current_SSP);
-      current_year = current_SSP;
-      //update_2D(current_SSP);
-    }
- });
+//     if (val == 2150) {
+//       showSSPs();
+//       title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2050 - " + current_SSP;
+//       contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+//       + current_viz  + " in " + current_SSP + "?";
+//       select_contribution_energy(current_SSP);
+//       update_percentages(current_SSP);
+//       current_year = current_SSP;
+//       //update_2D(current_SSP);
+//     }
+//  });
 
-let group = d3.select(".box.box-2").append("svg")
-  .attr("width", 900)
-  .attr("height", 70)
-  .append("g")
-  .attr("transform", "translate(" + 300 + "," + 12 + ")")
-  .call(slider);
+// let group = d3.select(".box.box-2").append("svg")
+//   .attr("width", 900)
+//   .attr("height", 70)
+//   .append("g")
+//   .attr("transform", "translate(" + 300 + "," + 12 + ")")
+//   .call(slider);
+
+createSlider();
 
 // Pollination contribution percentage starts here
-let width_circle = 65,
-    height_circle = 65,
+let width_circle = 20,
+    height_circle = 20,
     twoPi = 2 * Math.PI,
     progress = 0,
     progress_unmet = 0,
@@ -210,12 +233,14 @@ let width_circle = 65,
 
 let arc = d3.arc()
     .startAngle(0)
-    .innerRadius(58)
-    .outerRadius(66);
+    .innerRadius(55)
+    .outerRadius(62);
 
 let svg1 = d3.select(".docsChart").append("svg")
+    .attr("class", "percentage")
+    .attr('preserveAspectRatio','xMinYMin')
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle * 1.2 + ")");
+    .attr("transform", "translate(" + width_circle * 4 + "," + height_circle * 3.5 + ")");
 
 svg1.append("path")
     .attr("fill", "#E6E7E8")
@@ -230,8 +255,10 @@ let percentComplete = svg1.append("text")
 
 // Unmet need percentage starts here
 let svg2 = d3.select(".docsChart2").append("svg")
+    .attr("class", "percentage")
+    .attr('preserveAspectRatio','xMinYMin')
     .append("g")
-    .attr("transform", "translate(" + width_circle * 1.6 + "," + height_circle * 1.3 + ")");
+    .attr("transform", "translate(" + width_circle * 4.4 + "," + height_circle * 3.5 + ")");
 
 svg2.append("path")
       .attr("fill", "#E6E7E8")
@@ -294,6 +321,15 @@ function update_percentages(period) {
     )}
   });
   });
+}
+
+function make2015staticMap() {
+  if(firstTime){
+    console.log('called static');
+    let coordstoplot = initialize_2D("2015", data_2D);
+    showData(g_map2, coordstoplot);
+    firstTime = false ;
+  }
 }
 
 function hideNow(e) {
@@ -411,7 +447,7 @@ function accessData() {
 
 function makeLegend(colorScale) {
   // Getting the Legend and setting the color scale on the legend
-  var g_legend = svg_legend.append("g")
+  let g_legend = svg_legend.append("g")
       .attr("class", "legendThreshold")
       .attr("transform", "translate(0,20)");
 
@@ -421,8 +457,8 @@ function makeLegend(colorScale) {
       .attr("y", -4)
       .text("% contrib.");
 
-  var labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
-  var legend = d3.legendColor()
+  let labels = ['1-20', '21-40', '41-60', '61-80', '81-99', '100'];
+  let legend = d3.legendColor()
       .labels(function (d) { return labels[d.i]; })
       .shapePadding(4)
       .scale(colorScale);
@@ -445,6 +481,17 @@ function projection3D() {
     changeProjection(false);
     checked3D = "true";
     check2D = "false";
+
+    map2.setAttribute("style", "width: 0; height: 0;");
+    map1.setAttribute("style", "width: 100%; height: 94%;");
+    svg.attr("transform", "translate(0, 0)");
+    svg_map2.attr("width", 0).attr("height", 0);
+
+    document.getElementById("checked3D").disabled = true;
+    document.getElementById("checked2D").disabled = false;
+    d3.select(".map-slider").html("");
+    ("1945", false)
+    createSlider();
   }
 }
 
@@ -458,7 +505,28 @@ function projection2D() {
     checked2D = "true";
     checked3D = "false";
     let coordstoplot = initialize_2D(current_year, data_2D);
-    showData(coordstoplot);
+
+    // Change the size of the maps
+    svg.attr("width", $(".map1").width())
+    .attr("height", $(".map1").height())
+    .attr("transform", "translate(0, -200) scale(0.8)");
+    map1.setAttribute("style", "width: 100%; height: 47%;");
+
+    map2.setAttribute("style", "width: 100%; height: 47%;");
+    svg_map2.attr("width", $(".map1").width())
+    .attr("height", $(".map1").height() * 1.5)
+    .attr("transform", "translate(0, -180) scale(0.8)");
+
+    console.log(firstTime);
+    make2015staticMap();
+
+    document.getElementById("checked2D").disabled = true;
+    document.getElementById("checked3D").disabled = false;
+    d3.select(".map-slider").html("");
+    runSlider("SSP1", false)
+    createSlider();
+    // Plot points on the map
+    showData(g, coordstoplot);
   }
 }
 
@@ -483,6 +551,7 @@ function changeProjection(sliderChecked) {
 
       // Make the map black
       g.selectAll('path').attr('fill', '#D3D3D3').on("click", null);
+      g_map2.selectAll('path').attr('fill', '#D3D3D3').on("click", null);
   } else {
     projection = d3.geoOrthographic()
       .scale(planet_radius*0.844)
@@ -511,11 +580,11 @@ function changeProjection(sliderChecked) {
   svg.selectAll('path').transition().duration(500).attr('d', path);
 }
 
-function ready() {
+function ready(g, path) {
   d3.json("world/countries.json", function(error, data) {
     if (error) throw error;
 
-    var features = topojson.feature(data, data.objects.units).features;
+    let features = topojson.feature(data, data.objects.units).features;
     g.selectAll("path")
       .data(features)
       .enter().append("path")
@@ -560,7 +629,7 @@ function clicked(d) {
   // For centering the globe to that particular country
   geo_centroid = d3.geoCentroid(active_info.__data__);
 
-  var bounds = path.bounds(d),
+  let bounds = path.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
       dy = bounds[1][1] - bounds[0][1],
       x = (bounds[0][0] + bounds[1][0]) / 2,
@@ -577,7 +646,7 @@ function clicked(d) {
   svg.transition()
       .duration(750)
       .tween('rotate', function() {
-        var r = d3.interpolate(projection.rotate(), [-geo_centroid[0], -geo_centroid[1]]);
+        let r = d3.interpolate(projection.rotate(), [-geo_centroid[0], -geo_centroid[1]]);
         return function(t) {
           projection.rotate(r(t));
           svg.selectAll("path").attr("d", path);
@@ -609,7 +678,7 @@ function clicked(d) {
 
     // The regions should appear after we zoom in the country
     setTimeout(function() {
-        showData(coordstoplot);
+        showData(g, coordstoplot);
     }, 751) // Should be more than 750 -> more than duration
   } else {
     if(previousCountryClicked !== null) {
@@ -624,11 +693,11 @@ function clicked(d) {
   updateGraph(previousCountryClicked);
 }
 // plot points on the map
-function showData(coordinates) {
+function showData(the_g, coordinates) {
     // Add circles to the country which has been selected
     // Removing part is within
     if(checked3D == 'true') {
-    g.selectAll(".plot-point")
+    the_g.selectAll(".plot-point")
         .data(coordinates).enter()
         .append("circle")
         .classed('plot-point', true)
@@ -646,7 +715,7 @@ function showData(coordinates) {
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);
       } else {
-        g.selectAll(".plot-point")
+        the_g.selectAll(".plot-point")
             .data(coordinates).enter()
             .append("rect")
             .classed('plot-point', true)
@@ -730,12 +799,16 @@ function select_contribution_energy(period) {
       promise.then(function(result) {
         // TODO: Make the year not hard coded
           let coordstoplot = initialize_2D(period, data_2D);
-          // svg.selectAll('.plot-point').remove();
-          // showData(coordstoplot);
           g.selectAll(".plot-point").data(coordstoplot).attr("fill", function (d) {
             color = d[2] || 0 ;
             return colorScale(color);
-          })
+          });
+          let coordstoplot_static = initialize_2D('2015', data_2D);
+          g_map2.selectAll(".plot-point").data(coordstoplot_static).attr("fill", function (d) {
+            // console.log(d);
+            color = d[2] || 0 ;
+            return colorScale(color);
+          });
             });
       });
 
@@ -744,7 +817,7 @@ function select_contribution_energy(period) {
 
 function initialize_2D(period, data_) {
   let coordstoplot = [];
-  for (var key in data_) {
+  for (let key in data_) {
     coordstoplot.push([data_[key]['lat'], data_[key]['long'], data_[key][period]]);
   }
   return coordstoplot;
@@ -821,6 +894,7 @@ function removeSSPs() {
   document.getElementsByClassName('nav-bar-hidden')[0].style.display = "none";
 }
 
+
 let numbers = [1,2,3,4,5,6,7,8,9];
 let formatToYears = function(d) {
   // TO BE OPTIMIZED WITH A DICTIONARY
@@ -835,10 +909,80 @@ let formatToYears = function(d) {
     if (d == 9) return "SSP5";
 }
 
+function createSlider() {
+  let min_year, max_year, width, default_, tickvalues;
+  if(checked2D == "false") {
+    min_year = 1850;
+    max_year = 2150;
+    width = 400;
+    default_ =  "2000";
+    tickvalues = years;
+
+  } else {
+    min_year = 50;
+    max_year = 150;
+    width = 400;
+    default_ = "50";
+    tickvalues = sliderSSPs;
+  }
+  let slider = d3.sliderHorizontal()
+    .min(min_year)
+    .max(max_year)
+    .step(50)
+    .default(default_)
+    .width(width)
+    .tickValues(tickvalues)
+    .tickFormat(formatToData)
+    .on("onchange", val => {
+      if(checked3D == "true") {
+        // Here, the value we check for is still the original one, not the formatted one
+        if (val == 1850) runSlider("1850", false);
+        if (val == 1900) runSlider("1900", false);
+        if (val == 1950) runSlider("1910", false);
+        if (val == 2000) runSlider("1945", false);
+        if (val == 2050) runSlider("1980", false);
+        if (val == 2100) runSlider("2015", false);
+        if (val == 2150) runSlider("2050", true);
+      } else {
+        if (val == 50) runSlider("SSP1", false);
+        if (val == 100) runSlider("SSP3", false);
+        if (val == 150) runSlider("SSP5", false);
+      }
+   });
+
+  let group = d3.select(".map-slider").append("svg")
+    .attr("width", 900)
+    .attr("height", 70)
+    .append("g")
+    .attr("transform", "translate(" + 200 + "," + 12 + ")")
+    .call(slider);
+}
+
+function runSlider(period, if_ssp) {
+  if(!if_ssp) {
+    title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in " + period;
+    contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+    + current_viz  + " in " + period + "?";
+    current_year = period;
+    removeSSPs();
+    select_contribution_energy(period);
+    update_percentages(period);
+  } else {
+    if (checked3D == "true") showSSPs();
+    if (checked2D == "true") change_period(period);
+    title.innerHTML = "Pollination Contribution to Nutrition (" + current_viz + ") in 2050 - " + current_SSP;
+    contribution_text.innerHTML = "What is the percentage of pollination contribution to "
+    + current_viz  + " in " + current_SSP + "?";
+    select_contribution_energy(current_SSP);
+    update_percentages(current_SSP);
+    current_year = current_SSP;
+  }
+}
+
 let dataset_graph = "dataset/plot_energy.csv";
 
 // Set the dimensions of the canvas / graph
-let margin = {top: 10, right: 20, bottom: 80, left: 50},
+let margin = {top: 30, right: 30, bottom: 80, left: 50},
     width_plot = 500 - margin.left - margin.right,
     height_plot = 300 - margin.top - margin.bottom;
 
@@ -852,7 +996,7 @@ updateGraph('WLD');
 let color_graph = colorScale_energy;
 
 function updateGraph(country) {
-  var svg_remove = d3.select(".graph");
+  let svg_remove = d3.select(".graph");
   svg_remove.selectAll("*").remove();
 
 let line_draw = d3.line()
@@ -863,8 +1007,8 @@ let line_draw = d3.line()
   // Adds the svg canvas
 let svg_plot = d3.select(".graph")
       .append("svg")
-          .attr("width", width_plot + margin.left + margin.right)
-          .attr("height", height_plot + margin.top + margin.bottom)
+          .attr("class", "svg_graph")
+          .attr("preserveAspectRatio", "xMinYMin meet")
       .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
@@ -896,8 +1040,8 @@ let svg_plot = d3.select(".graph")
 
           // Add the Text
           svg_plot.append("text")
-              .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
-              .attr("y", height_plot + (margin.bottom/2)+ 5)
+              .attr("x", (legendSpace/2)+i*legendSpace + 5)  // space legend
+              .attr("y", height_plot + (margin.bottom/2) + 5)
               .attr("class", "legend")    // style the legend
               .style("fill", function() { // Add the colours dynamically
                   return d.color_graph = color_graph(d.key);

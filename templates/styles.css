@@ -111,14 +111,22 @@ line {
 
 .box-2 {
   width: 60%;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
+/* For the maps and slider  */
+.map1 { grid-area: 'map1'; }
+.map2 { grid-area: 'map2';  }
+.map-slider { grid-area: 'map-slider' }
 
 .box-3 {
   background-color: white;
   width: 30%;
   font-size: 1vh;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .box-3-2d {
@@ -156,7 +164,7 @@ line {
 }
 
 img {
-  opacity: 1;
+  opacity: 0.85;
 }
 
 .centered {
@@ -164,11 +172,13 @@ img {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #fff;
+  color: white;
   font-size: 7vh;
   font-weight: bold;
   font-family: "ourFont",sans-serif;
-  text-shadow: 0vh 2vh 3vh #555;
+  /* text-shadow: 0vh 2vh 3vh #555; */
+  /* color: #860101; */
+  text-shadow: black 0vh 0vh 2vh;
 }
 
 .topleft {
@@ -384,6 +394,7 @@ img {
 .parent-button-div {
   width: 3%;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .button-title {
@@ -461,7 +472,7 @@ img {
 }
 
 .map-button {
-  margin-left: 0.5vh;
+  margin-left: 0.5vw;
 }
 
 .info-button:hover {
@@ -494,33 +505,34 @@ img {
 .ver-bar {
   border-left: 0.3vh solid rgba(0,0,0,0.25);
   height: 30vh;
-  margin-left: -3vh;
+  margin-left: -2vh;
   top: 0;
 }
 
  .docsChart {
-  font-size: 3vh;
+  font-size: 2.5vh;
   fill: #5B8BE3;
   font-family: ourFont, sans-serif;
 }
 
+
+.docsChart2 {
+ font-size: 2.5vh;
+ fill: #5B8BE3;
+ font-family: ourFont, sans-serif;
+  
+
 .box_unmet {
-  flex-basis: 38%;
+  flex-basis: 6vw;
 }
 
 .box_contribution {
-  flex-basis: 50%;
-}
-
-.docsChart2 {
- font-size: 3vh;
- fill: #5B8BE3;
- font-family: ourFont, sans-serif;
+  flex-basis: 11vw;
 }
 
 .small-title {
   margin-left: -2vh;
-  margin-top: 5vh;
+  margin-top: 4vh;
 }
 
 .axis path,
@@ -535,7 +547,16 @@ img {
     text-anchor: middle;
 }
 .graph {
-  margin-top: 2vh;
+  margin-left: -2.7vw;
+}
+
+.svg_graph {
+  width: 26.7vw;
+  height: 30vh;
+}
+
+.percentage {
+  width: 10vw;
 }
 
 #limit {
