@@ -10,7 +10,7 @@ This data visualization analyzes the pollination contribution to various food nu
 
 ## Files description
 
-- The source code is available in the templates folder in ***viz.js***, ***lineGraph.js*** and ***barGraph.js***.
+- The source code is available in the templates folder in the various .js files. The HTML result is in index.html.
 - The folder dataset in templates contains all the csv files used in the visualization
 - The libraries folder in templates contains all the libraries used
 - The countries folders contains json files to describe the country borders
