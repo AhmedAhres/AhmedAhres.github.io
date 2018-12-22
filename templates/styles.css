@@ -465,7 +465,14 @@ img {
 }
 
 .map-button {
-  margin-left: 0.5vw;
+  width: 6vh;
+  height: 4vh;
+  margin-left: 0.1vh;
+}
+
+.globe-button {
+  width: 6vh;
+  height: 4vh;
 }
 
 .map-button:hover {
