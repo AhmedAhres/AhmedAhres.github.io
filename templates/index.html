@@ -133,6 +133,11 @@
       <div class="map2"></div>
       <div class="map-slider"></div>
     </div>
+
+    <div class="box end-story">
+      <a href="javascript:void(0);" class="next" onclick="toggle_story();return false">&#8250;</a>
+    </div>
+
     <div class="box box-3" style="display:flex;">
       <h1 id="box-3-header">
       <div> Pollination Contribution to Nutrition (Food Energy) in 1945 </div>
@@ -200,6 +205,19 @@
       </div>
 
     </div>
+
+    <script>
+      function toggle_story() {
+        // Just for 2D maps
+        var storyDiv = document.getElementsByClassName('box box-3')[1];
+        // Display removes the element but visibility just hides it
+        if(storyDiv.style.visibility ==  'visible')
+          storyDiv.style.visibility =  'hidden';
+        else
+          storyDiv.style.visibility = 'visible';
+      }      
+    </script>
+
     <script src="lineGraph.js"></script>
     <script src="barGraph.js"></script>
     <script src="data.js"></script>

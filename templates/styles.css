@@ -138,6 +138,12 @@ line {
   font-size: 1vh;
   box-sizing: border-box;
   overflow: hidden;
+  visibility: visible;
+}
+
+.end-story {
+  width: 0.005%;
+  overflow: hidden;
 }
 
 .description_text {
