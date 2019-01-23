@@ -163,7 +163,7 @@ function createSlider() {
     .attr("width", 900)
     .attr("height", 70)
     .append("g")
-    .attr("transform", "translate(" + 200 + "," + 12 + ")")
+    .attr("transform", "translate(" + 240 + "," + 12 + ")")
     .call(slider);
 }
 

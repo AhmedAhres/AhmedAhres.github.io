@@ -73,6 +73,7 @@ function updateLegend(colorScale) {
 // Function to update the legend position when switching to 2D/3D
 // since 2D has 2 legends (one for change map and one for normal map)
 function updateLegendPosition(twoLegends) {
+  document.getElementsByClassName('info-button')[0].style.position = "relative";
   if (twoLegends) {
     makeChangeLegend(changeColorScheme);
     svg_change_legend.attr("transform", "translate(0, -430)");
@@ -81,6 +82,7 @@ function updateLegendPosition(twoLegends) {
     document.getElementsByClassName('info-button')[0].style.top = "15%";
     document.getElementsByClassName('switch-proj')[0].style.top = "15%";
   } else {
+    document.getElementsByClassName('info-button')[0].style.position = "relative";
     document.getElementsByClassName('info-button')[0].style.top = "0%";
     document.getElementsByClassName('switch-proj')[0].style.top = "0%";
     svg_legend.attr("transform", "translate(0, 20)");
