@@ -20,7 +20,7 @@ let margin = {
     top: 30,
     right: 30,
     bottom: 80,
-    left: 50
+    left: 60
   },
   width_plot = 470 - margin.left - margin.right,
   height_plot = 300 - margin.top - margin.bottom;

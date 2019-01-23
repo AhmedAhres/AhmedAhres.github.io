@@ -597,3 +597,9 @@ img {
 .labelGraph {
   margin-top: -5vh;
 }
+
+.labelGraphY {
+  transform: rotate(-90deg);
+  margin-top: -16.3vh;
+  margin-left: -28vw;
+}
