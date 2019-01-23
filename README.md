@@ -1,4 +1,4 @@
-# Pollination Contribution to Nutrition - EPFL Data Visualization Project
+# Pollination Contribution to Nutrition - EPFL Data Visualization Project by Ahmed Ahres, Sami Ben Hassen and Harshdeep Singh
 
 ## Running the visualization
 
