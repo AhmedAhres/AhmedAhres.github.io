@@ -132,9 +132,21 @@ line {
   grid-area: 'map-slider';
 }
 
+.map-global {
+  grid-area: 'map-global';
+}
+
 .box-3 {
   background-color: white;
   width: 30%;
+  font-size: 1vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.box-3-global {
+  background-color: rgb(58, 96, 178);
+  width: 33%;
   font-size: 1vh;
   box-sizing: border-box;
   overflow: hidden;
@@ -490,6 +502,12 @@ img {
   margin-bottom: 0vh;
 }
 
+.nav-bar-white {
+  border-bottom: 0.2vh solid rgba(255, 255, 255, 0.25);
+  margin-top: 1vh;
+  margin-bottom: 0vh;
+}
+
 .nav-bar-hidden {
   border-bottom: 0.2vh solid rgba(0, 0, 0, 0.25);
   color: gray;
@@ -602,4 +620,41 @@ img {
   transform: rotate(-90deg);
   margin-top: -16.3vh;
   margin-left: -28vw;
+}
+
+#box-3-global-header {
+  font-size: 3.2vh;
+  color: white;
+  font-family: ourFont;
+  font-weight: bold;
+}
+
+#box-3-global-text {
+  font-size: 1.8vh;
+  font-family: ourFont;
+  color: white;
+  font-weight: bold;
+}
+
+#box-3-global-text-link {
+  font-size: 1.8vh;
+  font-family: ourFont;
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.box-2-global {
+  width: 60%;
+  /* box-sizing: border-box; */
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.map-title {
+  font-size: 1.2em;
+  font-family: ourFont;
+  color: rgb(58, 96, 178);
 }

@@ -1,22 +1,31 @@
 // Initialize the 3D projection for ready
-function ready(g, path) {
+function ready(g, path, global_) {
+  global_ = global_ || false;
   d3.json("world/countries.json", function(error, data) {
     if (error) throw error;
 
     let features = topojson.feature(data, data.objects.units).features;
-    g.selectAll("path")
-      .data(features)
-      .enter().append("path")
-      // Chloropleth code
-      .attr("fill", function(d) {
-        // Pull data for particular iso and set color - Not able to fill it
-        d.total = data_c[d.properties.iso3] || 0;
-        return colorScale(d.total);
-      })
-      // End of Chloropleth code
-      .attr("d", path)
-      .attr("class", "feature")
-      .on("click", clicked);
+    if(global_) {
+      g.selectAll("path")
+        .data(features)
+        .enter().append("path")
+        .attr("d", path)
+        .attr("class", "feature");
+    } else {
+      g.selectAll("path")
+        .data(features)
+        .enter().append("path")
+        // Chloropleth code
+        .attr("fill", function(d) {
+          // Pull data for particular iso and set color - Not able to fill it
+          d.total = data_c[d.properties.iso3] || 0;
+          return colorScale(d.total);
+        })
+        // End of Chloropleth code
+        .attr("d", path)
+        .attr("class", "feature")
+        .on("click", clicked);
+    }
     // Creates a mesh around the border
     g.append("path")
       .datum(topojson.mesh(data, data.objects.units, function(a, b) {
