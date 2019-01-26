@@ -45,6 +45,10 @@ function projection2D() {
 
     make2015staticMap();
 
+    // Making the name of the maps appear in 2D
+    document.getElementById("map-name-1").style.display = "initial";
+    document.getElementById("map-name-2").style.display = "initial";
+
     document.getElementById("checked2D").disabled = true;
     document.getElementById("checked3D").disabled = false;
     d3.select(".map-slider").html("");

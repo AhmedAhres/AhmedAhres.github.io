@@ -30,6 +30,22 @@ html, body {
   background-color: rgb(247, 246, 241);
 }
 
+#map-name-1 {
+  display: none;
+  font-family: ourFont;
+  font-size: 2vh;
+  margin: 0;
+  padding: 0;
+}
+
+#map-name-2 {
+  display: none;
+  font-family: ourFont;
+  font-size: 2vh;
+  margin: 0;
+  padding: 0;
+}
+
 .box {
   text-align: center;
   color: gray;
@@ -117,7 +133,6 @@ line {
 
 .map-diff-line {
   grid-area: 'map-diff-line';
-  /* display: block; */
   margin: 0 auto;
   padding: 0;
   width: 0%;
@@ -178,8 +193,6 @@ img {
   font-size: 7vh;
   font-weight: bold;
   font-family: "ourFont", sans-serif;
-  /* text-shadow: 0vh 2vh 3vh #555; */
-  /* color: #860101; */
   text-shadow: black 0vh 0vh 2vh;
 }
 

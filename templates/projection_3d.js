@@ -75,6 +75,10 @@ function projection3D() {
     map2.setAttribute("style", "width: 0; height: 0;");
     map1.setAttribute("style", "width: 100%; height: 94%;");
 
+    // Removing the name of the maps from 3D which were present in 2D
+    document.getElementById("map-name-1").style.display = "none";
+    document.getElementById("map-name-2").style.display = "none";
+
     // Make the svg map2
     svg.attr("transform", "translate(0, 0)");
     svg_map2.attr("width", 0).attr("height", 0);

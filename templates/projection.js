@@ -26,7 +26,7 @@ function changeProjection(sliderChecked) {
       'background': 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
     });
 
-    // Make the map black
+    // Make the map grey
     g.selectAll('path').attr('fill', '#D3D3D3').on("click", null);
     g_map2.selectAll('path').attr('fill', '#D3D3D3').on("click", null);
   } else {
