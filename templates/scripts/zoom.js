@@ -76,6 +76,7 @@ function clicked(d) {
   current_unmet_need = 100 - current_nature_contribution;
   change_percentage_animation(current_nature_contribution, current_unmet_need);
   lineGraphObject.updateGraph(previousCountryClicked);
+  console.log(previousCountryClicked);
 }
 
 // If the drag behavior prevents the default click,

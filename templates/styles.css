@@ -107,6 +107,7 @@ line {
   padding: 0;
   margin: 0;
   overflow: hidden;
+  display: inline-flex;
 }
 
 /* For the maps and slider  */
@@ -647,13 +648,13 @@ img {
 
 .box-2-global {
   width: 60%;
-  /* box-sizing: border-box; */
   padding: 0;
   margin: 0;
   overflow: hidden;
 }
 
 .map-title {
+  margin-top: 10vh;
   font-size: 1.2em;
   font-family: ourFont;
   color: rgb(58, 96, 178);

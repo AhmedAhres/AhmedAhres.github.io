@@ -1,12 +1,12 @@
 // Function to load the pollination visualization
 function load_pollination() {
+  document.getElementsByClassName("box box-2")[0].style.display = "flex";
   document.getElementsByClassName("box box-3-global")[0].style.display = "none";
   document.getElementsByClassName("box box-2-global")[0].style.display = "none"
   document.getElementsByClassName("box box-3")[0].style.display = "flex";
   document.getElementsByClassName("info-button")[0].style.display = "block";
   document.getElementsByClassName("switch-proj")[0].style.display = "flex";
   document.getElementsByClassName("parent-button-div")[0].style.display = "block";
-  document.getElementsByClassName("box box-2")[0].style.display = "flex";
 }
 
 // Function for the back button in pollination
