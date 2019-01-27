@@ -45,6 +45,9 @@ function update(eulerAngles) {
 function projection3D() {
   checked3D = document.getElementById("checked3D").value;
   checked2D = document.getElementById("checked2D").value;
+
+  svg_map2.call(zoom_2D.transform, d3.zoomIdentity);
+
   if (checked3D === 'true') {
     zoom_2D = null; // Set zoom 2D is null
 
