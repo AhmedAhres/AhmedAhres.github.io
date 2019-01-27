@@ -3,7 +3,12 @@ function load_pollination() {
   document.getElementsByClassName("box box-3-global")[0].style.display = "none";
   document.getElementsByClassName("box box-2-global")[0].style.display = "none"
   document.getElementsByClassName("box box-1-global")[0].style.display = "none";
-  document.getElementsByClassName("box box-3")[0].style.display = "flex";
+  if (checked3D == "true") {
+    document.getElementsByClassName("box box-3")[0].style.display = "flex";
+  }
+  if (checked2D == "true") {
+    document.getElementsByClassName("box box-3")[1].style.display = "flex";
+  }
   document.getElementsByClassName("info-button")[0].style.display = "block";
   document.getElementsByClassName("back-button")[0].style.display = "block";
   document.getElementsByClassName("switch-proj")[0].style.display = "flex";
@@ -18,6 +23,7 @@ function load_global() {
   document.getElementsByClassName("box box-2-global")[0].style.display = "flex"
   document.getElementsByClassName("box box-1-global")[0].style.display = "flex";
   document.getElementsByClassName("box box-3")[0].style.display = "none";
+  document.getElementsByClassName("box box-3")[1].style.display = "none";
   document.getElementsByClassName("info-button")[0].style.display = "none";
   document.getElementsByClassName("switch-proj")[0].style.display = "none";
   document.getElementsByClassName("parent-button-div")[0].style.display = "none";
