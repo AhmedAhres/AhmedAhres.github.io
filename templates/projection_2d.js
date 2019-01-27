@@ -23,13 +23,13 @@ function projection2D() {
     // Change the size of the maps
     svg.attr("width", $(".map1").width())
       .attr("height", $(".map1").height())
-      .attr("transform", "translate(0, -200) scale(0.7)");
+      .attr("transform", "translate(0, -200) scale(0.85)");
     map1.setAttribute("style", "width: 100%; height: 47%;");
 
     map2.setAttribute("style", "width: 100%; height: 47%;");
     svg_map2.attr("width", $(".map1").width())
       .attr("height", $(".map1").height())
-      .attr("transform", "translate(0, -130) scale(0.7)");
+      .attr("transform", "translate(0, -130) scale(0.85)");
 
     map2.setAttribute(
       "style",
