@@ -50,3 +50,26 @@ let map_global = document.getElementsByClassName('map-global')[0];
 map_global.setAttribute("style", "width: 100%; height: 100%;");
 
 ready(g_global, path_global, true);
+
+let pollination_box = document.getElementById("pollination-box");
+let water_box = document.getElementById("water-quality-box");
+let coastal_box = document.getElementById("coastal-risk-box");
+
+
+function load_pollination_data() {
+  if (pollination_box.checked == true) {
+    console.log("pollination checked")
+  }
+}
+
+function load_waterquality_data() {
+  if (water_box.checked == true) {
+    console.log("waterquality checked")
+  }
+}
+
+function load_coastalrisk_data() {
+  if (coastal_box.checked == true) {
+    console.log("coastal risk checked")
+  }
+}

@@ -686,12 +686,61 @@ img {
   transform: rotate(-90deg);
 }
 
-.fa-arrow-left {
-  size: 10vh;
-}
-
 .back-button {
   transform: translateY(-25vh);
   width: 6vh;
   height: 3vh;
+}
+
+
+/*style wrapper to give some space*/
+.wrapper {
+	  position: relative;
+}/*style label to give some more space*/
+
+.wrapper label {
+    display: block;
+    padding: 0vw 0vw 0vw 2.5vw;
+}
+
+/*style and hide original checkbox*/
+.wrapper input {
+	height: 10vh;
+	left: 0;
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	width: 10vw;
+}
+
+/*position new box*/
+.wrapper input + label::before {
+	border: 2px solid;
+	content: "";
+	height: 40px;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 40px;
+}
+
+/*create check symbol with pseudo element*/
+.wrapper input + label::after {
+	content: "";
+	border: 4px solid;
+	border-left: 0;
+	border-top: 0;
+	height: 20px;
+	left: 14px;
+	opacity: 0;
+	position: absolute;
+	top: 6px;
+	transform: rotate(45deg);
+	transition: opacity 0.2s ease-in-out;
+	width: 12px;
+}
+
+/*reveal check for 'on' state*/
+.wrapper input:checked + label::after {
+	opacity: 1;
 }
