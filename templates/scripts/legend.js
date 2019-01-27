@@ -89,3 +89,41 @@ function updateLegendPosition(twoLegends) {
     svg_change_legend.attr("width", 0);
   }
 }
+
+function create2DLegend() {
+  let size = 3;
+  let step = 70;
+
+  let X = d3.scaleLinear()
+  .domain([0, size])
+  .range(['white', 'rgb(234,55,247)']);
+
+  let Y = d3.scaleLinear()
+  .domain([0, size])
+  .range(['white', 'rgb(0,200,0)']);
+
+  let canvas = d3.select(".box.box-1-global").append('canvas')
+  .attr('width', size*step)
+  .attr('height', size*step+10)
+  .node();
+
+  let context = canvas.getContext('2d');
+
+  d3.range(0,size).forEach(function(y) {
+  d3.range(0,size).forEach(function(x) {
+    let color = d3.scaleLinear()
+      .domain([-1,1])
+      .range([X(x), Y(y)])
+      .interpolate(d3.interpolateRgb);
+
+    let strength = (y - x) / (size-1);
+
+    context.fillStyle = color(strength);
+    context.beginPath();
+    context.rect((x+0.6/2)*step,(y/2)*step,step-15,25);
+    context.fill();
+  });
+  });
+}
+
+create2DLegend();

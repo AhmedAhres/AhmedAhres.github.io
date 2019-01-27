@@ -97,23 +97,15 @@ line {
 }
 
 .box-1 {
-  width: 7%;
+  width: 8%;
   box-sizing: border-box;
-}
-
-.box-2 {
-  width: 60%;
-  /* box-sizing: border-box; */
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  display: inline-flex;
 }
 
 /* For the maps and slider  */
 
 .map1 {
   grid-area: 'map1';
+  pointer-events: all;
 }
 
 .map-diff-line {
@@ -127,6 +119,7 @@ line {
 
 .map2 {
   grid-area: 'map2';
+  pointer-events: all;
 }
 
 .map-slider {
@@ -147,7 +140,7 @@ line {
 
 .box-3-global {
   background-color: rgb(58, 96, 178);
-  width: 33%;
+  width: 30%;
   font-size: 1vh;
   box-sizing: border-box;
   overflow: hidden;
@@ -620,7 +613,7 @@ img {
 .labelGraphY {
   transform: rotate(-90deg);
   margin-top: -16.3vh;
-  margin-left: -28vw;
+  margin-left: -26.5vw;
 }
 
 #box-3-global-header {
@@ -646,16 +639,59 @@ img {
   cursor: pointer;
 }
 
+.box-2 {
+  width: 62%;
+  /* box-sizing: border-box; */
+  padding: 0;
+  margin: 0;
+}
+
 .box-2-global {
-  width: 60%;
+  width: 62%;
   padding: 0;
   margin: 0;
   overflow: hidden;
 }
 
 .map-title {
-  margin-top: 10vh;
+  margin-top: 11.3vh;
   font-size: 1.2em;
   font-family: ourFont;
   color: rgb(58, 96, 178);
+}
+
+.box-1-global {
+  width: 10%;
+  box-sizing: border-box;
+}
+
+.box-3-global {
+  background-color: rgb(58, 96, 178);
+  width: 28%;
+  font-size: 1vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.label2DLegendX {
+  font-size: 0.3em;
+  margin-left: 0.4vw;
+  margin-bottom: 4.2vh;
+}
+
+.label2DLegendY {
+  font-size: 0.3em;
+  margin-left: -7.8vw;
+  margin-bottom: -6vh;
+  transform: rotate(-90deg);
+}
+
+.fa-arrow-left {
+  size: 10vh;
+}
+
+.back-button {
+  transform: translateY(-25vh);
+  width: 6vh;
+  height: 3vh;
 }

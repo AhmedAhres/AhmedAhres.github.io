@@ -15,8 +15,8 @@ lineGraphObject.updateGraph('WLD');
 let checked3D = "true";
 let checked2D = "false";
 
-let width = $(".box.box-2").width(),
-  height = $(".box.box-2").height(),
+let width = $(".box.box-2-global").width(),
+  height = $(".box.box-2-global").height(),
   active = d3.select(null);
 
 let previousCountryClicked = 'WLD';
@@ -64,6 +64,7 @@ svg.call(tip);
 
 // Makes the legend
 makeLegend(colorScale);
+
 
 loadGlobalData(dataset);
 let data_2D = load(dataset_2D);
