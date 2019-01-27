@@ -7,7 +7,7 @@ function changeProjection(sliderChecked) {
   if (sliderChecked) {
 
     zoom_2D = d3.zoom()
-      .scaleExtent([1, 20])
+      .scaleExtent([0.8, 20])
       .translateExtent([
         [0, 0],
         [$(".map1").width(), $(".map1").height()]
