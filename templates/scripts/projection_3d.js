@@ -10,6 +10,11 @@ function ready(g, path, global_) {
         .data(features)
         .enter().append("path")
         .attr("d", path)
+        .attr("fill", function(d) {
+          // Pull data for particular iso and set color - Not able to fill it
+          d.total = data_c[d.properties.iso3] || 0;
+          return colorScale(d.total);
+        })
         .attr("class", "feature");
     } else {
       g.selectAll("path")

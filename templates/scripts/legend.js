@@ -94,13 +94,13 @@ function create2DLegend() {
   let size = 3;
   let step = 70;
 
-  let X = d3.scaleLinear()
-  .domain([0, size])
-  .range(['white', 'rgb(234,55,247)']);
-
-  let Y = d3.scaleLinear()
+  let X_2D = d3.scaleLinear()
   .domain([0, size])
   .range(['white', 'rgb(0,200,0)']);
+
+  let Y_2D = d3.scaleLinear()
+  .domain([0, size])
+  .range(['white', 'rgb(234,55,247)']);
 
   let canvas = d3.select(".box.box-1-global").append('canvas')
   .attr('width', size*step)
@@ -113,7 +113,7 @@ function create2DLegend() {
   d3.range(0,size).forEach(function(x) {
     let color = d3.scaleLinear()
       .domain([-1,1])
-      .range([X(x), Y(y)])
+      .range([X_2D(x), Y_2D(y)])
       .interpolate(d3.interpolateRgb);
 
     let strength = (y - x) / (size-1);
