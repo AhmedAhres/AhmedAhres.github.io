@@ -1,3 +1,5 @@
+let current_html = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
+
 // Function to load the pollination visualization
 function load_pollination() {
   document.getElementsByClassName("box box-3-global")[0].style.display = "none";
@@ -19,6 +21,7 @@ function load_pollination() {
 
 // Function for the back button in pollination
 function load_global() {
+  if (current_html == "index.html") {
   document.getElementsByClassName("box box-3-global")[0].style.display = "flex";
   document.getElementsByClassName("box box-2-global")[0].style.display = "flex"
   document.getElementsByClassName("box box-1-global")[0].style.display = "flex";
@@ -29,6 +32,10 @@ function load_global() {
   document.getElementsByClassName("parent-button-div")[0].style.display = "none";
   document.getElementsByClassName("box box-1")[0].style.visibility = "collapse";
   document.getElementsByClassName("box box-2")[0].style.display = "none";
+  } else {
+    location.href='index.html';
+    return false;
+  }
 }
 
 let width_global = $(".box.box-2-global").width(),
