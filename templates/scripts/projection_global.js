@@ -11,10 +11,13 @@ let colorScale2DGlobalY = d3.scaleThreshold()
   .domain([20, 40, 60, 80, 99, 100])
   .range(colorSchemeY);
 
-document.getElementsByClassName("box-container")[0].style.background = gradient_white;
+if (global_activated == true) {
+  document.getElementsByClassName("box-container")[0].style.background = gradient_white;
+}
 
 // Function to load the pollination visualization
 function load_pollination() {
+  global_activated = false;
   document.getElementsByClassName("box box-3-global")[0].style.display = "none";
   document.getElementsByClassName("box box-2-global")[0].style.display = "none"
   document.getElementsByClassName("box box-1-global")[0].style.display = "none";
@@ -36,6 +39,7 @@ function load_pollination() {
 
 // Function for the back button in pollination
 function load_global() {
+  global_activated = true;
   if (current_html == "index.html") {
   document.getElementsByClassName("box-container")[0].style.background = gradient_white;
   document.getElementsByClassName("box box-3-global")[0].style.display = "flex";
