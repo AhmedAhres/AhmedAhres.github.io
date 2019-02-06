@@ -1,4 +1,3 @@
-let current_html = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
 let dataset_global = 'dataset/pixel_energy.csv';
 let colorSchemeX = d3.schemeGreens[3];
 let colorSchemeY = d3.schemeReds[3];

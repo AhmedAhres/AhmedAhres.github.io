@@ -1,7 +1,16 @@
 // Change projection and zoom based on checked2D and checked3D variables
 
 // Variable used to initialize the gradient to white
+let current_html = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
+
 let global_activated = true;
+
+
+// If we are in index.html, then by default global is activated at the beginning
+// Otherwise we set it to false
+if (current_html != "index.html") {
+  global_activated = false;
+}
 
 function changeProjection(sliderChecked) {
   // Add background to the globe
