@@ -158,3 +158,7 @@ function showDataGlobal(the_g, coordinates, ColorScaleSelect) {
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 }
+
+function click_about() {
+  console.log("About button clicked");
+}
