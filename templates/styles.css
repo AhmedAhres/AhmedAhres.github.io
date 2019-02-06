@@ -486,7 +486,7 @@ img {
 }
 
 .graph2d {
-  margin-left: -3vw;
+  margin-left: -1.5vw;
 }
 
 .nav-bar {
@@ -613,7 +613,7 @@ img {
 .labelGraphY {
   transform: rotate(-90deg);
   margin-top: -16.3vh;
-  margin-left: -26.5vw;
+  margin-left: -26vw;
 }
 
 #box-3-global-header {
@@ -676,19 +676,19 @@ img {
 .label2DLegendX {
   font-size: 0.35em;
   margin-left: 1.3vw;
-  margin-bottom: -2vh;
+  margin-bottom: -1.8vh;
 }
 
 .label2DLegendY {
   font-size: 0.35em;
   margin-left: -7.8vw;
-  margin-bottom: -9.5vh;
+  margin-bottom: -12vh;
   transform: rotate(-90deg);
 }
 
 span {
   content: "\2192";
-  margin-bottom: 3vh;
+  margin-bottom: 0vh;
   margin-left: 1vw;
 }
 
@@ -778,4 +778,10 @@ span {
 .myButton:active {
 	position:relative;
 	top:0.2vh;
+}
+
+span2 {
+  content: "\2193";
+  margin-left: -7.5vw;
+  transform: translateY(13vh);
 }
