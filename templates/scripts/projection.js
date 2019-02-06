@@ -7,7 +7,7 @@ let global_activated = true;
 
 
 // If we are in index.html, then by default global is activated at the beginning
-// Otherwise we set it to false
+// Otherwise we initiate it to false;
 if (current_html != "index.html") {
   global_activated = false;
 }
