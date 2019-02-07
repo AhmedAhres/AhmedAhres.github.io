@@ -145,6 +145,7 @@ line {
 
 .map-slider {
   grid-area: 'map-slider';
+  display: block;
 }
 
 .box-3 {
@@ -615,4 +616,99 @@ img {
   transform: rotate(-90deg);
   margin-top: -16.3vh;
   margin-left: -28vw;
+}
+
+/* THIS CSS PART IS FOR REPLACING THE SLIDER IN 2D */
+#radios {
+  position: relative;
+  z-index:5;
+  width: 17%;
+  height: 5%;
+  display: none;
+  margin-left: 20%;
+}
+
+#radios2 {
+  position: relative;
+  z-index:5;
+  width: 22%;
+  height: 5%;
+  display: none;
+  margin-left: 60%;
+  margin-top: -4.3%;
+}
+
+input {
+  display: none;
+}
+
+#bckgrnd,
+.labels {
+  width: 3vw;
+  height: 2.77vh;
+  font-family: ourFont;
+  font-size: 2vh;
+  display: inline-block;
+  margin-right: -3px;
+  cursor: pointer;
+  outline: 1px solid black;
+  z-index: 2;
+}
+
+#bckgrnd {
+  background-color: orange;
+  position: absolute;
+  left: 6px;
+  top: 12px;
+  z-index: -1;
+}
+
+#bckgrnd2 {
+  width: 3vw;
+  height: 2.77vh;
+  background-color: yellow;
+  position: absolute;
+  font-family: ourFont;
+  font-size: 2vh;
+  display: inline-block;
+  left: 6px;
+  outline: 1px solid black;
+  cursor: pointer;
+  top: 12px;
+  z-index: -1;
+}
+
+/* THIS IS FOR ANIMATION WHEN YOU CHANGE THE OPTION */
+#rad1:checked ~ #bckgrnd {
+  transform: translateX(0);
+  transition: transform 0.5s ease-in-out;
+}
+
+#rad2:checked ~ #bckgrnd {
+  transform: translateX(3.2vw);
+  transition: transform 0.5s ease-in-out;
+}
+#rad3:checked ~ #bckgrnd {
+  transform: translateX(6.5vw);
+  transition: transform 0.5s ease-in-out;
+}
+
+#rad4:checked ~ #bckgrnd2 {
+  transform: translateX(0);
+  transition: transform 0.5s ease-in-out;
+}
+
+#rad5:checked ~ #bckgrnd2 {
+  transform: translateX(3.2vw);
+  transition: transform 0.5s ease-in-out;
+}
+
+#rad6:checked ~ #bckgrnd2 {
+  transform: translateX(6.5vw);
+  transition: transform 0.5s ease-in-out;
+}
+
+#rad7:checked ~ #bckgrnd2 {
+  transform: translateX(9.8vw);
+  transition: transform 0.5s ease-in-out;
 }

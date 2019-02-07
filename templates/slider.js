@@ -53,7 +53,6 @@ function change_pollination_contribution(period) {
   if (checked2D == "true") {
     d3.csv(change_dataset, function(error, data) {
       let promise = new Promise(function(resolve, reject) {
-        // loadGlobalData('dataset/pixel_energy.csv');
         setTimeout(() => resolve(1), 10);
       });
       promise.then(function(result) {
@@ -187,4 +186,27 @@ function runSlider(period, if_ssp) {
     update_percentages(current_SSP);
     current_year = current_SSP;
   }
+}
+
+function runSegmentedSSPs(period) {
+  // OMG, oh lord, this code needs to be cleaned.
+  // Python - concatentation - '{}'.format()
+  current_year = period;
+  if (period == "SSP1") {
+    BarGraphObject.updateBarGraph('dataset/ssp1_impacted.csv');
+    title_map.innerHTML = "Pollination Contribution to " + current_viz + " in 2015 (Bottom) vs SSP1 (Top)";
+    current_SSP = "SSP1";
+  }
+  if (period == "SSP3") {
+    BarGraphObject.updateBarGraph('dataset/ssp3_impacted.csv');
+    title_map.innerHTML = "Pollination Contribution to " + current_viz + " in 2015 (Bottom) vs SSP3 (Top)";
+    current_SSP = "SSP3";
+  }
+  if (period == "SSP5") {
+    BarGraphObject.updateBarGraph('dataset/ssp5_impacted.csv');
+    title_map.innerHTML = "Pollination Contribution to " + current_viz + " in 2015 (Bottom) vs SSP5 (Top)";
+    current_SSP = "SSP5";
+  }
+  change_pollination_contribution(period);
+  update_percentages(period);
 }

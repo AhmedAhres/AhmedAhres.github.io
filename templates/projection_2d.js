@@ -3,6 +3,11 @@ function projection2D() {
   checked2D = document.getElementById("checked2D").value;
   checked3D = document.getElementById("checked3D").value;
   if (checked2D === 'false') {
+
+    document.getElementsByClassName("map-slider")[0].style.display = "none";
+    document.getElementById("radios").style.display = "block";
+    document.getElementById("radios2").style.display = "block";
+
     zoom_3D = null;
     BarGraphObject.updateBarGraph('dataset/ssp1_impacted.csv');
     title_map.innerHTML = "Pollination Contribution to " + current_viz + " in 2015 (Bottom) vs SSP1 (Top)";
@@ -52,9 +57,9 @@ function projection2D() {
     document.getElementById("checked2D").disabled = true;
     document.getElementById("checked3D").disabled = false;
     d3.select(".map-slider").html("");
-    runSlider("SSP1", false)
-    createSlider();
+
     // Plot points on the map
+    runSegmentedSSPs("SSP1");
     showData(g, coordstoplot);
   }
 }
