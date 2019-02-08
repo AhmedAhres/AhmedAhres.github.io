@@ -2,6 +2,8 @@ let years = ["1850", "1900", "1950", "2000", "2050", "2100", "2150"];
 let sliderSSPs = ['50', '100', '150']
 let actualData = ["1850", "1900", "1910", "1945", "1980", "2015", "2050"];
 
+change_map_title = document.getElementById("map-name-1");
+
 // Function that formats the data to make it ready for the slider
 // For 3D and 2D
 let formatToData = function(d) {
@@ -207,6 +209,7 @@ function runSegmentedSSPs(period) {
     title_map.innerHTML = "Pollination Contribution to " + current_viz + " in 2015 (Bottom) vs SSP5 (Top)";
     current_SSP = "SSP5";
   }
+  change_map_title.innerHTML = "Change map for " + period;
   change_pollination_contribution(period);
   update_percentages(period);
 }

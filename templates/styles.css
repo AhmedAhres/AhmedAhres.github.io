@@ -658,8 +658,8 @@ input {
 #bckgrnd {
   background-color: orange;
   position: absolute;
-  left: 6px;
-  top: 12px;
+  left: 0.9vh;
+  top: 1.7vh;
   z-index: -1;
 }
 
@@ -671,10 +671,10 @@ input {
   font-family: ourFont;
   font-size: 2vh;
   display: inline-block;
-  left: 6px;
+  left: 3.7vh;
   outline: 1px solid black;
   cursor: pointer;
-  top: 12px;
+  top: 1.8vh;
   z-index: -1;
 }
 
@@ -705,10 +705,5 @@ input {
 
 #rad6:checked ~ #bckgrnd2 {
   transform: translateX(6.5vw);
-  transition: transform 0.5s ease-in-out;
-}
-
-#rad7:checked ~ #bckgrnd2 {
-  transform: translateX(9.8vw);
   transition: transform 0.5s ease-in-out;
 }
