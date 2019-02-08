@@ -20,7 +20,7 @@ function changeProjection(sliderChecked) {
   if (sliderChecked) {
 
     zoom_2D = d3.zoom()
-      .scaleExtent([1, 20])
+      .scaleExtent([0.8, 20])
       .translateExtent([
         [0, 0],
         [$(".map1").width(), $(".map1").height()]
@@ -36,10 +36,9 @@ function changeProjection(sliderChecked) {
       .translate([width / 2, height / 2])
       .precision(.1);
 
-        $('.box-container').css({
-          'background': 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
-        });
-
+      $('.box-container').css({
+        'background': 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
+      });
 
     // Make the map black
     g.selectAll('path').attr('fill', '#D3D3D3').on("click", null);

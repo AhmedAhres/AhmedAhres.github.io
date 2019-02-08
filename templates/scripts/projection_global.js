@@ -1,4 +1,5 @@
 let dataset_global = 'dataset/pixel_energy.csv';
+let dataset_2D_folate = 'dataset/pixel_folate.csv';
 let colorSchemeX = d3.schemeGreens[3];
 let colorSchemeY = d3.schemeReds[3];
 let gradient_blue = 'radial-gradient( circle at 37%, rgb(105, 190, 255) 29%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)';
@@ -126,13 +127,15 @@ function ready_global(g, path) {
 }
 
 let data_2D_global = load(dataset_2D);
+let data_2D_global_folate = load(dataset_2D_folate);
 let promise_global = new Promise(function(resolve, reject) {
   setTimeout(() => resolve(1), 100);
 });
 promise_global.then(() => {
   let coordstoplot_global = initialize_2D("2015", data_2D_global);
+  //let coordstoplot_global_folate = initialize_2D("2015", data_2D_global_folate);
   showDataGlobal(g_global, coordstoplot_global, colorSchemeX);
-  showDataGlobal(g_global, coordstoplot_global, colorSchemeY);
+  //showDataGlobal(g_global, coordstoplot_global_folate, colorSchemeY);
 });
 
 // plot points on the map for 2D global map
