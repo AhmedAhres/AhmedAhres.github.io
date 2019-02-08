@@ -680,7 +680,7 @@ input {
 
 /* THIS IS FOR ANIMATION WHEN YOU CHANGE THE OPTION */
 #rad1:checked ~ #bckgrnd {
-  transform: translateX(0);
+  transform: translateX(0vw);
   transition: transform 0.5s ease-in-out;
 }
 
@@ -694,7 +694,7 @@ input {
 }
 
 #rad4:checked ~ #bckgrnd2 {
-  transform: translateX(0);
+  transform: translateX(0vw);
   transition: transform 0.5s ease-in-out;
 }
 
