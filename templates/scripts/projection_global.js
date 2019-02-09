@@ -1,19 +1,52 @@
 let dataset_global = 'dataset/pixel_energy.csv';
 let dataset_2D_folate = 'dataset/pixel_folate.csv';
-let colorSchemeX = d3.schemeGreens[3];
-let colorSchemeY = d3.schemeReds[3];
+let colorSchemeX1 = [255,205,155,105,55];
+let colorSchemeY1 = [255,205,155,105,55];
+let colorSchemeX = ["#FFFFFF", "#C6F4BC", "#74DE4C"];
+let colorSchemeY = ["#FFFFFF", "#F4C8FF", "#C615F2"];
 let gradient_blue = 'radial-gradient( circle at 37%, rgb(105, 190, 255) 29%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)';
 let gradient_white = 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)';
-let colorScale2DGlobalX = d3.scaleThreshold()
-  .domain([20, 40, 60, 80, 99, 100])
+let colorScale2DGlobalX = d3.scaleLinear()
+  .domain([1, 50, 99])
   .range(colorSchemeX);
-let colorScale2DGlobalY = d3.scaleThreshold()
-  .domain([20, 40, 60, 80, 99, 100])
+let colorScale2DGlobalY = d3.scaleLinear()
+  .domain([1, 50, 99])
   .range(colorSchemeY);
 
 if (global_activated == true) {
   document.getElementsByClassName("box-container")[0].style.background = gradient_white;
 }
+
+d3.scaleBivariate = function() {
+  function scaleBivariate(value) {
+    var r = colorScale2DGlobalX1(value[0]);
+    var b = colorScale2DGlobalY1(value[1]);
+    return "rgb("+((r+b)/1.7)+","+r+","+b+")";
+  }
+
+  let colorScale2DGlobalX1 = d3.scaleThreshold()
+    .domain([1, 50, 99])
+    .range(colorSchemeX1);
+  let colorScale2DGlobalY1 = d3.scaleThreshold()
+    .domain([1, 50, 99])
+    .range(colorSchemeY1);
+
+  // var red = function(d) { return d[0]; }
+  //
+  // var blue = function(d) { return d[1];}
+  //
+  // // Accessors:
+  // scaleBivariate.red = function(_) {
+  //   return arguments.length ? (red = _, scaleBivariate): red;
+  // }
+  //
+  // scaleBivariate.blue = function(_) {
+  //   return arguments.length ? (blue = _, scaleBivariate): blue;
+  // }
+  return scaleBivariate;
+}
+
+var colorScaleBiv = d3.scaleBivariate();
 
 // Function to load the pollination visualization
 function load_pollination() {
@@ -109,11 +142,6 @@ function ready_global(g, path) {
       .data(features)
       .enter().append("path")
       .attr("d", path)
-      // .attr("fill", function(d) {
-      //   // Pull data for particular iso and set color - Not able to fill it
-      //   d.total = data_c[d.properties.iso3] || 0;
-      //   return colorScale(d.total);
-      // })
       .attr("fill", "#D3D3D3")
       .attr("class", "feature");
     // Creates a mesh around the border
@@ -133,9 +161,9 @@ let promise_global = new Promise(function(resolve, reject) {
 });
 promise_global.then(() => {
   let coordstoplot_global = initialize_2D("2015", data_2D_global);
-  //let coordstoplot_global_folate = initialize_2D("2015", data_2D_global_folate);
-  showDataGlobal(g_global, coordstoplot_global, colorSchemeX);
-  //showDataGlobal(g_global, coordstoplot_global_folate, colorSchemeY);
+  let coordstoplot_global_folate = initialize_2D("2015", data_2D_global_folate);
+  showDataGlobal(g_global, coordstoplot_global, colorScaleBiv);
+  showDataGlobal(g_global, coordstoplot_global_folate, colorScaleBiv);
 });
 
 // plot points on the map for 2D global map
