@@ -123,6 +123,7 @@ line {
 }
 
 .map-slider {
+  z-index: 1000;
   grid-area: 'map-slider';
 }
 
@@ -644,6 +645,7 @@ img {
   /* box-sizing: border-box; */
   padding: 0;
   margin: 0;
+  overflow: hidden;
 }
 
 .box-2-global {
