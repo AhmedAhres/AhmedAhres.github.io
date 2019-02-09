@@ -146,6 +146,7 @@ line {
 .map-slider {
   grid-area: 'map-slider';
   display: block;
+  z-index: 1000;
 }
 
 .box-3 {
