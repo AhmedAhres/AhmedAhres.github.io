@@ -21,28 +21,28 @@ d3.scaleBivariate = function() {
   function scaleBivariate(value) {
     var r = colorScale2DGlobalX1(value[0]);
     var b = colorScale2DGlobalY1(value[1]);
-    return "rgb("+((r+b)/1.7)+","+r+","+b+")";
+    return "rgb("+((r+b)/1.7)+","+r+","+(b+50)+")";
   }
 
   let colorScale2DGlobalX1 = d3.scaleThreshold()
-    .domain([1, 50, 99])
+    .domain([1, 25, 50, 75, 99])
     .range(colorSchemeX1);
   let colorScale2DGlobalY1 = d3.scaleThreshold()
-    .domain([1, 50, 99])
+    .domain([1, 25, 50, 75, 99])
     .range(colorSchemeY1);
 
-  // var red = function(d) { return d[0]; }
-  //
-  // var blue = function(d) { return d[1];}
-  //
-  // // Accessors:
-  // scaleBivariate.red = function(_) {
-  //   return arguments.length ? (red = _, scaleBivariate): red;
-  // }
-  //
-  // scaleBivariate.blue = function(_) {
-  //   return arguments.length ? (blue = _, scaleBivariate): blue;
-  // }
+  var red = function(d) { return d[0]; }
+
+  var blue = function(d) { return d[1];}
+
+  // Accessors:
+  scaleBivariate.red = function(_) {
+    return arguments.length ? (red = _, scaleBivariate): red;
+  }
+
+  scaleBivariate.blue = function(_) {
+    return arguments.length ? (blue = _, scaleBivariate): blue;
+  }
   return scaleBivariate;
 }
 
@@ -102,11 +102,11 @@ let svg_global = d3.select(".map-global").append("svg")
 
 let g_global = svg_global.append('g');
 
-let projection_global = d3.geoNaturalEarth().scale(d3.min([width_global / 2, height_global / 2]) * 0.45).translate([width_global / 2, height_global / 2]).precision(.1);
+let projection_global = d3.geoNaturalEarth().scale(d3.min([width_global / 2, height_global / 2]) * 0.49).translate([width_global / 2 - 52, height_global / 2]).precision(.1);
 let path_global = d3.geoPath().projection(projection_global);
 let map_global = document.getElementsByClassName('map-global')[0];
 
-map_global.setAttribute("style", "width: 100%; height: 100%;");
+map_global.setAttribute("style", "width: 95%; height: 100%;");
 
 ready_global(g_global, path_global);
 
