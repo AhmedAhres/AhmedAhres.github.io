@@ -42,6 +42,7 @@ function projection2D() {
     );
     document.getElementById('svg_map2').style.overflow = "initial";
 
+
     map1.setAttribute(
       "style",
       "width: 100%; height: 46%; overflow-x:hidden; overflow-y:hidden;"

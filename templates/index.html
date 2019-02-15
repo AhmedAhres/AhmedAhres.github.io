@@ -31,15 +31,15 @@
 
   <!-- StoryTelling form - 1st page for Title and other content, 2nd Page for the visualization  -->
   <!-- If needed to add another page, just copy the title container and change the name of the classes -->
-  <div class="title-container">
+  <!-- <div class="title-container">
     <div class="topleft">
       <img src="images/logo_polyscientist.png" alt="logo_polyscientist" style="height : 15%">
     </div>
     <img src="images/pollination.jpg" alt="Bee_pollination" style="width:100%; height:84%;" vspace=60 0>
     <div class="centered">Pollination Contribution to Nutrition</div>
-  </div>
+  </div> -->
 
-  <div class="title-container2">
+  <!-- <div class="title-container2">
     <div class="quote-container">
       <h1 class="h1_page"> There is no plan Bee for when we run out of pollinators</h1> <br>
       <p class="p_page1">Pollination is a vital process of nature that isn’t very well known,<br> but is extremely important in the food growing processes.<br> Pollen has to be transferred between two flowers of the same species,<br> which then fertilizes the flower and
@@ -74,10 +74,10 @@
         </ul>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- for the PopUpwindow -->
-  <div id="ac-wrapper" style='display:none' onClick="hideNow(event)">
+  <!-- <div id="ac-wrapper" style='display:none' onClick="hideNow(event)">
     <div id="popup" class="grad1">
       <center>
         <h2 class="h2_popup">How to use ?</h2>
@@ -115,19 +115,33 @@
         <input type="submit" name="submit" value="Got it !" onClick="PopUp('hide')" />
       </center>
     </div>
-  </div>
+  </div> -->
   <!-- End of popup window -->
 
   <div class="box-container" id='3rd_box'>
-    <div class="box box-1">
-      <button class="info-button" name="answer" value="info" onclick="showNow()"><i class="fa fa-info-circle fa-2x"></i></button>
-      <div class="switch-proj" id="projectionChangeChecked">
+    <div class="box box-1" style="visibility: collapse">
+      <button class="back-button" style="display:none;" name="answer" value="info" onclick="load_global()"><i class="fa fa-arrow-left fa-2x"></i></button>
+      <button class="info-button" style="display:none;" name="answer" value="info" onclick="showNow()"><i class="fa fa-info-circle fa-2x"></i></button>
+      <div class="switch-proj" id="projectionChangeChecked" style="display:none;">
         <button class="globe-button" onclick="projection3D()" value="true" id="checked3D"><i class="fa fa-globe fa-2x"></i></button>
         <button class="map-button" onclick="projection2D()" value="false" id="checked2D"><i class="fa fa-map fa-2x"></i></button>
       </div>
 
     </div>
-    <div class="box box-2">
+
+    <div class="box box-1-global" style="display:flex">
+      <p class="label2DLegendX">Nature's Contributions </p>
+      <span>&#8594;</span>
+      <p class="label2DLegendY">Demand </p>
+      <span2>&#8595;</span2> 
+      <a href="#" class="myButton" onclick="click_about()">About</a>
+    </div>
+    <div class="box box-2-global">
+      <h1 class="map-title"> Nature's Contributions to People
+      <div class="map-global"></div>
+    </div>
+
+    <div class="box box-2" style="display: none;">
       <p id="map-name-1">Change map for SSP1</p>
       <div class="map1"></div>
       <hr class="map-diff-line">
@@ -157,9 +171,58 @@
       </div>
 
     </div>
-    <div class="box box-3" style="display:flex;">
+
+    <div class="box box-3-global" style="display:flex;">
+      <h1 id="box-3-global-header">
+      <div> Ecosystem Services </div>
+      <div class="nav-bar-white"> </div>
+    </h1>
+
+    <h1 id="box-3-global-header">
+      <div class="wrapper">
+        <input id="pollination-box" name="pollination" type="checkbox" onclick="load_pollination_data()" value="pollination" checked>
+        <label for="pollination-box">Pollination</label>
+      </div>
+    <h2 id="box-3-global-text">
+      Pollination is the act of transferring pollen grains from the male anther of a flower to the female stigma.
+      The goal of every living organism, including plants, is to create offspring for the next generation.
+   <p id="box-3-global-text-link"> --> <a onClick="load_pollination();">To Pollination Modeling</a></p>
+
+
+  </h2>
+  <div class="nav-bar-white"> </div>
+  </h1>
+
+  <h1 id="box-3-global-header">
+    <div class="wrapper">
+    <input id="water-quality-box" name="water-quality" type="checkbox" onclick="load_waterquality_data()" value="waterquality">
+    <label for="water-quality-box">Water Quality Regulation</label>
+  </div>
+  <h2 id="box-3-global-text">
+    Pollination is the act of transferring pollen grains from the male anther of a flower to the female stigma.
+    The goal of every living organism, including plants, is to create offspring for the next generation.
+    <p id="box-3-global-text-link"> --> <a onClick="location.href='WaterQuality.html';return false;">To Water Quality Regulation Modeling</a></p>
+</h2>
+  <div class="nav-bar-white"> </div>
+</h1>
+
+<h1 id="box-3-global-header">
+  <div class="wrapper">
+  <input id="coastal-risk-box" name="coastal-risk" type="checkbox" onclick="load_coastalrisk_data()" value="coastal">
+  <label for="coastal-risk-box">Coastal Risk Mitigation</label>
+</div>
+<h2 id="box-3-global-text">
+  Pollination is the act of transferring pollen grains from the male anther of a flower to the female stigma.
+  The goal of every living organism, including plants, is to create offspring for the next generation.
+  <p id="box-3-global-text-link"> --> <a onClick="location.href='CoastalRisk.html';return false;">To Coastal Risk Mitigation Modeling</a></p>
+</h2>
+</h1>
+    </div>
+
+
+    <div class="box box-3" style="display:none;">
       <h1 id="box-3-header">
-      <div> Pollination Contribution to Nutrition (Food Energy) in 1945 </div>
+      <div> Pollination Contribution to People (Food Energy) in 1945 </div>
       <div class="nav-bar"> </div>
     </h1>
       <h1 id="box-3-header-2">
@@ -211,7 +274,7 @@
     </div>
 
     <!-- Add buttons for folate, vitamin, energy  -->
-    <div class="parent-button-div">
+    <div class="parent-button-div" style="display:none;">
       <div class="folate-button">
         <!-- Making the div as a function -->
         <a class="data-link" href="javascript:void(0)" onclick="updateData('Folate')"><h1 class="button-title">Folate</h1></a>
@@ -224,19 +287,20 @@
       </div>
 
     </div>
-    <script src="lineGraph.js"></script>
-    <script src="barGraph.js"></script>
-    <script src="data.js"></script>
-    <script src="popup.js"></script>
-    <script src="zoom.js"></script>
-    <script src="projection.js"></script>
-    <script src="projection_3d.js"></script>
-    <script src="projection_2d.js"></script>
-    <script src="legend.js"></script>
-    <script src="arcs.js"></script>
-    <script src="storytelling_helper.js"></script>
-    <script src="slider.js"></script>
-    <script src="viz.js"></script>
+    <script src="scripts/lineGraph.js"></script>
+    <script src="scripts/barGraph.js"></script>
+    <script src="scripts/data.js"></script>
+    <script src="scripts/popup.js"></script>
+    <script src="scripts/zoom.js"></script>
+    <script src="scripts/projection.js"></script>
+    <script src="scripts/projection_3d.js"></script>
+    <script src="scripts/projection_2d.js"></script>
+    <script src="scripts/legend.js"></script>
+    <script src="scripts/arcs.js"></script>
+    <script src="scripts/storytelling_helper.js"></script>
+    <script src="scripts/projection_global.js"></script>
+    <script src="scripts/slider.js"></script>
+    <script src="scripts/viz.js"></script>
 </body>
 
 </html>

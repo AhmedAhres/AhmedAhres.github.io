@@ -114,6 +114,9 @@ function reset() {
 
   countryName.innerHTML = "World";
   previousCountryClicked = 'WLD';
+  $('.box-container').css({
+    'background': 'radial-gradient( circle at 37%, rgb(105, 190, 255) 29%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
+  });
   current_unmet_need = 100 - data_c[previousCountryClicked];
   change_percentage_animation(data_c[previousCountryClicked], current_unmet_need);
   lineGraphObject.updateGraph(previousCountryClicked);

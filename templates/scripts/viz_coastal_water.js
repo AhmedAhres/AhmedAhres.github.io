@@ -65,6 +65,7 @@ svg.call(tip);
 // Makes the legend
 makeLegend(colorScale);
 
+
 loadGlobalData(dataset);
 let data_2D = load(dataset_2D);
 let change_data = load(change_dataset);

@@ -1,4 +1,17 @@
 // Change projection and zoom based on checked2D and checked3D variables
+
+// Variable used to initialize the gradient to white
+let current_html = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
+
+let global_activated = true;
+
+
+// If we are in index.html, then by default global is activated at the beginning
+// Otherwise we initiate it to false;
+if (current_html != "index.html") {
+  global_activated = false;
+}
+
 function changeProjection(sliderChecked) {
   // Add background to the globe
   let planet_radius = d3.min([width / 2, height / 2]);
@@ -22,9 +35,10 @@ function changeProjection(sliderChecked) {
       .scale(planet_radius * 0.45)
       .translate([width / 2, height / 2])
       .precision(.1);
-    $('.box-container').css({
-      'background': 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
-    });
+
+      $('.box-container').css({
+        'background': 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
+      });
 
     // Make the map grey
     g.selectAll('path').attr('fill', '#D3D3D3').on("click", null);
@@ -39,9 +53,11 @@ function changeProjection(sliderChecked) {
       .scale(planet_radius * 0.844)
       .translate([width / 2, height / 2])
       .precision(.1);
+      if (global_activated == false) {
     $('.box-container').css({
-      'background': ''
+      'background': 'radial-gradient( circle at 37%, rgb(105, 190, 255) 29%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)'
     });
+  }
     // inertia versor dragging after everything has been rendered
     inertia = d3.geoInertiaDrag(svg, function() {
       render();
