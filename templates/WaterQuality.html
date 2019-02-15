@@ -48,10 +48,31 @@
     </div>
 
     <div class="box box-2">
+      <p id="map-name-1">Change map for SSP1</p>
       <div class="map1"></div>
       <hr class="map-diff-line">
+      <p id="map-name-2">Current</p>
       <div class="map2"></div>
       <div class="map-slider"></div>
+      <div id="radios">
+        <!-- Autocomplete off is to not the save previous entry, so for resetting -->
+        <input id="rad1" type="radio" name="radioBtn" title="Sustainability" autocomplete="off" onclick="runSegmentedSSPs('SSP1')" checked>
+        <label class="labels" for="rad1">SSP1</label>
+        <input id="rad2" type="radio" name="radioBtn" title="Regional Rivalry" autocomplete="off" onclick="runSegmentedSSPs('SSP3')">
+        <label class="labels" for="rad2">SSP3</label>
+        <input id="rad3" type="radio" name="radioBtn" title="Fossil-fueled Development" autocomplete="off" onclick="runSegmentedSSPs('SSP5')">
+        <label class="labels" for="rad3">SSP5</label>
+        <div id="bckgrnd"></div>
+      </div>
+      <div id="radios2">
+        <input id="rad4" type="radio" name="radioBtn" checked>
+        <label class="labels" title="Pollination's contribution" autocomplete="off" for="rad4">P1</label>
+        <input id="rad5" type="radio" name="radioBtn">
+        <label class="labels" title="Population" autocomplete="off" for="rad5">P2</label>
+        <input id="rad6" type="radio" name="radioBtn">
+        <label class="labels" title="Unmet need" autocomplete="off" for="rad6">P3</label>
+        <div id="bckgrnd2"></div>
+      </div>
     </div>
 
 
