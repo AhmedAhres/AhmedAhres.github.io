@@ -6,6 +6,9 @@ let colorSchemeX = ["#FFFFFF", "#C6F4BC", "#74DE4C"];
 let colorSchemeY = ["#FFFFFF", "#F4C8FF", "#C615F2"];
 let gradient_blue = 'radial-gradient( circle at 37%, rgb(105, 190, 255) 29%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)';
 let gradient_white = 'radial-gradient(circle at 37%, rgb(236, 246, 255) 36%, rgb(228, 255, 255) 42%, rgb(215, 254, 255) 49%, rgb(204, 245, 255) 56%, rgb(191, 234, 255) 63%, rgb(147, 193, 227) 70%, rgb(147, 193, 227) 77%, rgb(147, 193, 227) 84%, rgb(81, 119, 164) 91%)';
+
+var zoom_2D_global = get_global_zoom();
+
 let colorScale2DGlobalX = d3.scaleLinear()
   .domain([1, 50, 99])
   .range(colorSchemeX);
@@ -51,6 +54,7 @@ var colorScaleBiv = d3.scaleBivariate();
 // Function to load the pollination visualization
 function load_pollination() {
   global_activated = false;
+  zoom_2D_global = null;
   document.getElementsByClassName("box box-3-global")[0].style.display = "none";
   document.getElementsByClassName("box box-2-global")[0].style.display = "none"
   document.getElementsByClassName("box box-1-global")[0].style.display = "none";
@@ -73,6 +77,7 @@ function load_pollination() {
 // Function for the back button in pollination
 function load_global() {
   global_activated = true;
+  zoom_2D_global = get_global_zoom();
   if (current_html == "index.html") {
   document.getElementsByClassName("box-container")[0].style.background = gradient_white;
   document.getElementsByClassName("box box-3-global")[0].style.display = "flex";
@@ -107,6 +112,8 @@ let path_global = d3.geoPath().projection(projection_global);
 let map_global = document.getElementsByClassName('map-global')[0];
 
 map_global.setAttribute("style", "width: 95%; height: 100%;");
+
+svg_global.call(zoom_2D_global);
 
 ready_global(g_global, path_global);
 
@@ -191,4 +198,24 @@ function showDataGlobal(the_g, coordinates, ColorScaleSelect) {
 
 function click_about() {
   console.log("About button clicked");
+}
+
+function get_global_zoom() {
+    return d3.zoom()
+      .scaleExtent([1, 15])
+      .translateExtent([
+        [0, 0],
+        [$(".map-global").width(), $(".map-global").height()]
+      ])
+      .extent([
+        [0, 0],
+        [$(".map-global").width(), $(".map-global").height()]
+      ])
+      .on("zoom", zoomed_2D_global);
+}
+
+
+// Changes both groups in 2D
+function zoomed_2D_global() {
+  g_global.attr("transform", d3.event.transform);
 }
