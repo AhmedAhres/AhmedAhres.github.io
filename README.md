@@ -2,7 +2,7 @@
 
 ## Running the visualization
 
-The visualization can be seen in the following url: https://ahmedahres.github.io/templates/index.html
+The visualization can be seen in the following url: https://ahmedahres.github.io/pollination-viz/templates/
 
 ## Description
 
